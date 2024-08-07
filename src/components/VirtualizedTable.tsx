@@ -12,159 +12,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CircularIndeterminate from "./Spinner.tsx";
 
-interface RowData {
-  id: number;
-  ligand_name: string;
-  ring_id: string;
-  boat: number;
-  chair: number;
-  flat: number;
-  half_chair: number;
-  tw_boat_left: number;
-  tw_boat_right: number;
-  min_value: number;
-  conformation: string;
-  entry_id: string;
-  experimental_method: string;
-  release_date: number;
-  resolution: number;
-  coverage: number | null;
-}
-
-interface ColumnData {
-  dataKey: keyof RowData;
-  label: string;
-  numeric?: boolean;
-  width: number;
-}
-
-function createData(
-  id: number,
-  ligand_name: string,
-  ring_id: string,
-  boat: number,
-  chair: number,
-  flat: number,
-  half_chair: number,
-  tw_boat_left: number,
-  tw_boat_right: number,
-  min_value: number,
-  conformation: string,
-  entry_id: string,
-  experimental_method: string,
-  release_date: number,
-  resolution: number,
-  coverage: number | null,
-): RowData {
-  console.log("Inside createData, ligand name is: ", ligand_name);
-  return {
-    id,
-    ligand_name,
-    ring_id,
-    boat,
-    chair,
-    flat,
-    half_chair,
-    tw_boat_left,
-    tw_boat_right,
-    min_value,
-    conformation,
-    entry_id,
-    experimental_method,
-    release_date,
-    resolution,
-    coverage,
-  };
-}
-
-const columns: ColumnData[] = [
-  {
-    width: 40,
-    label: "Ligand name",
-    dataKey: "ligand_name",
-  },
-  {
-    width: 70,
-    label: "Ring ID",
-    dataKey: "ring_id",
-  },
-  {
-    width: 40,
-    label: "Boat",
-    dataKey: "boat",
-    numeric: true,
-  },
-  {
-    width: 40,
-    label: "Chair",
-    dataKey: "chair",
-    numeric: true,
-  },
-  {
-    width: 40,
-    label: "Flat",
-    dataKey: "flat",
-    numeric: true,
-  },
-  {
-    width: 80,
-    label: "Half chair",
-    dataKey: "half_chair",
-    numeric: true,
-  },
-  {
-    width: 100,
-    label: "Twist boat left",
-    dataKey: "tw_boat_left",
-    numeric: true,
-  },
-  {
-    width: 100,
-    label: "Twist boat right",
-    dataKey: "tw_boat_right",
-    numeric: true,
-  },
-  {
-    width: 40,
-    label: "Min value",
-    dataKey: "min_value",
-    numeric: true,
-  },
-  {
-    width: 100,
-    label: "Conformation",
-    dataKey: "conformation",
-  },
-  {
-    width: 40,
-    label: "Entry ID",
-    dataKey: "entry_id",
-  },
-  {
-    width: 120,
-    label: "Experimental method",
-    dataKey: "experimental_method",
-  },
-  {
-    width: 70,
-    label: "Release date",
-    dataKey: "release_date",
-    numeric: true,
-  },
-  {
-    width: 60,
-    label: "Resolution",
-    dataKey: "resolution",
-    numeric: true,
-  },
-  {
-    width: 60,
-    label: "Coverage",
-    dataKey: "coverage",
-  },
-];
-
-type APIData = Readonly<Omit<RowData, "id">>;
+import { columns } from "../data/columnData";
+import { createData } from "../utils/dataHelpers";
+import { RowData, APIData } from "../data/dataTypes";
 
 const VirtuosoTableComponents: TableComponents<RowData> = {
   Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
@@ -173,6 +23,7 @@ const VirtuosoTableComponents: TableComponents<RowData> = {
   Table: (props) => (
     <Table
       {...props}
+      size={"small"}
       sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
     />
   ),
@@ -206,7 +57,6 @@ function fixedHeaderContent() {
 }
 
 function rowContent(_index: number, row: RowData) {
-  console.log("Row Content:", row);
   return (
     <React.Fragment>
       {columns.map((column) => (
@@ -229,7 +79,6 @@ export const VirtualizedTable = () => {
     axios
       .get<{ rows: APIData[] }>("http://localhost:5000/api/data")
       .then((response) => {
-        console.log("API Response:", typeof response.data);
         setDataAPI(response.data.rows);
         setIsLoading(false);
       })
@@ -238,8 +87,8 @@ export const VirtualizedTable = () => {
       });
   }, []);
 
-  const rows: RowData[] = dataAPI.map((data, _index) => {
-    const rowData = createData(
+  const rows: RowData[] = dataAPI.map((data, _index) =>
+    createData(
       _index,
       data.ligand_name,
       data.ring_id,
@@ -256,9 +105,8 @@ export const VirtualizedTable = () => {
       data.release_date,
       data.resolution,
       data.coverage,
-    );
-    return rowData;
-  });
+    ),
+  );
 
   return (
     <Box sx={{ height: 400, width: 1500 }}>
