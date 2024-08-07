@@ -1,11 +1,12 @@
 from pathlib import Path
 
-from flask import Flask, jsonify, request, make_response, send_from_directory
+import numpy as np
+from flask import Flask, jsonify
 import os
 from dotenv import load_dotenv
 import logging
 import pandas as pd
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -18,52 +19,38 @@ CORS(app)
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Sample data for the jobID "1234job"
-sample_data = {
-    "tablejson": [
-        {'Ligand_name': 'S02', 'Ring_ID': 'S02_1cs7_4', 'CHAIR': 0.243, 'FLAT': 0.009, 'MinValue': 0.009,
-         'Conformation': 'FLAT', 'Entry ID': '1CS7', 'Experimental Method': 'X-RAY DIFFRACTION', 'Release Date': 2001,
-         'Resolution (A)': 3.2, 'Coverage': 'nan'},
-    ]
-}
+
+def rename_headers(df):
+    df = df.rename(columns={
+        'Ligand_name': 'ligand_name',
+        'Ring_ID': 'ring_id',
+        'BOAT': 'boat',
+        'CHAIR': 'chair',
+        'FLAT': 'flat',
+        'HALF_CHAIR': 'half_chair',
+        'TW_BOAT_LEFT': 'tw_boat_left',
+        'TW_BOAT_RIGHT': 'tw_boat_right',
+        'MinValue': 'min_value',
+        'Conformation': 'conformation',
+        'Entry ID': 'entry_id',
+        'Experimental Method': 'experimental_method',
+        'Release Date': 'release_date',
+        'Resolution (A)': 'resolution',
+        'Coverage': 'coverage'
+    })
+    return df
 
 
-@app.route('/api/conf-comparer/results/<job_id>', methods=['GET'])
-def get_results(job_id):
-    if job_id == "1234job":
-        path = Path(app.config['EXCEL_FILE_PATH']) / "cyclohex_result_summary.xlsx"
-        df = pd.read_excel(str(path), sheet_name='Summary')
-        columns = df.columns.tolist()
-        data = df.to_dict(orient='records')
-        result = {
-            "columns": columns,
-            "tablejson": data
-        }
-        return jsonify(sample_data)
-    else:
-        return jsonify({"error": "Job ID not found"}), 404
-
-
-@app.route("/")
-def get_hello_world():
-    logging.info('GET request received at /')
-    return {'hello': 'world'}
-
-
-@cross_origin()
-@app.route('/download-excel', methods=['GET'])
-def download_excel():
-    try:
-        excel_file_path = app.config['EXCEL_FILE_PATH']
-        return send_from_directory(excel_file_path, "cyclohex_result_summary.xlsx", as_attachment=True, max_age=0)
-
-    except FileNotFoundError:
-        logging.error("Excel file not found")
-        return jsonify({'error': 'Excel file not found'}), 404
-
-    except Exception as e:
-        logging.error(f"Failed to download Excel file: {str(e)}")
-        return jsonify({'error': 'Failed to download Excel file'}), 500
+@app.route('/api/data', methods=['GET'])
+def get_results():
+    data_file = Path(app.config['DATA']) / "result_summary.xlsx"
+    df = pd.read_excel(data_file, sheet_name="Summary")
+    df = rename_headers(df)
+    # replace NaN values with None in column 'B' only
+    df['coverage'] = df['coverage'].replace(np.nan, None)
+    print("DataFrame after renaming headers:\n", df)
+    data = df.to_dict(orient='records')
+    return jsonify(rows=data)
 
 
 print(f"Environment: {app.config['ENV']}")
