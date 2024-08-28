@@ -1,0 +1,24 @@
+{
+  "action-cards": [
+    {
+      "header": "Search for rings in PDB entries by PDB/CCD ID(s)",
+      "body": "Here you can...",
+      "action": "input",
+      "color": "#D6E7FB"
+    },
+    {
+      "header": "Browse available rings and conformations",
+      "body": "Here you can browse individual rings (cyclohexane, cyclopentane, and benzene) and their conformations",
+      "action": "button",
+      "buttonText": "Browse",
+      "color": "#F1F1F1"
+    },
+    {
+      "header": "Browse the whole dataset",
+      "body": "Here you can browse the whole dataset collected on 01.04.2024",
+      "action": "button",
+      "buttonText": "Browse",
+      "color": "#F7D7D7"
+    }
+  ]
+}

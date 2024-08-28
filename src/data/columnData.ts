@@ -43,7 +43,7 @@ export const columnsCyclohex: ColumnDataMRT[] = [
   },
   {
     size: 40,
-    header: "Min value",
+    header: "RMSD with template",
     accessorKey: "min_value",
   },
   {
@@ -53,13 +53,14 @@ export const columnsCyclohex: ColumnDataMRT[] = [
   },
   {
     size: 40,
-    header: "Entry ID",
+    header: "PDB ID",
     accessorKey: "entry_id",
   },
   {
     size: 120,
-    header: "Experimental method",
+    header: "Exp. method",
     accessorKey: "experimental_method",
+    enableSorting: false,
   },
   {
     size: 70,

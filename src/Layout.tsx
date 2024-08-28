@@ -1,20 +1,12 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
-import routes from "../app-routes.json";
-
-export const Layout = () => {
+export const Layout: React.FC = () => {
   return (
     <>
-      {Object.keys(routes).map((routeName) => (
-        <div key={routeName}>
-          <nav>
-            <Link to={routes[routeName]}>{routeName}</Link>
-          </nav>
-        </div>
-      ))}
-      <Outlet />
+    <Header />
+    <Outlet />
     </>
   );
 };

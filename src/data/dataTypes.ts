@@ -29,6 +29,7 @@ export interface ColumnDataMRT {
   accessorKey: keyof RowData;
   header: string;
   size: number;
+  enableSorting?: boolean;
 }
 
 export type APIData = Readonly<Omit<RowData, "id">>;
