@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { Link } from 'react-router-dom';
 
 
 interface ExampleCardProps {
@@ -21,7 +22,7 @@ const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image }) => (
             height: '100%'
         }}
     >
-        <CardActionArea sx={{ height: '560px' }}>
+        <CardActionArea component={Link} to={"/result/example-1"} sx={{ height: '560px' }}>
             <CardMedia
                 component="img"
                 image={image}

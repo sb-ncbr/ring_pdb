@@ -8,20 +8,24 @@ import { Home } from "./pages/Home.tsx";
 import NoPage from "./pages/NoPage.tsx";
 import { DataDescription } from "./pages/DataDescription.tsx";
 import { UserGuide } from "./pages/UserGuide.tsx";
+import Example from "./pages/Example.tsx";
+import { TablePage } from "./pages/TablePage.tsx";
 
- const App: React.FC = () => {
+const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="data-description" element={<DataDescription />} />
-          <Route path="user-guide" element={<UserGuide />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="data-description" element={<DataDescription />} />
+            <Route path="user-guide" element={<UserGuide />} />
+            <Route path="result/example-1" element={<Example example="example-1" />} />
+            <Route path="data/example-1" element={<TablePage />} />
+            <Route path="*" element={<NoPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
