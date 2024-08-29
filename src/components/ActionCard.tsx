@@ -5,7 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 
 
@@ -13,11 +12,12 @@ interface ActionCardProps {
   header: string;
   body: string;
   action: string;
+  inputValue?: string;
   buttonText?: string;
   color: string;
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, buttonText, color }) => (
+const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, buttonText, color }) => (
   <Card
     sx={{
       minWidth: 300,
@@ -70,12 +70,12 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, buttonTex
           <TextField
             id="search-by"
             variant="outlined"
-            placeholder="1tup 2f4i"
+            placeholder={inputValue}
             sx={{
               height: '40px',
               '& .MuiInputBase-root': {
                 height: '100%',
-                padding: '0 10px', // Adjust padding if needed
+                padding: '0 10px',
               },
             }} />
         </Box>

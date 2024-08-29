@@ -1,7 +1,10 @@
 import React from "react";
 import Stack from '@mui/material/Stack';
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import ActionCard from "../components/ActionCard";
+import MainSection from "../components/MainSection";
+import ExampleCard from "../components/ExampleCard";
+
 import cards from "../content/cards.json"
 import sections from "../content/main.json"
 
@@ -11,34 +14,16 @@ export const Home: React.FC = () => {
     <Box
       sx={{
         display: 'flex',
-        maxWidth: '1000px',
+        maxWidth: '1300px',
         flexDirection: 'column',
         alignItems: 'center',
-        width: 'auto',
         padding: '0 16px',
         margin: '24px auto'
       }}
     >
-      <Typography variant="h4" component="div" sx={{
-        width: '100%',
-        margin: '16px 0',
-        textAlign: 'left'
-      }}
-      >
-        {sections.first.header}
-      </Typography>
-
-      <Typography variant="body2" component="div" sx={{
-        width: '100%',
-        margin: '16px 0',
-        textAlign: 'left'
-      }}
-      >
-        {sections.first.body}
-      </Typography>
-
+      <MainSection section={sections.first} />
       <Stack
-        direction="row"
+        direction={{ xs: 'column', sm: 'row' }}
         gap="24px"
         sx={{
           justifyContent: "center",
@@ -48,6 +33,20 @@ export const Home: React.FC = () => {
       >
         {cards["action-cards"].map((card, index) => (
           <ActionCard key={index} {...card} />
+        ))}
+      </Stack>
+
+      <MainSection section={sections.second} />
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        gap="24px"
+        sx={{
+          justifyContent: "center",
+          margin: '16px 0'
+        }}
+      >
+        {cards["example-cards"].map((card, index) => (
+          <ExampleCard key={index} {...card} />
         ))}
       </Stack>
     </Box>

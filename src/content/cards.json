@@ -4,6 +4,7 @@
       "header": "Search for rings in PDB entries by PDB/CCD ID(s)",
       "body": "Here you can...",
       "action": "input",
+      "inputValue": "1tup 2f4i",
       "color": "#D6E7FB"
     },
     {
@@ -19,6 +20,23 @@
       "action": "button",
       "buttonText": "Browse",
       "color": "#F7D7D7"
+    }
+  ],
+  "example-cards": [
+    {
+      "header": "Example 1",
+      "body": "Cras rutrum pulvinar mi vitae interdum. Nam quis quam tempus, congue velit sed, lacinia felis. Nulla ultrices rhoncus elit, in fringilla quam feugiat non. Fusce et hendrerit sem. Fusce quis ornare libero, laoreet dictum tortor. Sed nec ultrices lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi id mi elit. Donec malesuada lectus eu suscipit placerat.",
+      "image": "/static/images/pic1.png"
+    },
+    {
+      "header": "Example 2",
+      "body": "Vivamus condimentum diam elementum, malesuada sem eget, commodo sapien. Pellentesque convallis sodales dolor. Phasellus mattis, odio in vulputate laoreet, mi nisi fringilla risus, quis sollicitudin ipsum metus vel erat. Proin congue dapibus varius. Morbi sed vestibulum lacus. Aenean tincidunt quis lacus ut consequat. Curabitur nec est in orci hendrerit finibus vel ac justo. Praesent laoreet, magna et malesuada rutrum, erat arcu vestibulum risus, ac faucibus mi odio sed nibh. Etiam eu luctus lacus, sit amet placerat metus.",
+      "image": "/static/images/pic2.png"
+    },
+    {
+      "header": "Example 3",
+      "body": "Donec egestas in ipsum nec tincidunt. Vivamus sodales lorem laoreet nibh ultricies lacinia. In sed quam eu neque accumsan scelerisque. Phasellus in massa diam. Nulla et dui nulla. Duis ut blandit odio, ac fermentum nibh. Ut tempor risus sed bibendum bibendum. Cras vestibulum nulla quam, eget porta erat molestie sed. Aliquam egestas leo ut libero malesuada, quis pulvinar erat sollicitudin. Vestibulum consequat gravida augue, ut fermentum justo vehicula quis. Praesent consequat auctor turpis, vel hendrerit ex lacinia non. Nam in nunc sed sem ullamcorper fermentum eget at odio. Nulla quis ipsum at felis vestibulum varius sit amet consectetur magna.",
+      "image": "/static/images/pic3.png"
     }
   ]
 }
