@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
+import TableMRT from "../components/TableMRT";
 
 export const TablePage: React.FC = () => {
     return (
@@ -9,6 +10,7 @@ export const TablePage: React.FC = () => {
                 margin: '24px',
                 textAlign: 'left'
             }}>Table name</Typography>
+            <TableMRT />
         </div>
     );
 };

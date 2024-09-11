@@ -21,7 +21,7 @@ const App: React.FC = () => {
             <Route path="data-description" element={<DataDescription />} />
             <Route path="user-guide" element={<UserGuide />} />
             <Route path="result/example-1" element={<Example example="example-1" />} />
-            <Route path="data/example-1" element={<TablePage />} />
+            <Route path="data" element={<TablePage />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

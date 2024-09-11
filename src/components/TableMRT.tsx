@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_Row,
   type MRT_ColumnDef,
   type MRT_SortingState,
-  type MRT_RowVirtualizer,
 } from "material-react-table";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { mkConfig, generateCsv, download } from "export-to-csv";
@@ -17,11 +16,36 @@ import Button from "@mui/material/Button";
 
 const TableMRT = () => {
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsCyclohex, []);
-  const rowVirtualizerInstanceRef = useRef<MRT_RowVirtualizer>(null);
-
   const [data, setData] = useState<APIData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const [isCompactView, setIsCompactView] = useState(false);
+  const columnDefaultState = {
+    ring_id: true,
+    chair: true,
+    flat: true,
+    boat: true,
+    half_chair: true,
+    tw_boat_left: true,
+    tw_boat_right: true,
+  }
+  const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
+
+  useEffect(() => {
+    if (isCompactView) {
+      setColumnVisibility({
+        ring_id: false,
+        chair: false,
+        flat: false,
+        boat: false,
+        half_chair: false,
+        tw_boat_left: false,
+        tw_boat_right: false,
+      });
+    } else {
+      setColumnVisibility(columnDefaultState);
+    }
+  }, [isCompactView]);
 
   useEffect(() => {
     axios
@@ -35,14 +59,6 @@ const TableMRT = () => {
       });
   }, []);
 
-  useEffect(() => {
-    try {
-      rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [sorting]);
-
   const csvConfig = mkConfig({
     fieldSeparator: ",",
     decimalSeparator: ".",
@@ -55,35 +71,23 @@ const TableMRT = () => {
     download(csvConfig)(csv);
   };
 
-  const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
-  };
-
   const table = useMaterialReactTable({
     columns,
     data,
     initialState: {
-      columnVisibility: {
-        ring_id: false,
-        chair: false,
-        flat: false,
-        boat: false,
-        half_chair: false,
-        tw_boat_left: false,
-        tw_boat_right: false,
-      },
+      density: 'compact',
     },
-    enableGlobalFilterModes: true,
-    enablePagination: false,
+    enableColumnActions: false,
+    enableHiding: false,
+    enableFullScreenToggle: false,
+    enableDensityToggle: false,
+    enableGlobalFilter: false,
+    enablePagination: true,
     enableRowNumbers: false,
-    enableRowVirtualization: true,
     muiTableContainerProps: { sx: { maxHeight: "600px" } },
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
-    state: { isLoading, sorting },
-    rowVirtualizerInstanceRef,
-    rowVirtualizerOptions: { overscan: 5 },
+    state: { isLoading, sorting, columnVisibility },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -94,35 +98,20 @@ const TableMRT = () => {
         }}
       >
         <Button
-          onClick={handleExportData}
-          startIcon={<FileDownloadIcon />}
-        >
-          Export All Data
-        </Button>
-        <Button
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             handleExportRows(table.getPrePaginationRowModel().rows)
           }
           startIcon={<FileDownloadIcon />}
         >
-          Export All Rows
+          Download Data
         </Button>
         <Button
-          disabled={table.getRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+          variant="contained"
+          color="primary"
+          onClick={() => setIsCompactView(!isCompactView)}
         >
-          Export Page Rows
-        </Button>
-        <Button
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
-        >
-          Export Selected Rows
+          {isCompactView ? "Switch to detailed view" : "Switch to compact view"}
         </Button>
       </Box>
     ),

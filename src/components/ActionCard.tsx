@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 
 interface ActionCardProps {
@@ -15,9 +16,10 @@ interface ActionCardProps {
   inputValue?: string;
   buttonText?: string;
   color: string;
+  url?: string;
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, buttonText, color }) => (
+const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, buttonText, color, url }) => (
   <Card
     sx={{
       minWidth: 300,
@@ -55,6 +57,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValu
           size="small"
           variant='outlined'
           sx={{ height: '40px' }}
+          {...(url ? { component: Link, to: url } : {})}
         >
           {buttonText}
         </Button>
