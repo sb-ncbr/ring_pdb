@@ -21,26 +21,20 @@ const TableMRT = () => {
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
   const columnDefaultState = {
-    ring_id: true,
-    chair: true,
-    flat: true,
-    boat: true,
-    half_chair: true,
-    tw_boat_left: true,
-    tw_boat_right: true,
+    experimental_method: true,
+    rsr: true,
+    rscc: true,
+    ligand_coverage: true,
   }
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
 
   useEffect(() => {
     if (isCompactView) {
       setColumnVisibility({
-        ring_id: false,
-        chair: false,
-        flat: false,
-        boat: false,
-        half_chair: false,
-        tw_boat_left: false,
-        tw_boat_right: false,
+        experimental_method: false,
+        rsr: false,
+        rscc: false,
+        ligand_coverage: false,
       });
     } else {
       setColumnVisibility(columnDefaultState);

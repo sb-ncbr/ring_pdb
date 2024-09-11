@@ -1,20 +1,18 @@
 export interface RowData {
   id: number;
-  ligand_name: string;
-  ring_id: string;
-  boat: number;
-  chair: number;
-  flat: number;
-  half_chair: number;
-  tw_boat_left: number;
-  tw_boat_right: number;
-  min_value: number;
-  conformation: string;
-  entry_id: string;
-  experimental_method: string;
-  release_date: number;
+  pdb_id: string;
+  ccd_id: string;
+  residue_id: number;
+  ring_type: string;
   resolution: number;
-  coverage: number | null;
+  ring_coverage: number;
+  conformation: string;
+  rmsd: number;
+  experimental_method: string;
+  rsr: number;
+  rscc: number;
+  ligand_coverage: string;
+  details: string;
 }
 
 export interface ColumnData {
