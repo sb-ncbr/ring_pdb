@@ -15,14 +15,6 @@ export interface RowData {
   details: string;
 }
 
-export interface ColumnData {
-  dataKey: keyof RowData;
-  label: string;
-  numeric?: boolean;
-  width: number;
-  format?: (value: number) => string;
-}
-
 export interface ColumnDataMRT {
   accessorKey: keyof RowData;
   header: string;
@@ -30,4 +22,4 @@ export interface ColumnDataMRT {
   enableSorting?: boolean;
 }
 
-export type APIData = Readonly<Omit<RowData, "id">>;
+export type APIData = Readonly<Omit<RowData, 'id'>>;

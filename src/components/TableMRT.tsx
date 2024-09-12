@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_Row,
   type MRT_ColumnDef,
   type MRT_SortingState,
-} from "material-react-table";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { mkConfig, generateCsv, download } from "export-to-csv";
-import { RowData, APIData } from "../data/dataTypes";
-import axios from "axios";
-import { columnsCyclohex } from "../data/columnData.ts";
-import { Box } from "@mui/material";
-import Button from "@mui/material/Button";
+} from 'material-react-table';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { RowData, APIData } from '../data/dataTypes';
+import axios from 'axios';
+import { columnsCyclohex } from '../data/columnData.ts';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
 
 const TableMRT = () => {
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsCyclohex, []);
@@ -25,7 +25,7 @@ const TableMRT = () => {
     rsr: true,
     rscc: true,
     ligand_coverage: true,
-  }
+  };
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
 
   useEffect(() => {
@@ -43,19 +43,19 @@ const TableMRT = () => {
 
   useEffect(() => {
     axios
-      .get<{ rows: APIData[] }>("http://localhost:5000/api/data")
+      .get<{ rows: APIData[] }>('http://localhost:5000/api/data')
       .then((response) => {
         setData(response.data.rows);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       });
   }, []);
 
   const csvConfig = mkConfig({
-    fieldSeparator: ",",
-    decimalSeparator: ".",
+    fieldSeparator: ',',
+    decimalSeparator: '.',
     useKeysAsHeaders: true,
   });
 
@@ -78,24 +78,22 @@ const TableMRT = () => {
     enableGlobalFilter: false,
     enablePagination: true,
     enableRowNumbers: false,
-    muiTableContainerProps: { sx: { maxHeight: "600px" } },
+    muiTableContainerProps: { sx: { maxHeight: '600px' } },
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
     state: { isLoading, sorting, columnVisibility },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
-          display: "flex",
-          gap: "16px",
-          padding: "8px",
-          flexWrap: "wrap",
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
         }}
       >
         <Button
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRows(table.getPrePaginationRowModel().rows)
-          }
+          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
           startIcon={<FileDownloadIcon />}
         >
           Download Data
@@ -105,7 +103,7 @@ const TableMRT = () => {
           color="primary"
           onClick={() => setIsCompactView(!isCompactView)}
         >
-          {isCompactView ? "Switch to detailed view" : "Switch to compact view"}
+          {isCompactView ? 'Switch to detailed view' : 'Switch to compact view'}
         </Button>
       </Box>
     ),
