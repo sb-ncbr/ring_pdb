@@ -1,9 +1,12 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  typography: {
+    fontSize: 12,
+  },
   palette: {
     primary: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
   },
   components: {
@@ -53,8 +56,8 @@ const theme = createTheme({
             borderColor: 'black',
             borderWidth: '1px',
           },
-        }
-      }
+        },
+      },
     },
   },
 });

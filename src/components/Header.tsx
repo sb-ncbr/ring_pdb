@@ -1,21 +1,16 @@
-import React from "react";
-import {
-  AppBar,
-  Button,
-  Grid,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { AppBar, Button, Grid2 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import logo from '../Logo.svg';
-
 
 const Header: React.FC = () => {
   return (
     <AppBar position="static">
-      <Grid container spacing={3} alignItems="center">
-        <Grid item xs={9}>
+      <Grid2 container spacing={3} alignItems="center">
+        <Grid2 item xs={9}>
           <img src={logo} alt="Logo" />
-        </Grid>
-        <Grid item xs={3}>
+        </Grid2>
+        <Grid2 item xs={3}>
           <Button component={Link} to="/">
             Home
           </Button>
@@ -25,10 +20,10 @@ const Header: React.FC = () => {
           <Button component={Link} to="/user-guide">
             User guide
           </Button>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </AppBar>
-  )
-}
+  );
+};
 
 export default Header;

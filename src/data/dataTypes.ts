@@ -1,3 +1,6 @@
+import { MRT_Cell, MRT_Row } from 'material-react-table';
+import React from 'react';
+
 export interface RowData {
   id: number;
   pdb_id: string;
@@ -18,8 +21,11 @@ export interface RowData {
 export interface ColumnDataMRT {
   accessorKey: keyof RowData;
   header: string;
-  size: number;
+  size?: number;
+  maxSize?: number;
+  minSize?: number;
   enableSorting?: boolean;
+  Cell?: ({ cell, row }: { cell: MRT_Cell<RowData>, row: MRT_Row<RowData> }) => any;
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;

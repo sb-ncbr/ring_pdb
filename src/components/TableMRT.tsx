@@ -10,12 +10,12 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
-import { columnsCyclohex } from '../data/columnData.ts';
+import { columnsData } from '../data/columnData.tsx';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 
 const TableMRT = () => {
-  const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsCyclohex, []);
+  const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
   const [data, setData] = useState<APIData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -68,6 +68,11 @@ const TableMRT = () => {
   const table = useMaterialReactTable({
     columns,
     data,
+    defaultColumn: {
+      minSize: 20,
+      maxSize: 300,
+      size: 40,
+    },
     initialState: {
       density: 'compact',
     },
