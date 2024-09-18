@@ -2,14 +2,33 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
-    fontSize: 12,
+    fontSize: 14,
   },
   palette: {
     primary: {
-      main: '#ffffff',
+      main: '#E46962',
+    },
+    text: {
+      primary: '#000000',
+    },
+    custom: {
+      paleViolet: '#EBE4FF',
+      paleOrange: '#F6E8D8',
+      paleGreen: '#E2EFEF',
+    },
+    background: {
+      default: '#FFFFFF',
+      paper: '#FFFFFF',
     },
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#FFFFFF',
+        },
+      },
+    },
     MuiStack: {
       defaultProps: {
         useFlexGap: true,

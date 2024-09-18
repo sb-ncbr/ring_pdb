@@ -1,5 +1,4 @@
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import React from 'react';
 
 export interface RowData {
   id: number;
@@ -25,7 +24,8 @@ export interface ColumnDataMRT {
   maxSize?: number;
   minSize?: number;
   enableSorting?: boolean;
-  Cell?: ({ cell, row }: { cell: MRT_Cell<RowData>, row: MRT_Row<RowData> }) => any;
+  Cell?: ({ cell, row }: { cell: MRT_Cell<RowData>; row: MRT_Row<RowData> }) => any;
+  muiTableHeadCellProps?: any;
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;

@@ -72,6 +72,12 @@ const TableMRT = () => {
       minSize: 20,
       maxSize: 300,
       size: 40,
+      muiTableHeadCellProps: {
+        sx: {
+          fontSize: '12px',
+          fontWeight: '300',
+        },
+      },
     },
     initialState: {
       density: 'compact',
@@ -114,7 +120,18 @@ const TableMRT = () => {
     ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <Box sx={{ padding: 0, margin: '0 auto', width: '95%', overflowX: 'hidden' }}>
+      <MaterialReactTable
+        table={table}
+        muiTableProps={{
+          sx: {
+            maxWidth: '100%',
+          },
+        }}
+      />
+    </Box>
+  );
 };
 
 export default TableMRT;

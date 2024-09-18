@@ -7,10 +7,10 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Grid2 container spacing={3} alignItems="center">
-        <Grid2 item xs={9}>
+        <Grid2 size={{ xs: 9 }}>
           <img src={logo} alt="Logo" />
         </Grid2>
-        <Grid2 item xs={3}>
+        <Grid2 size={{ xs: 3 }}>
           <Button component={Link} to="/">
             Home
           </Button>

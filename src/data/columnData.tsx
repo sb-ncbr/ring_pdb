@@ -1,5 +1,8 @@
 import Link from '@mui/material/Link';
 import { ColumnDataMRT } from './dataTypes';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
+import { Chip } from '@mui/material';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -13,19 +16,41 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
+    size: 90,
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
+    Cell: ({ cell }) => {
+      const ringType = cell.getValue<string>();
+      const theme = useTheme();
+      const getChipStyles = (type: string) => {
+        switch (type) {
+          case 'cyclohexane':
+            return { backgroundColor: theme.palette.custom.paleGreen, color: '#000' };
+          case 'cyclopentane':
+            return { backgroundColor: theme.palette.custom.paleOrange, color: '#000' };
+          case 'benzene':
+            return { backgroundColor: theme.palette.custom.paleViolet, color: '#000' };
+          default:
+            return { backgroundColor: theme.palette.background.default, color: '#000' };
+        }
+      };
+
+      return <Chip label={ringType} sx={{ ...getChipStyles(ringType), width: 123 }} />;
+    },
   },
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RING COVERAGE',
     accessorKey: 'ring_coverage',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'CONFORMATION',
@@ -35,23 +60,36 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RMSD [Å]',
     accessorKey: 'rmsd',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'EXP. METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
+    Cell: ({ cell, row }) => (
+      <Box
+        sx={{
+          whiteSpace: 'normal',
+        }}
+      >
+        {cell.getValue()}
+      </Box>
+    ),
   },
   {
     header: 'RSR',
     accessorKey: 'rsr',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RSCC',
     accessorKey: 'rscc',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'LIGAND COVERAGE',
     accessorKey: 'ligand_coverage',
+    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'DETAILS',
