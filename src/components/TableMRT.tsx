@@ -5,6 +5,7 @@ import {
   type MRT_Row,
   type MRT_ColumnDef,
   type MRT_SortingState,
+  MRT_TableHeadCellFilterContainer,
 } from 'material-react-table';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
@@ -13,6 +14,10 @@ import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import Grow from '@mui/material/Grow';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const TableMRT = () => {
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
@@ -27,6 +32,11 @@ const TableMRT = () => {
     ligand_coverage: true,
   };
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const toggleAdvancedFilter = () => {
+    setShowAdvancedFilters((prev) => !prev);
+  };
 
   useEffect(() => {
     if (isCompactView) {
@@ -68,6 +78,8 @@ const TableMRT = () => {
   const table = useMaterialReactTable({
     columns,
     data,
+    columnFilterDisplayMode: 'custom',
+    enableFacetedValues: true,
     defaultColumn: {
       minSize: 20,
       maxSize: 300,
@@ -81,6 +93,7 @@ const TableMRT = () => {
     },
     initialState: {
       density: 'compact',
+      showColumnFilters: true,
     },
     enableColumnActions: false,
     enableHiding: false,
@@ -93,43 +106,100 @@ const TableMRT = () => {
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
     state: { isLoading, sorting, columnVisibility },
-    renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          flexWrap: 'wrap',
-        }}
-      >
-        <Button
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+    renderTopToolbar: () => {
+      const defaultFilterKeys = ['ring_type', 'conformation'];
+      const advancedFilterKeys = [
+        'resolution',
+        'ring_coverage',
+        'ligand_coverage',
+        'rsr',
+        'rscc',
+        'experimental_method',
+      ];
+
+      function renderFilters(filterKeys: string[]) {
+        return (
+          <Box sx={{ display: 'flex', gap: '16px', padding: '8px' }}>
+            {filterKeys.map((id) => {
+              const header = table
+                .getHeaderGroups()
+                .flatMap((headerGroup) => headerGroup.headers)
+                .find((header) => header.id === id);
+
+              if (!header) return null;
+
+              return <MRT_TableHeadCellFilterContainer key={id} header={header} table={table} />;
+            })}
+          </Box>
+        );
+      }
+
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '16px',
+            padding: '8px',
+          }}
         >
-          Download Data
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsCompactView(!isCompactView)}
-        >
-          {isCompactView ? 'Switch to detailed view' : 'Switch to compact view'}
-        </Button>
-      </Box>
-    ),
+          <Box>
+            {/* Default Filters */}
+            <Box>{renderFilters(defaultFilterKeys)}</Box>
+
+            {/* Advanced Filters with Grow Transition */}
+            <Grow
+              in={showAdvancedFilters}
+              timeout={{ enter: 700, exit: 1000 }}
+              style={{ transformOrigin: '0 0 0' }}
+              easing={{ enter: 'ease-in-out', exit: 'ease-in-out' }}
+            >
+              <Box>{showAdvancedFilters && <Box>{renderFilters(advancedFilterKeys)}</Box>}</Box>
+            </Grow>
+          </Box>
+
+          <Box
+            sx={{
+              marginLeft: 'auto', // Align to the right
+              alignSelf: 'flex-start', // Align to the top
+            }}
+          >
+            {/* Toggle Button for Advanced Filters */}
+            <FormControlLabel
+              control={<Switch checked={showAdvancedFilters} onChange={toggleAdvancedFilter} />}
+              label="Show advanced filters"
+            />
+
+            <FormControlLabel
+              control={
+                <Switch checked={isCompactView} onChange={() => setIsCompactView(!isCompactView)} />
+              }
+              label="Show compact table"
+            />
+            <Button
+              disabled={table.getPrePaginationRowModel().rows.length === 0}
+              onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
+              startIcon={<FileDownloadIcon />}
+            >
+              Download Data
+            </Button>
+          </Box>
+        </Box>
+      );
+    },
   });
 
   return (
     <Box sx={{ padding: 0, margin: '0 auto', width: '95%', overflowX: 'hidden' }}>
-      <MaterialReactTable
-        table={table}
-        muiTableProps={{
-          sx: {
-            maxWidth: '100%',
-          },
-        }}
-      />
+      <Stack direction="column" gap="8px">
+        <MaterialReactTable
+          table={table}
+          muiTableProps={{
+            sx: {
+              maxWidth: '100%',
+            },
+          }}
+        />
+      </Stack>
     </Box>
   );
 };

@@ -26,6 +26,8 @@ export interface ColumnDataMRT {
   enableSorting?: boolean;
   Cell?: ({ cell, row }: { cell: MRT_Cell<RowData>; row: MRT_Row<RowData> }) => any;
   muiTableHeadCellProps?: any;
+  filterVariant?: string;
+  enableColumnFilter?: boolean;
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;

@@ -17,12 +17,14 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
     size: 90,
+    enableColumnFilter: false,
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
+    filterVariant: 'multi-select',
     Cell: ({ cell }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
@@ -45,21 +47,25 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
+    filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RING COVERAGE',
     accessorKey: 'ring_coverage',
+    filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
+    filterVariant: 'multi-select',
   },
   {
     header: 'RMSD [Å]',
     accessorKey: 'rmsd',
+    enableColumnFilter: false,
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
@@ -79,22 +85,26 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RSR',
     accessorKey: 'rsr',
+    filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'RSCC',
     accessorKey: 'rscc',
+    filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'LIGAND COVERAGE',
     accessorKey: 'ligand_coverage',
+    filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
     header: 'DETAILS',
     accessorKey: 'details',
     enableSorting: false,
+    enableColumnFilter: false,
     Cell: ({ cell, row }) => (
       <Link
         href={`result/example-1`}
