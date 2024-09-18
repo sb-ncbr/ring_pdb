@@ -67,13 +67,12 @@ export const columnsData: ColumnDataMRT[] = [
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100%',
         }}
       >
         <img
           src={cell.getValue<string>()}
           alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
-          style={{ maxHeight: 50 }}
+          style={{ maxHeight: 50, margin: -10 }}
         />
       </Link>
     ),
