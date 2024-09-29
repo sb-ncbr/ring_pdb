@@ -1,8 +1,8 @@
-import Link from '@mui/material/Link';
 import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { Chip } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -105,24 +105,27 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'details',
     enableSorting: false,
     enableColumnFilter: false,
-    Cell: ({ cell, row }) => (
-      <Link
-        href={`result/example-1`}
-        target="_blank"
-        rel="noopener noreferrer"
-        underline="none"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <img
-          src={cell.getValue<string>()}
-          alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
-          style={{ maxHeight: 50, margin: -10 }}
-        />
-      </Link>
-    ),
+    Cell: ({ cell, row }) => {
+      return (
+        <Link
+          to={`/ring-details/${row.original.pdb_id}`}
+          state={{ rowData: row.original }}
+          target="_blank"
+          rel="noopener noreferrer"
+          underline="none"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src={cell.getValue<string>()}
+            alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
+            style={{ maxHeight: 50, margin: -10 }}
+          />
+        </Link>
+      );
+    },
   },
 ];
