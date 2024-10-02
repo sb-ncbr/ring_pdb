@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { Chip } from '@mui/material';
 import { Link } from 'react-router-dom';
+import RangeSlider from '../components/RangeSlider.tsx';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -47,8 +48,9 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
-    filterVariant: 'text',
+    // filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Filter: () => <RangeSlider />,
   },
   {
     header: 'RING COVERAGE',
