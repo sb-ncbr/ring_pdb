@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 
 const Input = styled(MuiInput)`
-  font-size: 13px;
+  font-size: 0.9rem;
   //width: 42px;
 `;
 
@@ -72,7 +72,7 @@ export default function RangeSlider({
   };
 
   return (
-    <Box sx={{ width: 110 }}>
+    <Box sx={{ width: 'auto' }}>
       <Grid
         container
         columnSpacing={2}
@@ -127,7 +127,7 @@ export default function RangeSlider({
           />
         </Grid>
       </Grid>
-      <Typography variant="caption" id="input-slider" gutterTop>
+      <Typography variant="caption" id="input-slider" sx={{ fontSize: '0.9rem' }}>
         Filter by {filterBy}
       </Typography>
     </Box>

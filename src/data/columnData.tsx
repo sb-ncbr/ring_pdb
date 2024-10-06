@@ -17,12 +17,12 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    filterVariant: 'text',
+    filterVariant: 'multi-select',
   },
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    filterVariant: 'text',
+    filterVariant: 'multi-select',
   },
   {
     header: 'RESIDUE ID',

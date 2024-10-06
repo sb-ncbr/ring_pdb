@@ -12,12 +12,13 @@ import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
-import { Box } from '@mui/material';
+import { Box, Grid2 } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Divider from '@mui/material/Divider';
 
 const TableMRT = () => {
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
@@ -86,13 +87,21 @@ const TableMRT = () => {
       size: 40,
       muiTableHeadCellProps: {
         sx: {
-          fontSize: '12px',
+          fontSize: '0.8rem',
           fontWeight: '300',
         },
       },
-      // muiFilterTextFieldProps: {
-      //   sx: { width: '160px' },
-      // },
+      muiFilterTextFieldProps: {
+        sx: {
+          '& .MuiInputBase-input': {
+            color: '#434242',
+            fontSize: '0.9rem',
+          },
+          '& .MuiBox-root': {
+            opacity: 1,
+          },
+        },
+      },
     },
     initialState: {
       density: 'compact',
@@ -124,7 +133,7 @@ const TableMRT = () => {
 
       function renderFilters(filterKeys: string[]) {
         return (
-          <Box sx={{ display: 'flex', gap: '36px', padding: '8px' }}>
+          <Box sx={{ display: 'flex', gap: '16px', padding: '2px' }}>
             {filterKeys.map((id) => {
               const header = table
                 .getHeaderGroups()
@@ -140,55 +149,100 @@ const TableMRT = () => {
       }
 
       return (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '16px',
-            padding: '8px',
-          }}
-        >
-          <Box>
-            {/* Default Filters */}
-            <Box>{renderFilters(defaultFilterKeys)}</Box>
-
-            {/* Advanced Filters with Grow Transition */}
-            <Grow
-              in={showAdvancedFilters}
-              timeout={{ enter: 700, exit: 1000 }}
-              style={{ transformOrigin: '0 0 0' }}
-              easing={{ enter: 'ease-in-out', exit: 'ease-in-out' }}
-            >
-              <Box>{showAdvancedFilters && <Box>{renderFilters(advancedFilterKeys)}</Box>}</Box>
-            </Grow>
-          </Box>
-
+        <>
           <Box
             sx={{
-              marginLeft: 'auto', // Align to the right
-              alignSelf: 'flex-start', // Align to the top
+              display: 'flex',
+              padding: '16px 2px',
+              m: '2px 12px',
+              gap: '48px',
             }}
           >
-            {/* Toggle Button for Advanced Filters */}
-            <FormControlLabel
-              control={<Switch checked={showAdvancedFilters} onChange={toggleAdvancedFilter} />}
-              label="Show advanced filters"
-            />
+            {/* Right toolbar */}
+            <Box>
+              {/* Default Filters */}
+              <Box sx={{ marginBottom: '16px' }}>{renderFilters(defaultFilterKeys)}</Box>
 
-            <FormControlLabel
-              control={
-                <Switch checked={isCompactView} onChange={() => setIsCompactView(!isCompactView)} />
-              }
-              label="Show compact table"
-            />
-            <Button
-              disabled={table.getPrePaginationRowModel().rows.length === 0}
-              onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
-              startIcon={<FileDownloadIcon />}
+              {/* Advanced Filters with Grow Transition */}
+
+              <Grow
+                in={showAdvancedFilters}
+                timeout={{ enter: 700, exit: 1000 }}
+                style={{ transformOrigin: '0 0 0' }}
+                easing={{ enter: 'ease-in-out', exit: 'ease-in-out' }}
+              >
+                <Box>
+                  {showAdvancedFilters && (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {/* First Row - First 3 filters */}
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
+                        {advancedFilterKeys.slice(0, 3).map((key) => (
+                          <Box key={key}>{renderFilters([key])}</Box>
+                        ))}
+                      </Box>
+
+                      {/* Second Row - Remaining filters-sliders */}
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
+                        {advancedFilterKeys.slice(3).map((key) => (
+                          <Box key={key}>{renderFilters([key])}</Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+              </Grow>
+            </Box>
+
+            {/* Left toolbar */}
+            <Box
+              sx={{
+                marginLeft: 'auto', // Align to the right
+                alignSelf: 'flex-end', // Align to the top
+                display: 'flex',
+                flexDirection: 'row',
+              }}
             >
-              Download Data
-            </Button>
+              {/* Toggle Button for Advanced Filters */}
+
+              <FormControlLabel
+                control={<Switch checked={showAdvancedFilters} onChange={toggleAdvancedFilter} />}
+                label="Show advanced filters"
+                sx={{
+                  '& .MuiTypography-root': {
+                    fontSize: '0.9rem',
+                    whiteSpace: 'nowrap',
+                  },
+                }}
+              />
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isCompactView}
+                    onChange={() => setIsCompactView(!isCompactView)}
+                  />
+                }
+                label="Show compact table"
+                sx={{
+                  '& .MuiTypography-root': {
+                    fontSize: '0.9rem',
+                    whiteSpace: 'nowrap',
+                  },
+                }}
+              />
+
+              <Button
+                disabled={table.getPrePaginationRowModel().rows.length === 0}
+                onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
+                startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
+                sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap' }}
+              >
+                Download Data
+              </Button>
+            </Box>
           </Box>
-        </Box>
+          <Divider sx={{ marginBottom: '24px' }} />
+        </>
       );
     },
   });
