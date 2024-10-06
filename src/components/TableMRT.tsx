@@ -90,6 +90,9 @@ const TableMRT = () => {
           fontWeight: '300',
         },
       },
+      // muiFilterTextFieldProps: {
+      //   sx: { width: '160px' },
+      // },
     },
     initialState: {
       density: 'compact',
@@ -109,17 +112,19 @@ const TableMRT = () => {
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
       const advancedFilterKeys = [
+        'ccd_id',
+        'pdb_id',
+        'experimental_method',
         'resolution',
         'ring_coverage',
         'ligand_coverage',
         'rsr',
         'rscc',
-        'experimental_method',
       ];
 
       function renderFilters(filterKeys: string[]) {
         return (
-          <Box sx={{ display: 'flex', gap: '16px', padding: '8px' }}>
+          <Box sx={{ display: 'flex', gap: '36px', padding: '8px' }}>
             {filterKeys.map((id) => {
               const header = table
                 .getHeaderGroups()

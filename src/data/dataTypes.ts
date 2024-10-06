@@ -29,6 +29,9 @@ export interface ColumnDataMRT {
   filterVariant?: string;
   enableColumnFilter?: boolean;
   Filter?: any;
+  filterSelectOptions?: any;
+  filterFn?: any;
+  muiTableHeadCellFilterTextFieldProps?: any;
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;

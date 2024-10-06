@@ -1,18 +1,28 @@
 import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { Chip } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
+
+const formatString = (str) => {
+  const words = str.split('_');
+  const firstWord = words[0].charAt(0).toUpperCase() + words[0].slice(1).toLowerCase();
+  const remainingWords = words.slice(1).join(' ').toLowerCase();
+
+  return `${firstWord} ${remainingWords}`.trim();
+};
 
 export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
+    filterVariant: 'text',
   },
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
+    filterVariant: 'text',
   },
   {
     header: 'RESIDUE ID',
@@ -26,6 +36,9 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'ring_type',
     enableSorting: false,
     filterVariant: 'multi-select',
+    muiTableHeadCellFilterTextFieldProps: {
+      placeholder: 'Ring type',
+    },
     Cell: ({ cell }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
@@ -48,21 +61,26 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
-    // filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: () => <RangeSlider />,
+    Filter: ({ column }) => (
+      <RangeSlider filterBy={column.columnDef.header} minVal={0.85} maxVal={3.04} step={0.01} />
+    ),
   },
   {
     header: 'RING COVERAGE',
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Filter: ({ column }) => (
+      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={6} step={1} />
+    ),
   },
   {
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
     filterVariant: 'multi-select',
+    Cell: ({ cell }) => <Typography>{formatString(cell.getValue<string>())}</Typography>,
   },
   {
     header: 'RMSD [Å]',
@@ -74,6 +92,9 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXP. METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
+    // filterFn: 'equals',
+    filterSelectOptions: ['X-ray diffraction', 'Hybrid'],
+    filterVariant: 'multi-select',
     Cell: ({ cell, row }) => (
       <Box
         sx={{
@@ -89,18 +110,27 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'rsr',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Filter: ({ column }) => (
+      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={1} step={0.01} />
+    ),
   },
   {
     header: 'RSCC',
     accessorKey: 'rscc',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Filter: ({ column }) => (
+      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={1} step={0.01} />
+    ),
   },
   {
     header: 'LIGAND COVERAGE',
     accessorKey: 'ligand_coverage',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Filter: ({ column }) => (
+      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={100} step={0.1} />
+    ),
   },
   {
     header: 'DETAILS',
