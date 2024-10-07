@@ -80,7 +80,27 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'conformation',
     enableSorting: false,
     filterVariant: 'multi-select',
-    Cell: ({ cell }) => <Typography>{formatString(cell.getValue<string>())}</Typography>,
+    Cell: ({ cell }) => {
+      const favorable = cell.getValue<string>() !== 'HALF_CHAIR'; // tmp value
+      const bckcolor = favorable ? '#A6C8E7' : '#F2B2AF';
+
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '16px',
+          }}
+        >
+          <Typography>{formatString(cell.getValue<string>())}</Typography>
+          <Chip
+            label={favorable ? 'favorable' : 'unfavorable'}
+            sx={{ backgroundColor: bckcolor, opacity: 0.7 }}
+          />
+        </Box>
+      );
+    },
   },
   {
     header: 'RMSD [Å]',
@@ -92,7 +112,6 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXP. METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    // filterFn: 'equals',
     filterSelectOptions: ['X-ray diffraction', 'Hybrid'],
     filterVariant: 'multi-select',
     Cell: ({ cell, row }) => (

@@ -182,9 +182,17 @@ const TableMRT = () => {
                       </Box>
 
                       {/* Second Row - Remaining filters-sliders */}
-                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          gap: '16px',
+                        }}
+                      >
                         {advancedFilterKeys.slice(3).map((key) => (
-                          <Box key={key}>{renderFilters([key])}</Box>
+                          <Box key={key} sx={{ maxWidth: '130px' }}>
+                            {renderFilters([key])}
+                          </Box>
                         ))}
                       </Box>
                     </Box>
@@ -241,7 +249,7 @@ const TableMRT = () => {
               </Button>
             </Box>
           </Box>
-          <Divider sx={{ marginBottom: '24px' }} />
+          <Divider sx={{ marginBottom: '5px' }} />
         </>
       );
     },
