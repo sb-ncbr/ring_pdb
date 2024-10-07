@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { Chip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
+import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 
 const formatString = (str) => {
   const words = str.split('_');
@@ -17,7 +18,9 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    filterVariant: 'multi-select',
+    Filter: () => {
+      return <FilterAutocomplete />;
+    },
   },
   {
     header: 'CCD ID',

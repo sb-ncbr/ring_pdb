@@ -107,6 +107,7 @@ const TableMRT = () => {
       density: 'compact',
       showColumnFilters: true,
     },
+    enableStickyHeader: true,
     enableColumnActions: false,
     enableHiding: false,
     enableFullScreenToggle: false,
@@ -121,8 +122,8 @@ const TableMRT = () => {
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
       const advancedFilterKeys = [
-        'ccd_id',
         'pdb_id',
+        'ccd_id',
         'experimental_method',
         'resolution',
         'ring_coverage',

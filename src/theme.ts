@@ -63,24 +63,24 @@ const theme = createTheme({
         },
       },
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#FFFFFF',
-          '&.Mui-focused': {
-            backgroundColor: '#EDEEEF',
-          },
-          borderRadius: '50px',
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black',
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black',
-            borderWidth: '1px',
-          },
-        },
-      },
-    },
+    // MuiOutlinedInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       backgroundColor: '#FFFFFF',
+    //       '&.Mui-focused': {
+    //         backgroundColor: '#EDEEEF',
+    //       },
+    //       borderRadius: '50px',
+    //       '& .MuiOutlinedInput-notchedOutline': {
+    //         borderColor: 'black',
+    //       },
+    //       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    //         borderColor: 'black',
+    //         borderWidth: '1px',
+    //       },
+    //     },
+    //   },
+    // },
   },
 });
 
