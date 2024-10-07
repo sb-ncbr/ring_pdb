@@ -85,7 +85,7 @@ export const columnsData: ColumnDataMRT[] = [
     filterVariant: 'multi-select',
     Cell: ({ cell }) => {
       const favorable = cell.getValue<string>() !== 'HALF_CHAIR'; // tmp value
-      const bckcolor = favorable ? '#A6C8E7' : '#F2B2AF';
+      const mainColor = favorable ? '#2587E2' : '#CD4139';
 
       return (
         <Box
@@ -99,7 +99,9 @@ export const columnsData: ColumnDataMRT[] = [
           <Typography>{formatString(cell.getValue<string>())}</Typography>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}
-            sx={{ backgroundColor: bckcolor, opacity: 0.7 }}
+            size="small"
+            variant="outlined"
+            sx={{ borderColor: mainColor, color: mainColor }}
           />
         </Box>
       );
