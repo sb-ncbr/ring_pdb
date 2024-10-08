@@ -2,23 +2,87 @@ import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
-import { Chip, Typography } from '@mui/material';
+import { Checkbox, Paper } from '@mui/material';
+import Box from '@mui/material/Box';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Divider from '@mui/material/Divider';
 
 export default function FilterAutocomplete() {
   const [inputValue, setInputValue] = useState('');
+
+  const [columns, setColumns] = useState<Option[]>([]);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
+
+  // Function to filter options based on the input value
+  const filterOptions = (options: Option[], input: string) => {
+    return options.filter((option) => option.toLowerCase().includes(input.toLowerCase()));
+  };
+
+  const handleToggleSelectAll = (visibleOptions: Option[]) => {
+    setColumns((prevColumns) => {
+      const newColumns = selectAll
+        ? prevColumns.filter((column) => !visibleOptions.includes(column))
+        : [...new Set([...prevColumns, ...visibleOptions])]; // Append visible options
+
+      return newColumns;
+    });
+    setSelectAll((prev) => !prev); // Toggle selectAll state
+  };
+
+  const handleChange = (_: any, value: Option[], reason: string) => {
+    if (reason === 'clear' || reason === 'removeOption') {
+      setSelectAll(false);
+    }
+
+    const filteredOptions = filterOptions(allOptions, inputValue);
+    if (reason === 'selectOption') {
+      setSelectAll(value.length === filteredOptions.length);
+    }
+    setColumns(value);
+  };
 
   return (
     <Autocomplete
       multiple
       size="small"
       limitTags={2}
-      options={pdbIds}
+      filterSelectedOptions
+      value={columns}
+      onChange={handleChange}
+      PaperComponent={(paperProps) => {
+        const { children, ...restPaperProps } = paperProps;
+        const visibleOptions = filterOptions(allOptions, inputValue);
+
+        return (
+          <Paper {...restPaperProps}>
+            <Box
+              onMouseDown={(e) => e.preventDefault()} // prevent blur
+              pl={1.5}
+              py={0.5}
+            >
+              {visibleOptions.length > 0 && ( // Only render if there are visible options
+                <FormControlLabel
+                  onClick={(e) => {
+                    e.preventDefault(); // prevent blur
+                    handleToggleSelectAll(visibleOptions);
+                  }}
+                  label="Select current matches"
+                  control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
+                />
+              )}
+            </Box>
+            <Divider />
+            {children}
+          </Paper>
+        );
+      }}
+      options={allOptions}
       getOptionLabel={(option) => option}
       open={inputValue.length >= 2}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
+      onInputChange={(_e, value) => {
+        setInputValue(value);
+        setSelectAll(false); // Unselect "Select All" when input changes
       }}
-      defaultValue={pdbIds}
       renderInput={(params) => {
         const { InputProps, ...restParams } = params;
         const { startAdornment, ...restInputProps } = InputProps;
@@ -63,7 +127,7 @@ function generateUniquePdbIds(count: number): string[] {
 }
 
 function generatePdbId(): string {
-  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'abcdef12345';
   let result = '';
   for (let i = 0; i < 4; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -71,4 +135,5 @@ function generatePdbId(): string {
   return result;
 }
 
-const pdbIds: string[] = generateUniquePdbIds(100);
+const allOptions: string[] = generateUniquePdbIds(100);
+type Option = (typeof allOptions)[number];
