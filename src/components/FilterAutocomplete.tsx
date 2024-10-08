@@ -2,6 +2,7 @@ import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
+import { Chip, Typography } from '@mui/material';
 
 export default function FilterAutocomplete() {
   const [inputValue, setInputValue] = useState('');
@@ -10,21 +11,14 @@ export default function FilterAutocomplete() {
     <Autocomplete
       multiple
       size="small"
-      limitTags={3}
-      id="multiple-limit-tags"
+      limitTags={2}
       options={pdbIds}
       getOptionLabel={(option) => option}
-      noOptionsText={inputValue.length < 2 ? 'Start typing PDB ID' : 'No matching options'}
-      filterOptions={(options, state) =>
-        state.inputValue.length >= 2
-          ? options.filter((option) => option.includes(state.inputValue))
-          : []
-      }
       open={inputValue.length >= 2}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
-      defaultValue={[pdbIds[1], pdbIds[2], pdbIds[3], pdbIds[4], pdbIds[5]]}
+      defaultValue={pdbIds}
       renderInput={(params) => {
         const { InputProps, ...restParams } = params;
         const { startAdornment, ...restInputProps } = InputProps;
@@ -32,38 +26,49 @@ export default function FilterAutocomplete() {
           <TextField
             {...restParams}
             label="Filter by PDB ID"
-            InputProps={{
-              ...restInputProps,
-              startAdornment: (
-                <div
-                  style={{
-                    maxHeight: '50px',
-                    overflowY: 'auto',
-                  }}
-                >
-                  {startAdornment}
-                </div>
-              ),
-              endAdornment: null,
+            slotProps={{
+              input: {
+                ...restInputProps,
+                startAdornment: (
+                  <div
+                    style={{
+                      maxHeight: '56px',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    {startAdornment}
+                  </div>
+                ),
+              },
             }}
           />
         );
       }}
-      sx={{ width: '265px' }}
+      sx={{
+        width: '290px',
+      }}
     />
   );
 }
 
-const pdbIds = [
-  '3vfa',
-  '1ndb',
-  '5cdi',
-  '2abk',
-  '3bsk',
-  '3vfb',
-  '4cdd',
-  '1abc',
-  '2xyz',
-  '3rst',
-  '3vfc',
-];
+function generateUniquePdbIds(count: number): string[] {
+  const pdbIds: Set<string> = new Set();
+
+  while (pdbIds.size < count) {
+    const pdbId = generatePdbId();
+    pdbIds.add(pdbId);
+  }
+
+  return Array.from(pdbIds);
+}
+
+function generatePdbId(): string {
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 4; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+const pdbIds: string[] = generateUniquePdbIds(100);
