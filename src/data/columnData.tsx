@@ -18,6 +18,19 @@ const formatString = (str) => {
 const pdbOptions: string[] = generateUniqueOptions(100, 'pdb');
 const ccdOptions: string[] = generateUniqueOptions(100, 'ccd');
 
+const getChipStyles = (type: string, theme) => {
+  switch (type) {
+    case 'cyclohexane':
+      return { backgroundColor: theme.palette.custom.paleGreen };
+    case 'cyclopentane':
+      return { backgroundColor: theme.palette.custom.paleOrange };
+    case 'benzene':
+      return { backgroundColor: theme.palette.custom.paleViolet };
+    default:
+      return { backgroundColor: theme.palette.background.default };
+  }
+};
+
 export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
@@ -45,26 +58,15 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'ring_type',
     enableSorting: false,
     filterVariant: 'multi-select',
-    muiTableHeadCellFilterTextFieldProps: {
-      placeholder: 'Ring type',
-    },
     Cell: ({ cell }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
-      const getChipStyles = (type: string) => {
-        switch (type) {
-          case 'cyclohexane':
-            return { backgroundColor: theme.palette.custom.paleGreen, color: '#000' };
-          case 'cyclopentane':
-            return { backgroundColor: theme.palette.custom.paleOrange, color: '#000' };
-          case 'benzene':
-            return { backgroundColor: theme.palette.custom.paleViolet, color: '#000' };
-          default:
-            return { backgroundColor: theme.palette.background.default, color: '#000' };
-        }
-      };
-
-      return <Chip label={ringType} sx={{ ...getChipStyles(ringType), width: 123 }} />;
+      return (
+        <Chip
+          label={ringType}
+          sx={{ ...getChipStyles(ringType, theme), color: '#000', width: 123 }}
+        />
+      );
     },
   },
   {

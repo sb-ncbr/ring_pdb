@@ -132,9 +132,9 @@ const TableMRT = () => {
         'rscc',
       ];
 
-      function renderFilters(filterKeys: string[]) {
+      function renderFilters(filterKeys: string[], index: number) {
         return (
-          <Box sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
+          <Box key={index} sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
             {filterKeys.map((id) => {
               const header = table
                 .getHeaderGroups()
@@ -175,7 +175,9 @@ const TableMRT = () => {
                   {showAdvancedFilters && (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {/* First Row - First 3 filters */}
-                      {advancedFilterKeys.slice(0, 3).map((key) => renderFilters([key]))}
+                      {advancedFilterKeys
+                        .slice(0, 3)
+                        .map((key, index) => renderFilters([key], index))}
 
                       {/* Second Row - Remaining filters-sliders */}
                       <Box
