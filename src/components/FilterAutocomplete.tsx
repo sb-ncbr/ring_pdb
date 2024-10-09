@@ -42,7 +42,12 @@ export default function FilterAutocomplete() {
   };
 
   return (
-    <Box sx={{ display: 'flex', width: '100%' }}>
+    <Box
+      sx={{
+        flexGrow: 1, // Allows the filter to grow and take available space
+        minWidth: '290px', // Ensure it has a minimum width
+      }}
+    >
       <Autocomplete
         multiple
         size="small"

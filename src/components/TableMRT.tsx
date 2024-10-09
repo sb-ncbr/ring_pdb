@@ -134,7 +134,7 @@ const TableMRT = () => {
 
       function renderFilters(filterKeys: string[]) {
         return (
-          <Box sx={{ display: 'flex', gap: '16px', padding: '2px' }}>
+          <Box sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
             {filterKeys.map((id) => {
               const header = table
                 .getHeaderGroups()
@@ -165,7 +165,6 @@ const TableMRT = () => {
               <Box sx={{ marginBottom: '16px' }}>{renderFilters(defaultFilterKeys)}</Box>
 
               {/* Advanced Filters with Grow Transition */}
-
               <Grow
                 in={showAdvancedFilters}
                 timeout={{ enter: 700, exit: 1000 }}
@@ -176,11 +175,7 @@ const TableMRT = () => {
                   {showAdvancedFilters && (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {/* First Row - First 3 filters */}
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        {advancedFilterKeys.slice(0, 3).map((key) => (
-                          <Box key={key}>{renderFilters([key])}</Box>
-                        ))}
-                      </Box>
+                      {advancedFilterKeys.slice(0, 3).map((key) => renderFilters([key]))}
 
                       {/* Second Row - Remaining filters-sliders */}
                       <Box
