@@ -176,7 +176,7 @@ const TableMRT = () => {
                   {showAdvancedFilters && (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {/* First Row - First 3 filters */}
-                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {advancedFilterKeys.slice(0, 3).map((key) => (
                           <Box key={key}>{renderFilters([key])}</Box>
                         ))}

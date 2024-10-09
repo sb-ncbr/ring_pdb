@@ -42,76 +42,80 @@ export default function FilterAutocomplete() {
   };
 
   return (
-    <Autocomplete
-      multiple
-      size="small"
-      limitTags={2}
-      filterSelectedOptions
-      value={columns}
-      onChange={handleChange}
-      PaperComponent={(paperProps) => {
-        const { children, ...restPaperProps } = paperProps;
-        const visibleOptions = filterOptions(allOptions, inputValue);
+    <Box sx={{ display: 'flex', width: '100%' }}>
+      <Autocomplete
+        multiple
+        size="small"
+        limitTags={2}
+        filterSelectedOptions
+        value={columns}
+        onChange={handleChange}
+        PaperComponent={(paperProps) => {
+          const { children, ...restPaperProps } = paperProps;
+          const visibleOptions = filterOptions(allOptions, inputValue);
 
-        return (
-          <Paper {...restPaperProps}>
-            <Box
-              onMouseDown={(e) => e.preventDefault()} // prevent blur
-              pl={1.5}
-              py={0.5}
-            >
-              {visibleOptions.length > 0 && ( // Only render if there are visible options
-                <FormControlLabel
-                  onClick={(e) => {
-                    e.preventDefault(); // prevent blur
-                    handleToggleSelectAll(visibleOptions);
-                  }}
-                  label="Select current matches"
-                  control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
-                />
-              )}
-            </Box>
-            <Divider />
-            {children}
-          </Paper>
-        );
-      }}
-      options={allOptions}
-      getOptionLabel={(option) => option}
-      open={inputValue.length >= 2}
-      onInputChange={(_e, value) => {
-        setInputValue(value);
-        setSelectAll(false); // Unselect "Select All" when input changes
-      }}
-      renderInput={(params) => {
-        const { InputProps, ...restParams } = params;
-        const { startAdornment, ...restInputProps } = InputProps;
-        return (
-          <TextField
-            {...restParams}
-            label="Filter by PDB ID"
-            slotProps={{
-              input: {
-                ...restInputProps,
-                startAdornment: (
-                  <div
-                    style={{
-                      maxHeight: '56px',
-                      overflowY: 'auto',
+          return (
+            <Paper {...restPaperProps}>
+              <Box
+                onMouseDown={(e) => e.preventDefault()} // prevent blur
+                pl={1.5}
+                py={0.5}
+              >
+                {visibleOptions.length > 0 && ( // Only render if there are visible options
+                  <FormControlLabel
+                    onClick={(e) => {
+                      e.preventDefault(); // prevent blur
+                      handleToggleSelectAll(visibleOptions);
                     }}
-                  >
-                    {startAdornment}
-                  </div>
-                ),
-              },
-            }}
-          />
-        );
-      }}
-      sx={{
-        width: '290px',
-      }}
-    />
+                    label="Select current matches"
+                    control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
+                  />
+                )}
+              </Box>
+              <Divider />
+              {children}
+            </Paper>
+          );
+        }}
+        options={allOptions}
+        getOptionLabel={(option) => option}
+        open={inputValue.length >= 2}
+        onInputChange={(_e, value) => {
+          setInputValue(value);
+          setSelectAll(false); // Unselect "Select All" when input changes
+        }}
+        renderInput={(params) => {
+          const { InputProps, ...restParams } = params;
+          const { startAdornment, ...restInputProps } = InputProps;
+          return (
+            <TextField
+              {...restParams}
+              label="Filter by PDB ID"
+              slotProps={{
+                input: {
+                  ...restInputProps,
+                  startAdornment: (
+                    <div
+                      style={{
+                        maxHeight: '112px',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      {startAdornment}
+                    </div>
+                  ),
+                },
+              }}
+            />
+          );
+        }}
+        sx={{
+          flexGrow: 1,
+          minWidth: '290px',
+          maxWidth: '100%',
+        }}
+      />
+    </Box>
   );
 }
 
