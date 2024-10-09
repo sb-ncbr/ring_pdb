@@ -5,6 +5,7 @@ import { Chip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
+import { generateUniqueOptions } from './testGeneratedData.ts';
 
 const formatString = (str) => {
   const words = str.split('_');
@@ -14,18 +15,23 @@ const formatString = (str) => {
   return `${firstWord} ${remainingWords}`.trim();
 };
 
+const pdbOptions: string[] = generateUniqueOptions(100, 'pdb');
+const ccdOptions: string[] = generateUniqueOptions(100, 'ccd');
+
 export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
     Filter: () => {
-      return <FilterAutocomplete />;
+      return <FilterAutocomplete allOptions={pdbOptions} filterByLabel="PDB ID" />;
     },
   },
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    filterVariant: 'multi-select',
+    Filter: () => {
+      return <FilterAutocomplete allOptions={ccdOptions} filterByLabel="CCD ID" />;
+    },
   },
   {
     header: 'RESIDUE ID',

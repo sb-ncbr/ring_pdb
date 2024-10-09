@@ -7,7 +7,14 @@ import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 
-export default function FilterAutocomplete() {
+export default function FilterAutocomplete({
+  allOptions,
+  filterByLabel,
+}: {
+  allOptions: string[];
+  filterByLabel: string;
+}) {
+  type Option = (typeof allOptions)[number];
   const [inputValue, setInputValue] = useState('');
 
   const [columns, setColumns] = useState<Option[]>([]);
@@ -95,7 +102,7 @@ export default function FilterAutocomplete() {
           return (
             <TextField
               {...restParams}
-              label="Filter by PDB ID"
+              label={`Filter by ${filterByLabel}`}
               slotProps={{
                 input: {
                   ...restInputProps,
@@ -123,26 +130,3 @@ export default function FilterAutocomplete() {
     </Box>
   );
 }
-
-function generateUniquePdbIds(count: number): string[] {
-  const pdbIds: Set<string> = new Set();
-
-  while (pdbIds.size < count) {
-    const pdbId = generatePdbId();
-    pdbIds.add(pdbId);
-  }
-
-  return Array.from(pdbIds);
-}
-
-function generatePdbId(): string {
-  const characters = 'abcdef12345';
-  let result = '';
-  for (let i = 0; i < 4; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
-const allOptions: string[] = generateUniquePdbIds(100);
-type Option = (typeof allOptions)[number];
