@@ -17,21 +17,21 @@ export default function FilterAutocomplete({
   type Option = (typeof allOptions)[number];
   const [inputValue, setInputValue] = useState('');
 
-  const [columns, setColumns] = useState<Option[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   // Function to filter options based on the input value
   const filterOptions = (options: Option[], input: string) => {
-    return options.filter((option) => option.toLowerCase().includes(input.toLowerCase()));
+    return options.filter((option) => option.toLowerCase().startsWith(input.toLowerCase()));
   };
 
   const handleToggleSelectAll = (visibleOptions: Option[]) => {
-    setColumns((prevColumns) => {
-      const newColumns = selectAll
-        ? prevColumns.filter((column) => !visibleOptions.includes(column))
-        : [...new Set([...prevColumns, ...visibleOptions])]; // Append visible options
+    setSelectedOptions((prevSelectedOptions) => {
+      const newSelectedOptions = selectAll
+        ? prevSelectedOptions.filter((option) => !visibleOptions.includes(option))
+        : [...new Set([...prevSelectedOptions, ...visibleOptions])]; // Append visible options
 
-      return newColumns;
+      return newSelectedOptions;
     });
     setSelectAll((prev) => !prev); // Toggle selectAll state
   };
@@ -45,7 +45,7 @@ export default function FilterAutocomplete({
     if (reason === 'selectOption') {
       setSelectAll(value.length === filteredOptions.length);
     }
-    setColumns(value);
+    setSelectedOptions(value);
   };
 
   return (
@@ -60,7 +60,7 @@ export default function FilterAutocomplete({
         size="small"
         // limitTags={10}
         filterSelectedOptions
-        value={columns}
+        value={selectedOptions}
         onChange={handleChange}
         PaperComponent={(paperProps) => {
           const { children, ...restPaperProps } = paperProps;
@@ -79,7 +79,7 @@ export default function FilterAutocomplete({
                       e.preventDefault(); // prevent blur
                       handleToggleSelectAll(visibleOptions);
                     }}
-                    label="Select current matches"
+                    label="Select all current matches"
                     control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
                   />
                 )}
@@ -103,6 +103,12 @@ export default function FilterAutocomplete({
             <TextField
               {...restParams}
               label={`Filter by ${filterByLabel}`}
+              placeholder={!selectedOptions.length ? 'Start typing for autocomplete...' : ''}
+              sx={{
+                '& .MuiOutlinedInput-input': {
+                  fontSize: '0.9rem',
+                },
+              }}
               slotProps={{
                 input: {
                   ...restInputProps,

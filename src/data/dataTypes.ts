@@ -31,6 +31,7 @@ export interface ColumnDataMRT {
   Filter?: any;
   filterSelectOptions?: any;
   filterFn?: any;
+  columnFilterModeOptions?: any;
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;

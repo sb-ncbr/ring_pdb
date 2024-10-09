@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { generateUniqueOptions } from './testGeneratedData.ts';
+import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 
 const formatString = (str) => {
   const words = str.split('_');
@@ -18,7 +19,7 @@ const formatString = (str) => {
 const pdbOptions: string[] = generateUniqueOptions(100, 'pdb');
 const ccdOptions: string[] = generateUniqueOptions(100, 'ccd');
 
-const getChipStyles = (type: string, theme) => {
+export const getChipStyles = (type: string, theme) => {
   switch (type) {
     case 'cyclohexane':
       return { backgroundColor: theme.palette.custom.paleGreen };
@@ -57,7 +58,14 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
-    filterVariant: 'multi-select',
+    Filter: () => {
+      return (
+        <FilterAutocompleteSimple
+          options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
+          filterByLabel="ring type"
+        />
+      );
+    },
     Cell: ({ cell }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
@@ -90,7 +98,14 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    filterVariant: 'multi-select',
+    Filter: () => {
+      return (
+        <FilterAutocompleteSimple
+          options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
+          filterByLabel="conformation"
+        />
+      );
+    },
     Cell: ({ cell }) => {
       const favorable = cell.getValue<string>() !== 'HALF_CHAIR'; // tmp value
       const mainColor = favorable ? '#2587E2' : '#CD4139';
