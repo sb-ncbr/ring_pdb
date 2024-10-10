@@ -140,8 +140,14 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXP. METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    filterSelectOptions: ['X-ray diffraction', 'Hybrid'],
-    filterVariant: 'multi-select',
+    Filter: () => {
+      return (
+        <FilterAutocompleteSimple
+          options={['X-ray diffraction', 'Hybrid method']}
+          filterByLabel="experimental method"
+        />
+      );
+    },
     Cell: ({ cell, row }) => (
       <Box
         sx={{

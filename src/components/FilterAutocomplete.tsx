@@ -22,7 +22,7 @@ export default function FilterAutocomplete({
 
   // Function to filter options based on the input value
   const filterOptions = (options: Option[], input: string) => {
-    return options.filter((option) => option.toLowerCase().startsWith(input.toLowerCase()));
+    return options.filter((option) => option.toLowerCase().includes(input.toLowerCase()));
   };
 
   const handleToggleSelectAll = (visibleOptions: Option[]) => {
@@ -57,8 +57,8 @@ export default function FilterAutocomplete({
     >
       <Autocomplete
         multiple
-        size="small"
-        // limitTags={10}
+        // size="small"
+        limitTags={10}
         filterSelectedOptions
         value={selectedOptions}
         onChange={handleChange}

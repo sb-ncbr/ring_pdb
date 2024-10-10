@@ -6,6 +6,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useTheme } from '@mui/material/styles';
 import { getChipStyles } from '../data/columnData.tsx';
+
+
 export const FilterAutocompleteSimple = ({
   options,
   filterByLabel,
