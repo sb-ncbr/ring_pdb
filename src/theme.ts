@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   typography: {
     fontSize: 14,
+    color: '#3A3A3A',
   },
   palette: {
     primary: {
@@ -12,7 +13,7 @@ const theme = createTheme({
       main: '#AFAFAF',
     },
     text: {
-      primary: '#000000',
+      primary: '#3A3A3A',
     },
     custom: {
       paleViolet: '#EBE4FF',
@@ -25,6 +26,14 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.9rem',
+          color: '#3A3A3A',
+        },
+      },
+    },
     MuiAppBar: {
       styleOverrides: {
         root: {

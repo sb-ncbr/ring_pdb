@@ -26,6 +26,7 @@ const TableMRT = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
+  let tableContainerMaxWidth = '1900px';
   const columnDefaultState = {
     experimental_method: true,
     rsr: true,
@@ -38,6 +39,10 @@ const TableMRT = () => {
   const toggleAdvancedFilter = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
+
+  if (isCompactView) {
+    tableContainerMaxWidth = '1200px';
+  }
 
   useEffect(() => {
     if (isCompactView) {
@@ -82,13 +87,14 @@ const TableMRT = () => {
     columnFilterDisplayMode: 'custom',
     enableFacetedValues: true,
     defaultColumn: {
-      minSize: 20,
-      maxSize: 300,
-      size: 40,
+      minSize: 10,
+      maxSize: 100,
+      size: 10,
       muiTableHeadCellProps: {
         sx: {
           fontSize: '0.8rem',
           fontWeight: '300',
+          maxWidth: '100px',
         },
       },
       muiFilterTextFieldProps: {
@@ -103,6 +109,15 @@ const TableMRT = () => {
         },
       },
     },
+    muiPaginationProps: {
+      color: 'primary',
+      shape: 'rounded',
+      showRowsPerPage: true,
+      variant: 'outlined',
+    },
+    // manualPagination: true,
+    // rowCount: 26,
+    paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
       showColumnFilters: true,
@@ -114,8 +129,15 @@ const TableMRT = () => {
     enableDensityToggle: false,
     enableGlobalFilter: false,
     enablePagination: true,
-    enableRowNumbers: false,
-    muiTableContainerProps: { sx: { maxHeight: '600px' } },
+    enableRowNumbers: true,
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: '600px',
+        maxWidth: tableContainerMaxWidth,
+        margin: '0 auto',
+        width: 'auto',
+      },
+    },
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
     state: { isLoading, sorting, columnVisibility },
@@ -132,7 +154,7 @@ const TableMRT = () => {
         'rscc',
       ];
 
-      function renderFilters(filterKeys: string[], index: number) {
+      function renderFilters(filterKeys: string[], index?: number) {
         return (
           <Box key={index} sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
             {filterKeys.map((id) => {
@@ -162,7 +184,7 @@ const TableMRT = () => {
             {/* Right toolbar */}
             <Box>
               {/* Default Filters */}
-              <Box sx={{ marginBottom: '16px' }}>{renderFilters(defaultFilterKeys)}</Box>
+              <Box>{renderFilters(defaultFilterKeys)}</Box>
 
               {/* Advanced Filters with Grow Transition */}
               <Grow
@@ -173,7 +195,14 @@ const TableMRT = () => {
               >
                 <Box>
                   {showAdvancedFilters && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '16px',
+                        marginTop: '16px',
+                      }}
+                    >
                       {/* First Row - First 3 filters */}
                       {advancedFilterKeys
                         .slice(0, 3)
@@ -241,7 +270,7 @@ const TableMRT = () => {
                 disabled={table.getPrePaginationRowModel().rows.length === 0}
                 onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
                 startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
-                sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap' }}
+                sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
               >
                 Download Data
               </Button>
@@ -254,17 +283,8 @@ const TableMRT = () => {
   });
 
   return (
-    <Box sx={{ padding: 0, margin: '0 auto', width: '95%', overflowX: 'hidden' }}>
-      <Stack direction="column" gap="8px">
-        <MaterialReactTable
-          table={table}
-          muiTableProps={{
-            sx: {
-              maxWidth: '100%',
-            },
-          }}
-        />
-      </Stack>
+    <Box sx={{ margin: '0 8px' }}>
+      <MaterialReactTable table={table} />
     </Box>
   );
 };

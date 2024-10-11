@@ -15,3 +15,8 @@
   width: 12px;
   height: 12px;
 }
+
+/*table header*/
+.Mui-TableHeadCell-Content-Wrapper.MuiBox-root.css-lapokc {
+  white-space: normal;
+}

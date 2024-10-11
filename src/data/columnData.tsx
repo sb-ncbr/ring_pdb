@@ -1,15 +1,19 @@
 import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { Chip, Typography } from '@mui/material';
+import { Chip, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { generateUniqueOptions } from './testGeneratedData.ts';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 
-const formatString = (str) => {
-  const words = str.split('_');
+const formatString = (str, splitBy) => {
+  const substring = str.split(',');
+  if (substring.length > 1) {
+    return formatString(substring[0], splitBy) + ', ' + formatString(substring[1].trim(), splitBy);
+  }
+  const words = str.split(splitBy);
   const firstWord = words[0].charAt(0).toUpperCase() + words[0].slice(1).toLowerCase();
   const remainingWords = words.slice(1).join(' ').toLowerCase();
 
@@ -36,6 +40,7 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
+    size: 60,
     Filter: () => {
       return <FilterAutocomplete allOptions={pdbOptions} filterByLabel="PDB ID" />;
     },
@@ -50,7 +55,6 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
-    size: 90,
     enableColumnFilter: false,
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
@@ -71,7 +75,7 @@ export const columnsData: ColumnDataMRT[] = [
       const theme = useTheme();
       return (
         <Chip
-          label={ringType}
+          label={ringType.charAt(0).toUpperCase() + ringType.slice(1)}
           sx={{ ...getChipStyles(ringType, theme), color: '#000', width: 123 }}
         />
       );
@@ -98,6 +102,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
+
     Filter: () => {
       return (
         <FilterAutocompleteSimple
@@ -119,7 +124,9 @@ export const columnsData: ColumnDataMRT[] = [
             gap: '16px',
           }}
         >
-          <Typography>{formatString(cell.getValue<string>())}</Typography>
+          <Typography sx={{ fontSize: '0.9rem' }}>
+            {formatString(cell.getValue<string>(), '_')}
+          </Typography>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}
             size="small"
@@ -137,7 +144,7 @@ export const columnsData: ColumnDataMRT[] = [
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
-    header: 'EXP. METHOD',
+    header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
     Filter: () => {
@@ -148,15 +155,30 @@ export const columnsData: ColumnDataMRT[] = [
         />
       );
     },
-    Cell: ({ cell, row }) => (
-      <Box
-        sx={{
-          whiteSpace: 'normal',
-        }}
-      >
-        {cell.getValue()}
-      </Box>
-    ),
+    Cell: ({ cell, row }) => {
+      const text = formatString(cell.getValue<string>(), ' ');
+      return (
+        <Box
+          sx={{
+            whiteSpace: 'normal',
+          }}
+        >
+          {
+            <Typography
+              sx={{
+                // width: '120px',
+                fontSize: '0.9rem',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                textWrap: 'nowrap',
+              }}
+            >
+              {text}
+            </Typography>
+          }
+        </Box>
+      );
+    },
   },
   {
     header: 'RSR',

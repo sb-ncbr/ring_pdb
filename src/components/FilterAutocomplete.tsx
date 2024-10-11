@@ -58,7 +58,7 @@ export default function FilterAutocomplete({
       <Autocomplete
         multiple
         // size="small"
-        limitTags={10}
+        // limitTags={10}
         filterSelectedOptions
         value={selectedOptions}
         onChange={handleChange}
@@ -115,7 +115,7 @@ export default function FilterAutocomplete({
                   startAdornment: (
                     <div
                       style={{
-                        maxHeight: '56px',
+                        maxHeight: '75px',
                         overflowY: 'auto',
                       }}
                     >
