@@ -1,0 +1,85 @@
+{
+  "cyclohexane":
+  {
+    "header": "Cyclohexane",
+    "ccd": 1653,
+    "pdb": 3355,
+    "total": 7157,
+    "confs": [
+      {
+        "name": "Chair",
+        "count": 100
+      },
+      {
+        "name": "Twist boat",
+        "count": 30
+      },
+      {
+        "name": "Boat",
+        "count": 50
+      },
+      {
+        "name": "Half chair",
+        "count": 10
+      },
+      {
+        "name": "Flat",
+        "count": 10
+      },
+      {
+        "name": "All conformations",
+        "count": 200
+      }
+    ]
+  },
+  "cyclopentane":
+  {
+    "header": "Cyclopentane",
+    "ccd": 856,
+    "pdb": 2169,
+    "total": 4888,
+    "confs": [
+      {
+        "name": "Envelope",
+        "count": 50
+      },
+      {
+        "name": "Half chair",
+        "count": 55
+      },
+      {
+        "name": "Flat",
+        "count": 10
+      },
+      {
+        "name": "All conformations",
+        "count": 115
+      }
+    ]
+  },
+  "benzene":
+  {
+    "header": "Benzene",
+    "ccd": 22254,
+    "pdb": 38498,
+    "total": 111219,
+    "confs": [
+      {
+        "name": "Flat",
+        "count": 500
+      },
+      {
+        "name": "Chair",
+        "count": 5
+      },
+      {
+        "name": "Boat",
+        "count": 1
+      },
+      {
+        "name": "All conformations",
+        "count": 506
+      }
+    ]
+  }
+}

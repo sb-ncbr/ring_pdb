@@ -11,6 +11,7 @@ import { UserGuide } from './pages/UserGuide.tsx';
 import Example from './pages/Example.tsx';
 import { TablePage } from './pages/TablePage.tsx';
 import RingDetails from './pages/RingDetails.tsx';
+import { RingsStepperPage } from './pages/RingsStepperPage.tsx';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
             <Route path="user-guide" element={<UserGuide />} />
             <Route path="result/example-1" element={<Example example="example-1" />} />
             <Route path="data" element={<TablePage />} />
+            <Route path="browse-conformations" element={<RingsStepperPage />} />
             <Route path="ring-details/:ringId" element={<RingDetails />} />
             <Route path="*" element={<NoPage />} />
           </Route>

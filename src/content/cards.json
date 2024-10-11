@@ -12,7 +12,8 @@
       "body": "Here you can browse individual rings (cyclohexane, cyclopentane, and benzene) and their conformations",
       "action": "button",
       "buttonText": "Browse",
-      "color": "#F1F1F1"
+      "color": "#F1F1F1",
+      "url": "/browse-conformations"
     },
     {
       "header": "Browse the whole dataset",
