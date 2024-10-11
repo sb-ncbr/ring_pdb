@@ -4,16 +4,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { formatNumber } from '../helperFunctions/helpers.ts';
 
 interface RingCardProps {
   name: string;
   count: number;
   handleClick: () => void;
   handleCardSelect: () => void;
-}
-
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
 export const ConformationCard: React.FC<RingCardProps> = ({

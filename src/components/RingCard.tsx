@@ -4,23 +4,20 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { formatNumber } from '../helperFunctions/helpers.ts';
 
 interface RingCardProps {
-  header: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
+  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
   ccd: number;
   pdb: number;
   total: number;
   confs?: { name: string; count: number }[];
   handleClick: () => void;
-  handleCardSelect: any;
-}
-
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  handleCardSelect: () => void;
 }
 
 export const RingCard: React.FC<RingCardProps> = ({
-  header,
+  name,
   ccd,
   pdb,
   total,
@@ -38,7 +35,7 @@ export const RingCard: React.FC<RingCardProps> = ({
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {header}
+            {name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {formatNumber(ccd)} ligands in the CCD

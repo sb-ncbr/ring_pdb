@@ -98,7 +98,7 @@ const steps = ['Select a ring type', 'Select a conformation', 'Browse the data']
 
 export default function RingsStepper() {
   const [activeStep, setActiveStep] = useState(0);
-  const [selectedRing, setSelectedRing] = useState(null);
+  const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
   const [selectedConf, setSelectedConf] = useState(null);
 
   const handleRingSelect = (ring) => {
@@ -147,21 +147,14 @@ export default function RingsStepper() {
             margin: '16px 0',
           }}
         >
-          <RingCard
-            {...ringCards['cyclohexane']}
-            handleClick={handleNext}
-            handleCardSelect={() => handleRingSelect('cyclohexane')}
-          />
-          <RingCard
-            {...ringCards['cyclopentane']}
-            handleClick={handleNext}
-            handleCardSelect={() => handleRingSelect('cyclopentane')}
-          />
-          <RingCard
-            {...ringCards['benzene']}
-            handleClick={handleNext}
-            handleCardSelect={() => handleRingSelect('benzene')}
-          />
+          {ringCards.rings.map((ring, index) => (
+            <RingCard
+              key={index}
+              {...ring}
+              handleClick={handleNext}
+              handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
+            />
+          ))}
         </Stack>
       )}
       {activeStep === 1 && (
@@ -175,7 +168,7 @@ export default function RingsStepper() {
               gap: '16px',
             }}
           >
-            {ringCards[selectedRing].confs.map((conf, index) => (
+            {ringCards.rings[selectedRing.index].confs.map((conf, index) => (
               <ConformationCard
                 key={index}
                 {...conf}
