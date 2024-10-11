@@ -103,10 +103,12 @@ export default function RingsStepper() {
 
   const handleRingSelect = (ring) => {
     setSelectedRing(ring);
+    handleNext();
   };
 
   const handleConfSelect = (conf) => {
     setSelectedConf(conf);
+    handleNext();
   };
 
   const handleNext = () => {
@@ -151,7 +153,6 @@ export default function RingsStepper() {
             <RingCard
               key={index}
               {...ring}
-              handleClick={handleNext}
               handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
             />
           ))}
@@ -172,7 +173,6 @@ export default function RingsStepper() {
               <ConformationCard
                 key={index}
                 {...conf}
-                handleClick={handleNext}
                 handleCardSelect={() => handleConfSelect(conf.name)}
               />
             ))}
@@ -185,7 +185,7 @@ export default function RingsStepper() {
       {activeStep === 2 && (
         <>
           <div>
-            You have selected ring: {selectedRing} and conformation: {selectedConf}
+            You have selected ring: {selectedRing.name} and conformation: {selectedConf}
           </div>
           <Button onClick={handleBack} color="primary">
             Go Back

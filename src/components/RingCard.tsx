@@ -12,21 +12,13 @@ interface RingCardProps {
   pdb: number;
   total: number;
   confs?: { name: string; count: number }[];
-  handleClick: () => void;
   handleCardSelect: () => void;
 }
 
-export const RingCard: React.FC<RingCardProps> = ({
-  name,
-  ccd,
-  pdb,
-  total,
-  handleClick,
-  handleCardSelect,
-}) => {
+export const RingCard: React.FC<RingCardProps> = ({ name, ccd, pdb, total, handleCardSelect }) => {
   return (
-    <Card sx={{ maxWidth: 345 }} onClick={handleCardSelect}>
-      <CardActionArea onClick={handleClick}>
+    <Card sx={{ maxWidth: 345 }}>
+      <CardActionArea onClick={handleCardSelect}>
         <CardMedia
           component="img"
           alt="green iguana"

@@ -9,19 +9,13 @@ import { formatNumber } from '../helperFunctions/helpers.ts';
 interface RingCardProps {
   name: string;
   count: number;
-  handleClick: () => void;
   handleCardSelect: () => void;
 }
 
-export const ConformationCard: React.FC<RingCardProps> = ({
-  name,
-  count,
-  handleClick,
-  handleCardSelect,
-}) => {
+export const ConformationCard: React.FC<RingCardProps> = ({ name, count, handleCardSelect }) => {
   return (
-    <Card sx={{ maxWidth: 345 }} onClick={handleCardSelect}>
-      <CardActionArea onClick={handleClick}>
+    <Card sx={{ maxWidth: 345 }}>
+      <CardActionArea onClick={handleCardSelect}>
         <CardMedia
           component="img"
           alt="green iguana"
