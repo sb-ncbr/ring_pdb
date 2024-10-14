@@ -50,8 +50,8 @@ const AnimatedCard = styled(Card)`
 export default function RingsStepper() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
+  const [filterValues, setFilterValues] = useState({ ring: null, conf: null });
   const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
-  const [selectedConf, setSelectedConf] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,13 +59,16 @@ export default function RingsStepper() {
   const handleRingSelect = (ring) => {
     if (!selectedRing.index) {
       setSelectedRing(ring);
+      setFilterValues({ ring: ring.name, conf: null });
       handleNext();
     } else {
       setSelectedRing(ring);
+      setFilterValues({ ring: ring.name, conf: null });
     }
   };
   const handleConfSelect = (conf) => {
-    setSelectedConf(conf);
+    // setSelectedConf(conf);
+    setFilterValues({ ...filterValues, conf: conf });
     setIsStepTwoComplete(true);
     setShowButton(true);
   };
@@ -75,7 +78,7 @@ export default function RingsStepper() {
 
   const handleBrowseCard = () => {
     setIsLoading(true);
-    navigate('/data');
+    navigate(`/data?ring=${filterValues.ring}&conf=${filterValues.conf}`);
   };
 
   return (
@@ -137,7 +140,7 @@ export default function RingsStepper() {
                     key={index}
                     {...conf}
                     handleCardSelect={() => handleConfSelect(conf.name)}
-                    isSelected={selectedConf === conf.name}
+                    isSelected={filterValues.conf === conf.name}
                     // disabled={isLoading}
                     ring={selectedRing.name}
                   />

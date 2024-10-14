@@ -12,15 +12,20 @@ import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
-import { Box, Grid2 } from '@mui/material';
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
+import { useSearchParams } from 'react-router-dom';
 
 const TableMRT = () => {
+  const [searchParams] = useSearchParams();
+  const filterByRing = searchParams.get('ring');
+  const filterByConf = searchParams.get('conf');
+  console.log(`Filtered by ${filterByRing} and ${filterByConf}`);
+
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
   const [data, setData] = useState<APIData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
