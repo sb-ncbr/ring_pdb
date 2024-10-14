@@ -142,6 +142,7 @@ export default function RingsStepper() {
                     handleCardSelect={() => handleConfSelect(conf.name)}
                     isSelected={selectedConf === conf.name}
                     disabled={isLoading}
+                    ring={selectedRing.name}
                   />
                 ))}
                 {/* Button Card */}

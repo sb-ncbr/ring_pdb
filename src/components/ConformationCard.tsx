@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
 import { SelectableCard } from './RingCard.tsx';
+import { RotatingMolecule } from './RotatingMolecule.tsx';
+import Box from '@mui/material/Box';
 
 interface RingCardProps {
   name: string;
@@ -12,6 +14,7 @@ interface RingCardProps {
   handleCardSelect: () => void;
   isSelected: boolean;
   disabled: boolean;
+  ring: string;
 }
 
 export const ConformationCard: React.FC<RingCardProps> = ({
@@ -20,16 +23,16 @@ export const ConformationCard: React.FC<RingCardProps> = ({
   handleCardSelect,
   isSelected,
   disabled,
+  ring,
 }) => {
   return (
     <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
       <CardActionArea onClick={handleCardSelect} disabled={disabled}>
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          height="300"
-          image="https://fakeimg.pl/345x300/e46962/ffffff?text=No+image&font=bebas"
-        />
+        <Box sx={{ height: 300 }}>
+          {name === 'All conformations' || ring !== 'Cyclohexane' ? null : (
+            <RotatingMolecule modelPath={`/static/geometry/${ring}/${name}.glb`} />
+          )}
+        </Box>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {name}
