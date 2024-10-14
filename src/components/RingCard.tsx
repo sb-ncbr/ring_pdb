@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 interface RingCardProps {
   name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';

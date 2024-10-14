@@ -19,13 +19,17 @@ export default function RingsStepper() {
   const [selectedConf, setSelectedConf] = useState(null);
 
   const handleRingSelect = (ring) => {
-    setSelectedRing(ring);
-    handleNext();
+    if (!selectedRing.index) {
+      console.log('activeStep: ' + activeStep);
+      setSelectedRing(ring);
+      handleNext();
+    } else {
+      setSelectedRing(ring);
+    }
   };
 
   const handleConfSelect = (conf) => {
     setSelectedConf(conf);
-    handleNext();
   };
 
   const handleNext = () => {
@@ -42,14 +46,7 @@ export default function RingsStepper() {
     <Box>
       <Stepper activeStep={activeStep} orientation="vertical" sx={{ margin: '32px' }}>
         {/*first step*/}
-        <Step
-          key={steps[0]}
-          onClick={() => {
-            handleStepClick(0);
-          }}
-          style={{ cursor: 'pointer' }}
-          expanded
-        >
+        <Step key={steps[0]} style={{ cursor: 'pointer' }} expanded>
           <StepLabel>
             <Typography variant="h6">{steps[0]}</Typography>
           </StepLabel>
