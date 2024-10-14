@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
 import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import { RotatingMolecule } from './RotatingMolecule.tsx';
 
 interface RingCardProps {
   name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
@@ -26,6 +28,7 @@ export const SelectableCard = styled(Card)(({ theme, selected }) => ({
     boxShadow: selected ? theme.shadows[24] : theme.shadows[6],
   },
   maxWidth: 345,
+  width: 345,
 }));
 
 export const RingCard: React.FC<RingCardProps> = ({
@@ -40,13 +43,10 @@ export const RingCard: React.FC<RingCardProps> = ({
   return (
     <SelectableCard selected={isSelected}>
       <CardActionArea disabled={disabled || isSelected} onClick={handleCardSelect}>
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          height="300"
-          image="https://fakeimg.pl/345x300/e46962/ffffff?text=No+image&font=bebas"
-        />
         <CardContent>
+          <Box sx={{ height: 300 }}>
+            <RotatingMolecule modelPath={`/static/geometry/${name}.glb`} />
+          </Box>
           <Typography gutterBottom variant="h5" component="div">
             {name}
           </Typography>
