@@ -75,12 +75,9 @@ export default function RingsStepper() {
 
   const handleBrowseCard = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      console.log('Data sent successfully!');
-
-      navigate('/data');
-    }, 2000); // Simulate 2 seconds delay
+    navigate('/data');
   };
+
   return (
     <Box>
       <Stepper
@@ -112,7 +109,7 @@ export default function RingsStepper() {
                   {...ring}
                   handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
                   isSelected={selectedRing?.index === index}
-                  disabled={isLoading}
+                  // disabled={isLoading}
                 />
               ))}
             </Stack>
@@ -141,7 +138,7 @@ export default function RingsStepper() {
                     {...conf}
                     handleCardSelect={() => handleConfSelect(conf.name)}
                     isSelected={selectedConf === conf.name}
-                    disabled={isLoading}
+                    // disabled={isLoading}
                     ring={selectedRing.name}
                   />
                 ))}

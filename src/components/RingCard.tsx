@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
@@ -17,7 +16,7 @@ interface RingCardProps {
   confs?: { name: string; count: number }[];
   handleCardSelect: () => void;
   isSelected: boolean;
-  disabled: boolean;
+  // disabled: boolean;
 }
 
 export const SelectableCard = styled(Card)(({ theme, selected }) => ({
@@ -38,11 +37,11 @@ export const RingCard: React.FC<RingCardProps> = ({
   total,
   handleCardSelect,
   isSelected,
-  disabled,
+  // disabled,
 }) => {
   return (
     <SelectableCard selected={isSelected}>
-      <CardActionArea disabled={disabled || isSelected} onClick={handleCardSelect}>
+      <CardActionArea onClick={handleCardSelect}>
         <CardContent>
           <Box sx={{ height: 300 }}>
             <RotatingMolecule modelPath={`/static/geometry/${name}.glb`} />

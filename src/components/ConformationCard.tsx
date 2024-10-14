@@ -13,7 +13,7 @@ interface RingCardProps {
   count: number;
   handleCardSelect: () => void;
   isSelected: boolean;
-  disabled: boolean;
+  // disabled: boolean;
   ring: string;
 }
 
@@ -22,12 +22,12 @@ export const ConformationCard: React.FC<RingCardProps> = ({
   count,
   handleCardSelect,
   isSelected,
-  disabled,
+  // disabled,
   ring,
 }) => {
   return (
     <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
-      <CardActionArea onClick={handleCardSelect} disabled={disabled}>
+      <CardActionArea onClick={handleCardSelect}>
         <Box sx={{ height: 300 }}>
           {name === 'All conformations' || ring !== 'Cyclohexane' ? null : (
             <RotatingMolecule modelPath={`/static/geometry/${ring}/${name}.glb`} />
