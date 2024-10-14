@@ -1,21 +1,29 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
+import { SelectableCard } from './RingCard.tsx';
 
 interface RingCardProps {
   name: string;
   count: number;
   handleCardSelect: () => void;
+  isSelected: boolean;
+  disabled: boolean;
 }
 
-export const ConformationCard: React.FC<RingCardProps> = ({ name, count, handleCardSelect }) => {
+export const ConformationCard: React.FC<RingCardProps> = ({
+  name,
+  count,
+  handleCardSelect,
+  isSelected,
+  disabled,
+}) => {
   return (
-    <Card sx={{ maxWidth: 325 }}>
-      <CardActionArea onClick={handleCardSelect}>
+    <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
+      <CardActionArea onClick={handleCardSelect} disabled={disabled}>
         <CardMedia
           component="img"
           alt="green iguana"
@@ -31,6 +39,6 @@ export const ConformationCard: React.FC<RingCardProps> = ({ name, count, handleC
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </SelectableCard>
   );
 };

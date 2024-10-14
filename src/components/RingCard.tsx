@@ -15,15 +15,15 @@ interface RingCardProps {
   confs?: { name: string; count: number }[];
   handleCardSelect: () => void;
   isSelected: boolean;
+  disabled: boolean;
 }
 
-const SelectableCard = styled(Card)(({ theme, selected }) => ({
+export const SelectableCard = styled(Card)(({ theme, selected }) => ({
   transform: selected ? 'translateY(-10px)' : 'none',
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   '&:hover': {
-    // cursor: selected ? 'default' : 'pointer',
-    boxShadow: theme.shadows[6],
+    boxShadow: selected ? theme.shadows[24] : theme.shadows[6],
   },
   maxWidth: 345,
 }));
@@ -35,10 +35,11 @@ export const RingCard: React.FC<RingCardProps> = ({
   total,
   handleCardSelect,
   isSelected,
+  disabled,
 }) => {
   return (
     <SelectableCard selected={isSelected}>
-      <CardActionArea onClick={handleCardSelect}>
+      <CardActionArea disabled={disabled || isSelected} onClick={handleCardSelect}>
         <CardMedia
           component="img"
           alt="green iguana"

@@ -10,43 +10,89 @@ import { RingCard } from './RingCard.tsx';
 import ringCards from '../content/ringCards.json';
 import { ConformationCard } from './ConformationCard.tsx';
 import { StepContent, Typography } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { styled } from '@mui/material/styles';
+import CardActionArea from '@mui/material/CardActionArea';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Select a ring type', 'Select a conformation'];
 
+const AnimatedCard = styled(Card)`
+  padding: 16px;
+  color: #fff;
+  width: 325px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  //box-shadow: 3;
+  transition:
+    transform 0.3s ease-in-out,
+    background-color 0.5s ease;
+  animation: colorChange 2s forwards;
+
+  @keyframes colorChange {
+    0% {
+      background-color: transparent;
+    }
+    100% {
+      background-color: ${({ theme }) => theme.palette.primary.main};
+    }
+  }
+
+  &:hover {
+    //transform: scale(1.05); // Scale on hover
+    //box-shadow: 6;
+  }
+`;
+
 export default function RingsStepper() {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
   const [selectedConf, setSelectedConf] = useState(null);
+  const [showButton, setShowButton] = useState(false);
+  const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRingSelect = (ring) => {
     if (!selectedRing.index) {
-      console.log('activeStep: ' + activeStep);
       setSelectedRing(ring);
       handleNext();
     } else {
       setSelectedRing(ring);
     }
   };
-
   const handleConfSelect = (conf) => {
     setSelectedConf(conf);
+    setIsStepTwoComplete(true);
+    setShowButton(true);
   };
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
-  const handleStepClick = (step) => {
-    if (step < activeStep) {
-      setActiveStep(step);
-    }
-  };
+  const handleBrowseCard = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      console.log('Data sent successfully!');
 
+      navigate('/data');
+    }, 2000); // Simulate 2 seconds delay
+  };
   return (
     <Box>
-      <Stepper activeStep={activeStep} orientation="vertical" sx={{ margin: '32px' }}>
+      <Stepper
+        activeStep={activeStep}
+        orientation="vertical"
+        sx={{
+          margin: '32px',
+          textAlign: 'center',
+        }}
+      >
         {/*first step*/}
-        <Step key={steps[0]} style={{ cursor: 'pointer' }} expanded>
+        <Step key={steps[0]} expanded>
           <StepLabel>
             <Typography variant="h6">{steps[0]}</Typography>
           </StepLabel>
@@ -66,6 +112,7 @@ export default function RingsStepper() {
                   {...ring}
                   handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
                   isSelected={selectedRing?.index === index}
+                  disabled={isLoading}
                 />
               ))}
             </Stack>
@@ -73,30 +120,48 @@ export default function RingsStepper() {
         </Step>
 
         {/*second step*/}
-        <Step key={steps[1]} onClick={() => handleStepClick(1)} style={{ cursor: 'pointer' }}>
-          <StepLabel>
-            <Typography variant="h6">{steps[1]}</Typography>
-          </StepLabel>
-          <StepContent>
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                margin: '16px 0',
-                gap: '16px',
-              }}
-            >
-              {ringCards.rings[selectedRing.index]?.confs.map((conf, index) => (
-                <ConformationCard
-                  key={index}
-                  {...conf}
-                  handleCardSelect={() => handleConfSelect(conf.name)}
-                />
-              ))}
-            </Box>
-          </StepContent>
-        </Step>
+        {selectedRing.index !== null && (
+          <Step key={steps[1]} completed={isStepTwoComplete}>
+            <StepLabel>
+              <Typography variant="h6">{steps[1]}</Typography>
+            </StepLabel>
+            <StepContent>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'start',
+                  margin: '16px 0',
+                  gap: '16px',
+                }}
+              >
+                {ringCards.rings[selectedRing.index]?.confs.map((conf, index) => (
+                  <ConformationCard
+                    key={index}
+                    {...conf}
+                    handleCardSelect={() => handleConfSelect(conf.name)}
+                    isSelected={selectedConf === conf.name}
+                    disabled={isLoading}
+                  />
+                ))}
+                {/* Button Card */}
+                {showButton && (
+                  <AnimatedCard>
+                    <CardActionArea
+                      sx={{ height: '100%' }}
+                      onClick={handleBrowseCard}
+                      disabled={isLoading}
+                    >
+                      <CardContent>
+                        <Typography variant="h6">Browse the data</Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </AnimatedCard>
+                )}
+              </Box>
+            </StepContent>
+          </Step>
+        )}
       </Stepper>
     </Box>
   );
