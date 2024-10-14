@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
+import { styled, useTheme } from '@mui/material/styles';
 
 interface RingCardProps {
   name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
@@ -13,11 +14,30 @@ interface RingCardProps {
   total: number;
   confs?: { name: string; count: number }[];
   handleCardSelect: () => void;
+  isSelected: boolean;
 }
 
-export const RingCard: React.FC<RingCardProps> = ({ name, ccd, pdb, total, handleCardSelect }) => {
+const SelectableCard = styled(Card)(({ theme, selected }) => ({
+  transform: selected ? 'translateY(-10px)' : 'none',
+  boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
+  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  '&:hover': {
+    // cursor: selected ? 'default' : 'pointer',
+    boxShadow: theme.shadows[6],
+  },
+  maxWidth: 345,
+}));
+
+export const RingCard: React.FC<RingCardProps> = ({
+  name,
+  ccd,
+  pdb,
+  total,
+  handleCardSelect,
+  isSelected,
+}) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <SelectableCard selected={isSelected}>
       <CardActionArea onClick={handleCardSelect}>
         <CardMedia
           component="img"
@@ -40,6 +60,6 @@ export const RingCard: React.FC<RingCardProps> = ({ name, ccd, pdb, total, handl
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </SelectableCard>
   );
 };

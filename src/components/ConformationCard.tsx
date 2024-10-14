@@ -14,7 +14,7 @@ interface RingCardProps {
 
 export const ConformationCard: React.FC<RingCardProps> = ({ name, count, handleCardSelect }) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 325 }}>
       <CardActionArea onClick={handleCardSelect}>
         <CardMedia
           component="img"
