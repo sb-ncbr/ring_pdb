@@ -57,13 +57,11 @@ export default function RingsStepper() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRingSelect = (ring) => {
+    setSelectedRing(ring);
+    setFilterValues({ ring: ring.name, conf: null });
+    setShowButton(false);
     if (!selectedRing.index) {
-      setSelectedRing(ring);
-      setFilterValues({ ring: ring.name, conf: null });
       handleNext();
-    } else {
-      setSelectedRing(ring);
-      setFilterValues({ ring: ring.name, conf: null });
     }
   };
   const handleConfSelect = (conf) => {
