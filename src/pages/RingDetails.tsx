@@ -1,19 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
-import data from '../content/ringDetails.json';
 import { Typography } from '@mui/material';
+import Loader from '../components/Spinner.tsx';
 
 const RingDetails: React.FC = () => {
-  const { ringId } = useParams<{ ringId: string }>();
-  console.log(ringId);
-  const result = data.data[ringId];
+  const { ringID } = useParams<{ ringID: string }>();
+  console.log(ringID);
+  const [ringData, setRingData] = useState(null);
+  const [error, setError] = useState(null);
 
-  if (!result) {
+  useEffect(() => {
+    const fetchRingData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/get_row_data?ringID=${ringID}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setRingData(data);
+        console.log(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchRingData();
+  }, [ringID]);
+
+  if (!ringData) {
+    return <Loader />;
+  }
+
+  if (error) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', margin: '24px auto', padding: '0 16px' }}>
-        <Typography>No data available</Typography>
+        <Typography>{error}</Typography>
       </Box>
     );
   }
@@ -45,25 +67,43 @@ const RingDetails: React.FC = () => {
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           PDB ID:
         </Typography>
-        <Typography variant="body2">{result.pdb_id}</Typography>
+        <Typography variant="body2">
+          <a
+            href={`https://www.ebi.ac.uk/pdbe/entry/pdb/${ringData.pdb_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            {ringData.pdb_id}
+          </a>
+        </Typography>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           {labels.ccdID}:{' '}
         </Typography>
-        <Typography variant="body2">{result.ccd_id}</Typography>
+        <Typography variant="body2">
+          <a
+            href={`https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/${ringData.ccd_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            {ringData.ccd_id}
+          </a>
+        </Typography>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           Residue ID:
         </Typography>
-        <Typography variant="body2">{result.residue_id}</Typography>
+        <Typography variant="body2">{ringData.residue_id}</Typography>
       </Box>
 
       <Typography variant="body2" component="div">
-        Ring type: {result.ring_type}
+        Ring type: {ringData.ring_type}
       </Typography>
     </Box>
   );

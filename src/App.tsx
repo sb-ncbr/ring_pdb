@@ -25,7 +25,7 @@ const App: React.FC = () => {
             <Route path="result/example-1" element={<Example example="example-1" />} />
             <Route path="data" element={<TablePage />} />
             <Route path="browse-conformations" element={<RingsStepperPage />} />
-            <Route path="ring-details/:ringId" element={<RingDetails />} />
+            <Route path="ring-details/:ringID" element={<RingDetails />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

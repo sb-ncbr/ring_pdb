@@ -31,7 +31,12 @@ const TableMRT = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
+  const [page, setPage] = useState(0); // Page number (MRT uses 0-based indexing)
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
   let tableContainerMaxWidth = '1900px';
+
   const columnDefaultState = {
     experimental_method: true,
     rsr: true,
@@ -49,6 +54,28 @@ const TableMRT = () => {
     tableContainerMaxWidth = '1200px';
   }
 
+  const fetchData = async (page, pageSize) => {
+    axios
+      .get('http://localhost:5000/api/data', {
+        params: {
+          page: page + 1,
+          pageSize: pageSize,
+        },
+      })
+      .then((response) => {
+        setData(response.data.rows);
+        setTotalRows(response.data.totalRows);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData(page, pageSize);
+  }, [page, pageSize]);
+
   useEffect(() => {
     if (isCompactView) {
       setColumnVisibility({
@@ -61,18 +88,6 @@ const TableMRT = () => {
       setColumnVisibility(columnDefaultState);
     }
   }, [isCompactView]);
-
-  useEffect(() => {
-    axios
-      .get<{ rows: APIData[] }>('http://localhost:5000/api/data')
-      .then((response) => {
-        setData(response.data.rows);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
 
   const csvConfig = mkConfig({
     fieldSeparator: ',',
@@ -90,6 +105,7 @@ const TableMRT = () => {
     columns,
     data,
     columnFilterDisplayMode: 'custom',
+    getRowId: (row) => row['Ring ID'],
     enableFacetedValues: true,
     defaultColumn: {
       minSize: 10,
@@ -120,12 +136,16 @@ const TableMRT = () => {
       showRowsPerPage: true,
       variant: 'outlined',
     },
-    // manualPagination: true,
-    // rowCount: 26,
+    manualPagination: true,
+    rowCount: totalRows,
+    // onPageSizeChange: (newPageSize) => setPageSize(newPageSize),
     paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
       showColumnFilters: true,
+      // pagination: {
+      //   pageSize: 10,
+      // },
     },
     enableStickyHeader: true,
     enableColumnActions: false,
@@ -134,10 +154,10 @@ const TableMRT = () => {
     enableDensityToggle: false,
     enableGlobalFilter: false,
     enablePagination: true,
-    enableRowNumbers: true,
+    // enableRowNumbers: true,
     muiTableContainerProps: {
       sx: {
-        maxHeight: '600px',
+        maxHeight: '1000px',
         maxWidth: tableContainerMaxWidth,
         margin: '0 auto',
         width: 'auto',

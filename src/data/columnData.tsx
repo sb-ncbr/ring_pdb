@@ -1,7 +1,7 @@
 import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { Chip, Tooltip, Typography } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
@@ -25,11 +25,11 @@ const ccdOptions: string[] = generateUniqueOptions(100, 'ccd');
 
 export const getChipStyles = (type: string, theme) => {
   switch (type) {
-    case 'cyclohexane':
+    case 'Cyclohexane':
       return { backgroundColor: theme.palette.custom.paleGreen };
-    case 'cyclopentane':
+    case 'Cyclopentane':
       return { backgroundColor: theme.palette.custom.paleOrange };
-    case 'benzene':
+    case 'Benzene':
       return { backgroundColor: theme.palette.custom.paleViolet };
     default:
       return { backgroundColor: theme.palette.background.default };
@@ -209,14 +209,14 @@ export const columnsData: ColumnDataMRT[] = [
   },
   {
     header: 'DETAILS',
-    accessorKey: 'details',
+    accessorKey: 'img_url',
     enableSorting: false,
     enableColumnFilter: false,
     Cell: ({ cell, row }) => {
+      console.log(row.original);
       return (
         <Link
-          to={`/ring-details/${row.original.pdb_id}`}
-          state={{ rowData: row.original }}
+          to={`/ring-details/${row.original.ring_id}`}
           target="_blank"
           rel="noopener noreferrer"
           underline="none"

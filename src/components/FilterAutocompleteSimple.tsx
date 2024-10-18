@@ -7,7 +7,6 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useTheme } from '@mui/material/styles';
 import { getChipStyles } from '../data/columnData.tsx';
 
-
 export const FilterAutocompleteSimple = ({
   options,
   filterByLabel,
@@ -57,7 +56,7 @@ export const FilterAutocompleteSimple = ({
                       label={option}
                       // size="small"
                       {...tagProps}
-                      sx={{ ...getChipStyles(option.toLowerCase(), theme) }}
+                      sx={{ ...getChipStyles(option, theme) }}
                     />
                   );
                 })

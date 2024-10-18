@@ -1,7 +1,6 @@
 import { MRT_Cell, MRT_Row } from 'material-react-table';
 
 export interface RowData {
-  id: number;
   pdb_id: string;
   ccd_id: string;
   residue_id: number;
@@ -14,7 +13,7 @@ export interface RowData {
   rsr: number;
   rscc: number;
   ligand_coverage: string;
-  details: string;
+  img_url: string;
 }
 
 export interface ColumnDataMRT {
