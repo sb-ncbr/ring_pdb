@@ -4,4 +4,6 @@ class ConfigClass:
     """
     DEBUG = True
     ENV = 'development'
-    DATA = 'path/to/data'
+
+    # output_data is default folder name with workflow results
+    WORKFLOW_OUTPUT_DATA = 'path/to/output_data'

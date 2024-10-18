@@ -25,7 +25,7 @@ def get_results():
     data_file = Path(app.config['DATA']) / "test_data.xlsx"
     df = pd.read_excel(data_file)
     df['ligand_coverage'] = df['ligand_coverage'].apply(lambda x: f"{x:.0%}")
-    df['ring_coverage'] = df['ring_coverage'].replace(np.nan, 'None')
+    df['ring_coverage'] = df['ring_coverage'].replace(np.nan, 'NaN')
     print("DataFrame after renaming headers:\n", df)
     data = df.to_dict(orient='records')
     return jsonify(rows=data)
