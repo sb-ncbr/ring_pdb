@@ -1,6 +1,5 @@
 import * as React from 'react';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
@@ -29,8 +28,8 @@ export const ConformationCard: React.FC<RingCardProps> = ({
     <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
       <CardActionArea onClick={handleCardSelect}>
         <Box sx={{ height: 300 }}>
-          {name === 'All conformations' || ring !== 'Cyclohexane' ? null : (
-            <RotatingMolecule modelPath={`/static/geometry/${ring}/${name}.glb`} />
+          {name === 'All conformations' ? null : (
+            <RotatingMolecule modelPath={`/static/geometry/${ring}/${ring}-${name}.glb`} />
           )}
         </Box>
         <CardContent>
