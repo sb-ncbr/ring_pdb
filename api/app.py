@@ -24,8 +24,7 @@ data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'NaN')
 data['rsr'] = data['rsr'].replace(np.nan, 'NaN')
 data['rscc'] = data['rscc'].replace(np.nan, 'NaN')
 data['resolution'] = data['resolution'].replace(np.nan, 'NaN')
-
-data.reset_index(inplace=True)
+data['ring_id'] = data.index
 
 
 @app.route('/api/data', methods=['GET'])
