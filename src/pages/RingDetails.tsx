@@ -140,7 +140,7 @@ const RingDetails: React.FC = () => {
         </Typography>
         <Typography variant="body2">{ringData.experimental_method}</Typography>
       </Box>
-      {ringData.resolution == 'NaN' ? null : (
+      {ringData.resolution == 'N/A' ? null : (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
             Resolution:

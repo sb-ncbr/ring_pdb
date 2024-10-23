@@ -31,9 +31,12 @@ const TableMRT = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
-  const [page, setPage] = useState(0); // Page number (MRT uses 0-based indexing)
   const [totalRows, setTotalRows] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   let tableContainerMaxWidth = '1900px';
 
@@ -54,12 +57,13 @@ const TableMRT = () => {
     tableContainerMaxWidth = '1200px';
   }
 
-  const fetchData = async (page, pageSize) => {
+  useEffect(() => {
+    setIsLoading(true); // Set loading state
     axios
       .get('http://localhost:5000/api/data', {
         params: {
-          page: page + 1,
-          pageSize: pageSize,
+          pageIndex: pagination.pageIndex + 1,
+          pageSize: pagination.pageSize,
         },
       })
       .then((response) => {
@@ -69,12 +73,9 @@ const TableMRT = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setIsLoading(false);
       });
-  };
-
-  useEffect(() => {
-    fetchData(page, pageSize);
-  }, [page, pageSize]);
+  }, [pagination.pageIndex, pagination.pageSize]);
 
   useEffect(() => {
     if (isCompactView) {
@@ -138,6 +139,7 @@ const TableMRT = () => {
     },
     manualPagination: true,
     rowCount: totalRows,
+    onPaginationChange: setPagination,
     // onPageSizeChange: (newPageSize) => setPageSize(newPageSize),
     paginationDisplayMode: 'pages',
     initialState: {
@@ -165,7 +167,7 @@ const TableMRT = () => {
     },
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
-    state: { isLoading, sorting, columnVisibility },
+    state: { isLoading, sorting, columnVisibility, ...pagination },
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
       const advancedFilterKeys = [

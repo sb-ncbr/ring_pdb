@@ -20,20 +20,26 @@ CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
-data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'NaN')
-data['rsr'] = data['rsr'].replace(np.nan, 'NaN')
-data['rscc'] = data['rscc'].replace(np.nan, 'NaN')
-data['resolution'] = data['resolution'].replace(np.nan, 'NaN')
+data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'N/A')
+data['rsr'] = data['rsr'].replace(np.nan, 'N/A')
+data['rscc'] = data['rscc'].replace(np.nan, 'N/A')
+data['resolution'] = data['resolution'].replace(np.nan, 'N/A')
 data['ring_id'] = data.index
 
 
 @app.route('/api/data', methods=['GET'])
 def get_paginated_data():
-    page = int(request.args.get('page', 1))
+    try:
+        page_index = int(request.args.get('pageIndex', 1))
+
+    except (ValueError, TypeError):
+        page_index = 1
+
+    print(page_index)
     page_size = int(request.args.get('pageSize', 10))
 
     # Calculate start and end indices for the page
-    start_idx = (page - 1) * page_size
+    start_idx = (page_index - 1) * page_size
     end_idx = start_idx + page_size
 
     paginated_data = data.iloc[start_idx:end_idx]
