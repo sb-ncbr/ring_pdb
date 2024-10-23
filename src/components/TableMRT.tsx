@@ -28,6 +28,7 @@ const TableMRT = () => {
 
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
   const [data, setData] = useState<APIData[]>([]);
+  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
@@ -58,7 +59,7 @@ const TableMRT = () => {
   }
 
   useEffect(() => {
-    setIsLoading(true); // Set loading state
+    setIsLoading(true);
     axios
       .get('http://localhost:5000/api/data', {
         params: {
@@ -73,7 +74,8 @@ const TableMRT = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setIsLoading(false);
+        setIsError(true);
+        return;
       });
   }, [pagination.pageIndex, pagination.pageSize]);
 
@@ -131,19 +133,21 @@ const TableMRT = () => {
         },
       },
     },
-    // muiPaginationProps: {
-    //   color: 'primary',
-    //   shape: 'rounded',
-    //   showRowsPerPage: true,
-    //   variant: 'outlined',
-    // },
+    muiPaginationProps: {
+      color: 'primary',
+      shape: 'rounded',
+      showRowsPerPage: true,
+      variant: 'text',
+    },
+    manualSorting: true,
+    manualFiltering: true,
     manualPagination: true,
     rowCount: totalRows,
     onPaginationChange: setPagination,
     paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
-      showColumnFilters: true,
+      // showColumnFilters: true,
     },
     enableStickyHeader: true,
     enableColumnActions: false,
@@ -162,7 +166,7 @@ const TableMRT = () => {
     },
     onSortingChange: setSorting,
     isMultiSortEvent: () => true,
-    state: { isLoading, sorting, columnVisibility, ...pagination },
+    state: { isLoading, sorting, columnVisibility, pagination },
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
       const advancedFilterKeys = [
