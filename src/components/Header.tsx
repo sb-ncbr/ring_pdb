@@ -8,7 +8,9 @@ const Header: React.FC = () => {
     <AppBar position="static">
       <Grid2 container spacing={3} alignItems="center">
         <Grid2 size={{ xs: 9 }}>
-          <img src={logo} alt="Logo" />
+          <Link to="/">
+            <img src={logo} alt="Logo" />
+          </Link>
         </Grid2>
         <Grid2 size={{ xs: 3 }}>
           <Button component={Link} to="/">

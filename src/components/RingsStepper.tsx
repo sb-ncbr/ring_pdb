@@ -59,6 +59,7 @@ export default function RingsStepper() {
   const handleRingSelect = (ring) => {
     setSelectedRing(ring);
     setFilterValues({ ring: ring.name, conf: null });
+    setIsStepTwoComplete(false);
     setShowButton(false);
     if (!selectedRing.index) {
       handleNext();
@@ -147,7 +148,9 @@ export default function RingsStepper() {
                 {showButton && (
                   <AnimatedCard>
                     <CardActionArea
-                      sx={{ height: '100%' }}
+                      sx={{
+                        height: '100%',
+                      }}
                       onClick={handleBrowseCard}
                       disabled={isLoading}
                     >
