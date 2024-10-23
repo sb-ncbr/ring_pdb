@@ -131,23 +131,19 @@ const TableMRT = () => {
         },
       },
     },
-    muiPaginationProps: {
-      color: 'primary',
-      shape: 'rounded',
-      showRowsPerPage: true,
-      variant: 'outlined',
-    },
+    // muiPaginationProps: {
+    //   color: 'primary',
+    //   shape: 'rounded',
+    //   showRowsPerPage: true,
+    //   variant: 'outlined',
+    // },
     manualPagination: true,
     rowCount: totalRows,
     onPaginationChange: setPagination,
-    // onPageSizeChange: (newPageSize) => setPageSize(newPageSize),
     paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      // pagination: {
-      //   pageSize: 10,
-      // },
     },
     enableStickyHeader: true,
     enableColumnActions: false,
@@ -156,7 +152,6 @@ const TableMRT = () => {
     enableDensityToggle: false,
     enableGlobalFilter: false,
     enablePagination: true,
-    // enableRowNumbers: true,
     muiTableContainerProps: {
       sx: {
         maxHeight: '1000px',

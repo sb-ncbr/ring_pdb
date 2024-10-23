@@ -8,23 +8,28 @@
     "confs": [
       {
         "name": "Chair",
-        "count": 100
+        "count": 100,
+        "favorable": true
       },
       {
         "name": "Twist boat",
-        "count": 30
+        "count": 30,
+        "favorable": true
       },
       {
         "name": "Boat",
-        "count": 50
+        "count": 50,
+        "favorable": true
       },
       {
         "name": "Half chair",
-        "count": 10
+        "count": 10,
+        "favorable": false
       },
       {
         "name": "Flat",
-        "count": 10
+        "count": 10,
+        "favorable": false
       }
     ]
   },
@@ -36,15 +41,18 @@
     "confs": [
       {
         "name": "Envelope",
-        "count": 50
+        "count": 50,
+        "favorable": true
       },
       {
         "name": "Half chair",
-        "count": 55
+        "count": 55,
+        "favorable": true
       },
       {
         "name": "Flat",
-        "count": 10
+        "count": 10,
+        "favorable": false
       }
     ]
   },
@@ -56,15 +64,18 @@
     "confs": [
       {
         "name": "Flat",
-        "count": 500
+        "count": 500,
+        "favorable": true
       },
       {
         "name": "Chair",
-        "count": 5
+        "count": 5,
+        "favorable": false
       },
       {
         "name": "Boat",
-        "count": 1
+        "count": 1,
+        "favorable": false
       }
     ]
   }

@@ -15,13 +15,35 @@ import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
 import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const steps = ['Select a ring type', 'Select a conformation'];
+
+const StickyButton = styled(Button)(({ theme }) => ({
+  padding: '10px 20px',
+  fontSize: '16px',
+  borderRadius: '8px',
+  border: 'none',
+  cursor: 'pointer',
+  transition: 'transform 0.3s ease-in-out, background-color 0.5s ease',
+  animation: 'colorChange 2s forwards',
+  backgroundColor: 'transparent',
+  position: 'sticky',
+  top: '20px',
+  '@keyframes colorChange': {
+    '0%': {
+      backgroundColor: 'transparent',
+    },
+    '100%': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+}));
 
 const AnimatedCard = styled(Card)`
   padding: 16px;
   color: #fff;
-  width: 325px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,7 +74,7 @@ export default function RingsStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const [filterValues, setFilterValues] = useState({ ring: null, conf: null });
   const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
-  const [showButton, setShowButton] = useState(false);
+  const [showStickyButton, setShowStickyButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,7 +82,7 @@ export default function RingsStepper() {
     setSelectedRing(ring);
     setFilterValues({ ring: ring.name, conf: null });
     setIsStepTwoComplete(false);
-    setShowButton(false);
+    setShowStickyButton(false);
     if (!selectedRing.index) {
       handleNext();
     }
@@ -69,13 +91,13 @@ export default function RingsStepper() {
     // setSelectedConf(conf);
     setFilterValues({ ...filterValues, conf: conf });
     setIsStepTwoComplete(true);
-    setShowButton(true);
+    setShowStickyButton(true);
   };
   const handleNext = () => {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
-  const handleBrowseCard = () => {
+  const handleBrowseData = () => {
     setIsLoading(true);
     navigate(`/data?ring=${filterValues.ring}&conf=${filterValues.conf}`);
   };
@@ -128,6 +150,8 @@ export default function RingsStepper() {
               <Box
                 sx={{
                   display: 'flex',
+                  // justifyContent: 'center',
+                  // alignItems: 'stretch',
                   flexWrap: 'wrap',
                   justifyContent: 'start',
                   margin: '16px 0',
@@ -142,16 +166,17 @@ export default function RingsStepper() {
                     isSelected={filterValues.conf === conf.name}
                     // disabled={isLoading}
                     ring={selectedRing.name}
+                    favorable={conf.favorable}
                   />
                 ))}
                 {/* Button Card */}
-                {showButton && (
-                  <AnimatedCard>
+                {showStickyButton && (
+                  <AnimatedCard sx={{ width: '292px' }}>
                     <CardActionArea
                       sx={{
                         height: '100%',
                       }}
-                      onClick={handleBrowseCard}
+                      onClick={handleBrowseData}
                       disabled={isLoading}
                     >
                       <CardContent>
@@ -162,6 +187,12 @@ export default function RingsStepper() {
                 )}
               </Box>
             </StepContent>
+            {/*Change this*/}
+            {/*{showStickyButton && (*/}
+            {/*  <StickyButton>*/}
+            {/*    <Typography variant="h6">Browse the data</Typography>*/}
+            {/*  </StickyButton>*/}
+            {/*)}*/}
           </Step>
         )}
       </Stepper>
