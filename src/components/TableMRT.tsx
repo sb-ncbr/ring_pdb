@@ -147,7 +147,7 @@ const TableMRT = () => {
     paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
-      // showColumnFilters: true,
+      showColumnFilters: true,
     },
     enableStickyHeader: true,
     enableColumnActions: false,
