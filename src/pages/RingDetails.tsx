@@ -3,11 +3,12 @@ import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
 import { Typography } from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
 import Loader from '../components/Spinner.tsx';
 
 const RingDetails: React.FC = () => {
   const { ringID } = useParams<{ ringID: string }>();
-  console.log(ringID);
+  // console.log(ringID);
   const [ringData, setRingData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -20,7 +21,7 @@ const RingDetails: React.FC = () => {
         }
         const data = await response.json();
         setRingData(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         setError(error.message);
       }
@@ -72,13 +73,17 @@ const RingDetails: React.FC = () => {
             href={`https://www.ebi.ac.uk/pdbe/entry/pdb/${ringData.pdb_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+            }}
           >
-            {ringData.pdb_id}
+            {ringData.pdb_id} <LinkIcon fontSize="small" sx={{ marginLeft: '4px' }} />
           </a>
         </Typography>
       </Box>
-
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           {labels.ccdID}:{' '}
@@ -88,23 +93,75 @@ const RingDetails: React.FC = () => {
             href={`https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/${ringData.ccd_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+            }}
           >
-            {ringData.ccd_id}
+            {ringData.ccd_id} <LinkIcon fontSize="small" sx={{ marginLeft: '4px' }} />
           </a>
         </Typography>
       </Box>
-
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           Residue ID:
         </Typography>
         <Typography variant="body2">{ringData.residue_id}</Typography>
       </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Ring type:
+        </Typography>
+        <Typography variant="body2">{ringData.ring_type}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Ring coverage:
+        </Typography>
+        <Typography variant="body2">{ringData.ring_coverage}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Assigned conformation:
+        </Typography>
+        <Typography variant="body2">{ringData.conformation}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          RMSD with template:
+        </Typography>
+        <Typography variant="body2">{ringData.rmsd} [Å]</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Experimental method:
+        </Typography>
+        <Typography variant="body2">{ringData.experimental_method}</Typography>
+      </Box>
+      {ringData.resolution == 'NaN' ? null : (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            Resolution:
+          </Typography>
+          <Typography variant="body2">{ringData.resolution}</Typography>
+        </Box>
+      )}
 
-      <Typography variant="body2" component="div">
-        Ring type: {ringData.ring_type}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          RSR:
+        </Typography>
+        <Typography variant="body2">{ringData.rsr}</Typography>
+      </Box>
+
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          RSCC:
+        </Typography>
+        <Typography variant="body2">{ringData.rscc}</Typography>
+      </Box>
     </Box>
   );
 };

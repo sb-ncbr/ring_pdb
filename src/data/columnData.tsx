@@ -156,7 +156,8 @@ export const columnsData: ColumnDataMRT[] = [
       );
     },
     Cell: ({ cell, row }) => {
-      const text = formatString(cell.getValue<string>(), ' ');
+      // const text = formatString(cell.getValue<string>(), ' ');
+      const text = cell.getValue<string>();
       return (
         <Box
           sx={{
@@ -213,7 +214,7 @@ export const columnsData: ColumnDataMRT[] = [
     enableSorting: false,
     enableColumnFilter: false,
     Cell: ({ cell, row }) => {
-      console.log(row.original);
+      // console.log(row.original);
       return (
         <Link
           to={`/ring-details/${row.original.ring_id}`}
