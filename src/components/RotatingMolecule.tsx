@@ -28,7 +28,7 @@ export const RotatingMolecule: React.FC<RotatingMoleculeProps> = ({ modelPath })
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <View style={{ height: '100%', width: '100%' }}>
-        <Common color="lightblue" />
+        <Common color="white" />
         <Molecule modelPath={modelPath} />
       </View>
     </div>

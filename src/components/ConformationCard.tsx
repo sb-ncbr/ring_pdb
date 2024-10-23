@@ -13,7 +13,7 @@ interface RingCardProps {
   count: number;
   handleCardSelect: () => void;
   isSelected: boolean;
-  // disabled: boolean;
+  disabled: boolean;
   ring: string;
   favorable: boolean;
 }
@@ -23,14 +23,14 @@ export const ConformationCard: React.FC<RingCardProps> = ({
   count,
   handleCardSelect,
   isSelected,
-  // disabled,
+  disabled,
   ring,
   favorable,
 }) => {
   const mainColor = favorable ? '#2587E2' : '#CD4139';
   return (
     <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
-      <CardActionArea onClick={handleCardSelect}>
+      <CardActionArea onClick={handleCardSelect} disabled={disabled}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '16px' }}>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}

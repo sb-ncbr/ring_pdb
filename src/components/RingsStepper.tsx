@@ -88,7 +88,6 @@ export default function RingsStepper() {
     }
   };
   const handleConfSelect = (conf) => {
-    // setSelectedConf(conf);
     setFilterValues({ ...filterValues, conf: conf });
     setIsStepTwoComplete(true);
     setShowStickyButton(true);
@@ -133,7 +132,7 @@ export default function RingsStepper() {
                   {...ring}
                   handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
                   isSelected={selectedRing?.index === index}
-                  // disabled={isLoading}
+                  disabled={isLoading}
                 />
               ))}
             </Stack>
@@ -164,7 +163,7 @@ export default function RingsStepper() {
                     {...conf}
                     handleCardSelect={() => handleConfSelect(conf.name)}
                     isSelected={filterValues.conf === conf.name}
-                    // disabled={isLoading}
+                    disabled={isLoading}
                     ring={selectedRing.name}
                     favorable={conf.favorable}
                   />

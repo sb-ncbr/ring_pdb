@@ -16,15 +16,20 @@ interface RingCardProps {
   confs?: { name: string; count: number }[];
   handleCardSelect: () => void;
   isSelected: boolean;
-  // disabled: boolean;
+  disabled: boolean;
 }
 
 export const SelectableCard = styled(Card)(({ theme, selected }) => ({
   transform: selected ? 'translateY(-10px)' : 'none',
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  backgroundColor: '#fff',
+  '&.MuiPaper-root': {
+    backgroundColor: '#fff',
+  },
   '&:hover': {
     boxShadow: selected ? theme.shadows[24] : theme.shadows[6],
+    backgroundColor: '#fff',
   },
   maxWidth: 345,
   width: 345,
@@ -37,11 +42,11 @@ export const RingCard: React.FC<RingCardProps> = ({
   total,
   handleCardSelect,
   isSelected,
-  // disabled,
+  disabled,
 }) => {
   return (
     <SelectableCard selected={isSelected}>
-      <CardActionArea onClick={handleCardSelect}>
+      <CardActionArea onClick={handleCardSelect} disabled={disabled || isSelected}>
         <CardContent>
           <Box sx={{ height: 300 }}>
             <RotatingMolecule modelPath={`/static/geometry/${name}.glb`} />
