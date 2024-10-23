@@ -1,33 +1,49 @@
+import { Environment, useGLTF, View } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import React, { useRef } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Group } from 'three';
 
 interface RotatingMoleculeProps {
   modelPath: string;
 }
 
 const Molecule: React.FC<{ modelPath: string }> = ({ modelPath }) => {
-  const gltf = useLoader(GLTFLoader, modelPath);
-  const modelRef = useRef<THREE.Group>(null);
+  const ref = useRef<Group>(null);
+  const { scene } = useGLTF(modelPath);
 
-  useFrame(() => {
-    if (modelRef.current) {
-      modelRef.current.rotation.y += 0.01;
+  useFrame((_state, delta) => {
+    if (ref.current) {
+      ref.current.rotation.y += delta;
     }
   });
 
-  return <primitive object={gltf.scene} ref={modelRef} />;
+  return (
+    <group ref={ref} dispose={null}>
+      <primitive ref={ref} object={scene} />
+    </group>
+  );
 };
 
 export const RotatingMolecule: React.FC<RotatingMoleculeProps> = ({ modelPath }) => {
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 5, 5]} />
+      <View style={{ height: '100%', width: '100%' }}>
+        <Common color="lightblue" />
         <Molecule modelPath={modelPath} />
-      </Canvas>
+      </View>
     </div>
   );
 };
+
+function Common({ color }: { color: string }) {
+  return (
+    <>
+      {color && <color attach="background" args={[color]} />}
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[0, 5, 5]} />
+      <pointLight position={[20, 30, 10]} intensity={1} />
+      <pointLight position={[-10, -10, -10]} color="blue" />
+      <Environment preset="sunset" />
+    </>
+  );
+}
