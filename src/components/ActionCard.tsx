@@ -1,12 +1,11 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import CardActionArea from '@mui/material/CardActionArea';
 
 
 interface ActionCardProps {
@@ -14,77 +13,56 @@ interface ActionCardProps {
   body: string;
   action: string;
   inputValue?: string;
-  buttonText?: string;
   color: string;
   url?: string;
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, buttonText, color, url }) => (
-  <Card
-    sx={{
-      minWidth: 300,
-      width: 300,
-      minHeight: 280,
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: color,
-      padding: '0 8px'
-    }}
-  >
-    <CardContent
+const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, color, url }) => {
+  const navigate = useNavigate()
+  return (
+    <Card
       sx={{
-        flex: '1 0 auto',
-        padding: '24px 16px',
-      }}>
-      <Typography variant="h6" component="div">
-        {header}
-      </Typography>
-      <Typography variant="body2" sx={{ mt: 1 }}>
-        {body}
-      </Typography>
-    </CardContent>
-    <CardActions
-      sx={{
-        flexShrink: 0,
-        justifyContent: 'center',
-        padding: '16px',
-        height: '72px'
+        minWidth: 300,
+        width: 300,
+        minHeight: 350,
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: color,
       }}
     >
-      {action === "button"
-        ?
-        <Button
-          size="small"
-          variant='outlined'
-          sx={{ height: '40px' }}
-          {...(url ? { component: Link, to: url } : {})}
-        >
-          {buttonText}
-        </Button>
-        :
-        <Box
-          component="form"
+      <CardActionArea sx={{ height: '100%' }} onClick={action === "button" ? () => navigate(url) : undefined}>
+        <CardContent
           sx={{
-            '& > :not(style)': { m: 1, width: '25ch' },
+            flex: '1 0 auto',
+            padding: '48px',
           }}
-          noValidate
-          autoComplete="off"
         >
-          <TextField
-            id="search-by"
-            variant="outlined"
-            placeholder={inputValue}
-            sx={{
-              height: '40px',
-              '& .MuiInputBase-root': {
-                height: '100%',
-                padding: '0 10px',
-              },
-            }} />
-        </Box>
-      }
-    </CardActions>
-  </Card>
-);
+          <Typography variant="h6" component="div">
+            {header}
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {body}
+          </Typography>
+          {action === "input" ? <Box
+              component="form"
+            >
+              <TextField
+                id="search-by"
+                variant="outlined"
+                placeholder={inputValue}
+                sx={{
+                  height: '40px',
+                  '& .MuiInputBase-root': {
+                    height: '100%',
+                    padding: '0 10px',
+                  },
+                }}
+              />
+            </Box> : null}
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
 
 export default ActionCard;
