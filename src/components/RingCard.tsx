@@ -22,6 +22,7 @@ interface RingCardProps {
 export const SelectableCard = styled(Card)(({ theme, selected }) => ({
   transform: selected ? 'translateY(-10px)' : 'none',
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
+  border: selected ? `1px solid ${theme.palette.primary.main}` : '0',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   backgroundColor: '#fff',
   '&.MuiPaper-root': {

@@ -17,7 +17,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
-const steps = ['Select a ring type', 'Select a conformation'];
+const steps = ['Select a ring type', 'Select conformations'];
 
 const StickyButton = styled(Button)(({ theme }) => ({
   padding: '10px 20px',
@@ -72,7 +72,7 @@ const AnimatedCard = styled(Card)`
 export default function RingsStepper() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const [filterValues, setFilterValues] = useState({ ring: null, conf: null });
+  const [filterValues, setFilterValues] = useState({ ring: null, confs: new Set() });
   const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
@@ -80,25 +80,39 @@ export default function RingsStepper() {
 
   const handleRingSelect = (ring) => {
     setSelectedRing(ring);
-    setFilterValues({ ring: ring.name, conf: null });
+    setFilterValues({ ring: ring.name, confs: new Set() });
     setIsStepTwoComplete(false);
     setShowStickyButton(false);
     if (!selectedRing.index) {
       handleNext();
     }
   };
-  const handleConfSelect = (conf) => {
-    setFilterValues({ ...filterValues, conf: conf });
-    setIsStepTwoComplete(true);
-    setShowStickyButton(true);
-  };
+
+  const handleConfCardClick = (conf) => {
+  setFilterValues((prevFilterValues) => {
+    const confs = prevFilterValues.confs;
+    if (confs.has(conf)) {
+      confs.delete(conf);
+    } else {
+      confs.add(conf);
+    }
+    return {
+      ...prevFilterValues,
+      confs: confs,
+    };
+  });
+  setIsStepTwoComplete(filterValues.confs.size != 0);
+  setShowStickyButton(filterValues.confs.size != 0);
+};
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
   const handleBrowseData = () => {
     setIsLoading(true);
-    navigate(`/data?ring=${filterValues.ring}&conf=${filterValues.conf}`);
+    const confValues = Array.from(filterValues.confs).join(';');
+    navigate(`/data?ring=${filterValues.ring}&conf=${confValues}`);
   };
 
   return (
@@ -161,8 +175,8 @@ export default function RingsStepper() {
                   <ConformationCard
                     key={index}
                     {...conf}
-                    handleCardSelect={() => handleConfSelect(conf.name)}
-                    isSelected={filterValues.conf === conf.name}
+                    handleCardClick={() => handleConfCardClick(conf.name)}
+                    isSelected={filterValues.confs.has(conf.name)}
                     disabled={isLoading}
                     ring={selectedRing.name}
                     favorable={conf.favorable}

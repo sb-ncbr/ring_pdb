@@ -8,20 +8,20 @@ import { RotatingMolecule } from './RotatingMolecule.tsx';
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
 
-interface RingCardProps {
+interface ConfCardProps {
   name: string;
   count: number;
-  handleCardSelect: () => void;
+  handleCardClick: () => void;
   isSelected: boolean;
   disabled: boolean;
   ring: string;
   favorable: boolean;
 }
 
-export const ConformationCard: React.FC<RingCardProps> = ({
+export const ConformationCard: React.FC<ConfCardProps> = ({
   name,
   count,
-  handleCardSelect,
+  handleCardClick,
   isSelected,
   disabled,
   ring,
@@ -30,7 +30,7 @@ export const ConformationCard: React.FC<RingCardProps> = ({
   const mainColor = favorable ? '#2587E2' : '#CD4139';
   return (
     <SelectableCard selected={isSelected} sx={{ maxWidth: 325 }}>
-      <CardActionArea onClick={handleCardSelect} disabled={disabled}>
+      <CardActionArea onClick={handleCardClick} disabled={disabled}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '16px' }}>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}
