@@ -1,13 +1,25 @@
 import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { Chip, Typography } from '@mui/material';
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { generateUniqueOptions } from './testGeneratedData.ts';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 import ringCards from '../content/ringCards.json';
+import { useState } from 'react';
 
 const formatString = (str, splitBy) => {
   const substring = str.split(',');
@@ -235,25 +247,99 @@ export const columnsData: ColumnDataMRT[] = [
     enableSorting: false,
     enableColumnFilter: false,
     Cell: ({ cell, row }) => {
-      // console.log(row.original);
+      const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(
+        null,
+      );
+      const [openOverlay, setOpenOverlay] = useState(false);
+
+      const handleContextMenu = (event: MouseEvent) => {
+        event.preventDefault();
+        setContextMenu({
+          mouseX: event.clientX + 2,
+          mouseY: event.clientY - 6,
+        });
+      };
+      const handleCloseContextMenu = () => {
+        setContextMenu(null);
+      };
+      const handleShowImage = () => {
+        setOpenOverlay(true);
+        handleCloseContextMenu();
+      };
+      const handleCloseOverlay = () => {
+        setOpenOverlay(false);
+      };
+
       return (
-        <Link
-          to={`/ring-details/${row.original.ring_id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          underline="none"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <img
-            src={cell.getValue<string>()}
-            alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
-            style={{ maxHeight: 50, margin: -10 }}
-          />
-        </Link>
+        <>
+          <Link
+            to={`/ring-details/${row.original.ring_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            underline="none"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onContextMenu={handleContextMenu}
+          >
+            <img
+              src={cell.getValue<string>()}
+              alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
+              style={{ maxHeight: 50, margin: -10 }}
+            />
+          </Link>
+          <Menu
+            open={contextMenu !== null}
+            onClose={handleCloseContextMenu}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              contextMenu !== null
+                ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                : undefined
+            }
+          >
+            <MenuItem onClick={handleShowImage}>Show Image</MenuItem>
+          </Menu>
+          {/* Overlay Modal */}
+          <Dialog open={openOverlay} onClose={handleCloseOverlay} fullWidth maxWidth="lg">
+            <DialogActions>
+              <IconButton
+                onClick={handleCloseOverlay}
+                sx={{ position: 'absolute', right: 8, top: 8 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogActions>
+            <DialogContent
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+              }}
+            >
+              <Typography variant="h6">
+                Ring atoms: {row.original.ring_id.split('_')[4].replaceAll('-', ' ')}
+              </Typography>
+              <Box
+                component="img"
+                src={cell.getValue<string>()}
+                alt={`Vector graphics of ligand ${row.original.ccd_id}`}
+                sx={{
+                  maxWidth: '60%',
+                  maxHeight: '70vh',
+                  marginBottom: 2,
+                  objectFit: 'contain',
+                }}
+              />
+              {/*<Typography variant="h6" mt={2}>*/}
+              {/*  Ligand {row.original.ccd_id}*/}
+              {/*</Typography>*/}
+            </DialogContent>
+          </Dialog>
+        </>
       );
     },
   },
