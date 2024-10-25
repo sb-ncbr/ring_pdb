@@ -18,13 +18,11 @@ import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const TableMRT = () => {
-  const [searchParams] = useSearchParams();
-  const filterByRing = searchParams.get('ring');
-  const filterByConf = searchParams.get('conf');
-  console.log(`Filtered by ${filterByRing} and ${filterByConf}`);
+  const location = useLocation();
+  console.log(location.state);
 
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
   const [data, setData] = useState<APIData[]>([]);
@@ -33,6 +31,18 @@ const TableMRT = () => {
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
+
+  const [pageFilters, setPageFilters] = useState({
+    ring: [],
+    confs: [],
+    pdb_id: [],
+    ccd_id: [],
+  });
+
+  const filters = {
+    ...location.state?.filters,
+    // ...pageFilters,
+  };
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -61,11 +71,10 @@ const TableMRT = () => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get('http://localhost:5000/api/data', {
-        params: {
-          pageIndex: pagination.pageIndex + 1,
-          pageSize: pagination.pageSize,
-        },
+      .post('http://localhost:5000/api/data', {
+        pageIndex: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+        filters: location.state.filters,
       })
       .then((response) => {
         setData(response.data.rows);
@@ -77,7 +86,7 @@ const TableMRT = () => {
         setIsError(true);
         return;
       });
-  }, [pagination.pageIndex, pagination.pageSize]);
+  }, [pagination.pageIndex, pagination.pageSize, pageFilters]);
 
   useEffect(() => {
     if (isCompactView) {

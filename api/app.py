@@ -19,35 +19,67 @@ CORS(app)
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
 
+mapping_methods = {
+    'X-RAY DIFFRACTION': 'X-ray diffraction',
+    'SOLUTION NMR': 'Solution NMR ',
+    'ELECTRON MICROSCOPY': 'Electron microscopy',
+}
+
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
 data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'N/A')
 data['rsr'] = data['rsr'].replace(np.nan, 'N/A')
 data['rscc'] = data['rscc'].replace(np.nan, 'N/A')
 data['resolution'] = data['resolution'].replace(np.nan, 'N/A')
 data['ring_id'] = data.index
+data['conformation'] = data['conformation'].str.replace('_', ' ').str.capitalize()
+data['conformation'] = data['conformation'].replace({
+    'Tw boat left': 'Twist boat',
+    'Tw boat right': 'Twist boat'
+})
+data['experimental_method'] = data['experimental_method'].replace(mapping_methods)
+
+# conformation_mapping = {
+#     'Twist boat': ['Tw boat left', 'Tw boat right']
+# }
+
+# data['mapped_conformation'] = data['conformation'].map(
+#     lambda x: next((key for key, values in conformation_mapping.items() if x in values), None)
+# )
 
 
-@app.route('/api/data', methods=['GET'])
+@app.route('/api/data', methods=['POST'])
 def get_paginated_data():
-    try:
-        page_index = int(request.args.get('pageIndex', 1))
+    received_data = request.json
 
+    page_index = received_data.get('pageIndex', 1)
+    page_size = received_data.get('pageSize', 10)
+
+    try:
+        page_index = int(page_index)
+        page_size = int(page_size)
     except (ValueError, TypeError):
         page_index = 1
+        page_size = 10
 
-    print(page_index)
-    page_size = int(request.args.get('pageSize', 10))
-
-    # Calculate start and end indices for the page
     start_idx = (page_index - 1) * page_size
     end_idx = start_idx + page_size
 
-    paginated_data = data.iloc[start_idx:end_idx]
+    filters = received_data.get('filters', {})
+    print(filters['ring'])
+    print(filters['confs'])
+
+    data['filter_by_ring'] = data['ring_type'] == filters.get('ring')
+    data['filter_by_conf'] = data['conformation'].isin(filters.get('confs'))
+
+    data['filter_final'] = data[['filter_by_ring', 'filter_by_conf']].all(axis=1)
+    filtered_data = data[data['filter_final']]
+
+    paginated_data = filtered_data.iloc[start_idx:end_idx]
     response = {
         'rows': paginated_data.to_dict(orient='records'),
-        'totalRows': len(data)
+        'totalRows': len(filtered_data)
     }
-    print(data)
+    print(paginated_data)
 
     return jsonify(response)
 

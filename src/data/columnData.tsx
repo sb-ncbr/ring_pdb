@@ -2,7 +2,6 @@ import { ColumnDataMRT } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import {
-  Button,
   Chip,
   Dialog,
   DialogActions,
@@ -21,32 +20,12 @@ import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple
 import ringCards from '../content/ringCards.json';
 import { useState } from 'react';
 
-const formatString = (str, splitBy) => {
-  const substring = str.split(',');
-  if (substring.length > 1) {
-    return formatString(substring[0], splitBy) + ', ' + formatString(substring[1].trim(), splitBy);
-  }
-  const words = str.split(splitBy);
-  const firstWord = words[0].charAt(0).toUpperCase() + words[0].slice(1).toLowerCase();
-  const remainingWords = words.slice(1).join(' ').toLowerCase();
-
-  return `${firstWord} ${remainingWords}`.trim();
-};
-
 const isFavorable = (ringName, confName) => {
   const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
 
   if (!ring) return null;
-
-  //TODO TMP FIX!
-  if (
-    ring.name === 'Cyclohexane' &&
-    (confName === 'TW_BOAT_LEFT' || confName === 'TW_BOAT_RIGHT')
-  ) {
-    return true;
-  }
   const conf = ring.confs.find((c) => {
-    return c.name.toLowerCase() === formatString(confName, '_').toLowerCase();
+    return c.name === confName;
   });
   return conf ? conf.favorable : null;
 };
@@ -157,9 +136,7 @@ export const columnsData: ColumnDataMRT[] = [
             gap: '16px',
           }}
         >
-          <Typography sx={{ fontSize: '0.9rem' }}>
-            {formatString(row.original.conformation, '_')}
-          </Typography>
+          <Typography sx={{ fontSize: '0.9rem' }}>{row.original.conformation}</Typography>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}
             size="small"
@@ -189,7 +166,6 @@ export const columnsData: ColumnDataMRT[] = [
       );
     },
     Cell: ({ cell, row }) => {
-      // const text = formatString(cell.getValue<string>(), ' ');
       const text = cell.getValue<string>();
       return (
         <Box

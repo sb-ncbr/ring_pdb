@@ -89,21 +89,21 @@ export default function RingsStepper() {
   };
 
   const handleConfCardClick = (conf) => {
-  setFilterValues((prevFilterValues) => {
-    const confs = prevFilterValues.confs;
-    if (confs.has(conf)) {
-      confs.delete(conf);
-    } else {
-      confs.add(conf);
-    }
-    return {
-      ...prevFilterValues,
-      confs: confs,
-    };
-  });
-  setIsStepTwoComplete(filterValues.confs.size != 0);
-  setShowStickyButton(filterValues.confs.size != 0);
-};
+    setFilterValues((prevFilterValues) => {
+      const confs = prevFilterValues.confs;
+      if (confs.has(conf)) {
+        confs.delete(conf);
+      } else {
+        confs.add(conf);
+      }
+      return {
+        ...prevFilterValues,
+        confs: confs,
+      };
+    });
+    setIsStepTwoComplete(filterValues.confs.size != 0);
+    setShowStickyButton(filterValues.confs.size != 0);
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
@@ -111,8 +111,14 @@ export default function RingsStepper() {
 
   const handleBrowseData = () => {
     setIsLoading(true);
-    const confValues = Array.from(filterValues.confs).join(';');
-    navigate(`/data?ring=${filterValues.ring}&conf=${confValues}`);
+    navigate('/data', {
+      state: {
+        filters: {
+          ring: filterValues.ring,
+          confs: Array.from(filterValues.confs),
+        },
+      },
+    });
   };
 
   return (
