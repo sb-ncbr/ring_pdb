@@ -7,6 +7,7 @@ import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { generateUniqueOptions } from './testGeneratedData.ts';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
+import ringCards from '../content/ringCards.json';
 
 const formatString = (str, splitBy) => {
   const substring = str.split(',');
@@ -18,6 +19,16 @@ const formatString = (str, splitBy) => {
   const remainingWords = words.slice(1).join(' ').toLowerCase();
 
   return `${firstWord} ${remainingWords}`.trim();
+};
+
+const isFavorable = (ringName, confName) => {
+  const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
+
+  if (!ring) return null;
+  const conf = ring.confs.find((c) => {
+    return c.name.toLowerCase() === formatString(confName, '_').toLowerCase();
+  });
+  return conf ? conf.favorable : null;
 };
 
 const pdbOptions: string[] = generateUniqueOptions(100, 'pdb');
@@ -111,8 +122,10 @@ export const columnsData: ColumnDataMRT[] = [
         />
       );
     },
-    Cell: ({ cell }) => {
-      const favorable = cell.getValue<string>() !== 'HALF_CHAIR'; // tmp value
+    Cell: ({ row }) => {
+      const conf = row.original.conformation;
+      const ring = row.original.ring_type;
+      const favorable = isFavorable(ring, conf);
       const mainColor = favorable ? '#2587E2' : '#CD4139';
 
       return (
@@ -125,7 +138,7 @@ export const columnsData: ColumnDataMRT[] = [
           }}
         >
           <Typography sx={{ fontSize: '0.9rem' }}>
-            {formatString(cell.getValue<string>(), '_')}
+            {formatString(row.original.conformation, '_')}
           </Typography>
           <Chip
             label={favorable ? 'favorable' : 'unfavorable'}

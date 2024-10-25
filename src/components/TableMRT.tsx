@@ -165,7 +165,7 @@ const TableMRT = () => {
       },
     },
     onSortingChange: setSorting,
-    isMultiSortEvent: () => true,
+    isMultiSortEvent: () => false,
     state: { isLoading, sorting, columnVisibility, pagination },
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
