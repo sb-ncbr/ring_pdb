@@ -25,6 +25,14 @@ const isFavorable = (ringName, confName) => {
   const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
 
   if (!ring) return null;
+
+  //TODO TMP FIX!
+  if (
+    ring.name === 'Cyclohexane' &&
+    (confName === 'TW_BOAT_LEFT' || confName === 'TW_BOAT_RIGHT')
+  ) {
+    return true;
+  }
   const conf = ring.confs.find((c) => {
     return c.name.toLowerCase() === formatString(confName, '_').toLowerCase();
   });
