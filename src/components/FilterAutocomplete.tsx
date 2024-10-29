@@ -1,42 +1,48 @@
 import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Checkbox, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
+import axios from 'axios';
 
 export default function FilterAutocomplete({
-  allOptions,
   filterByLabel,
+  selectedValues,
+  onChange,
 }: {
-  allOptions: string[];
   filterByLabel: string;
+  selectedValues: string[];
+  onChange: (newValue) => void;
 }) {
-  type Option = (typeof allOptions)[number];
+  const [allOptions, setAllOptions] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
-  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   // Function to filter options based on the input value
-  const filterOptions = (options: Option[], input: string) => {
-    return options.filter((option) => option.toLowerCase().includes(input.toLowerCase()));
+  const filterOptions = (options: string[], input: string) => {
+    return options.filter((option) => {
+      return input.toLowerCase().trim() === option.slice(0, input.length).toLowerCase().trim();
+    });
   };
 
-  const handleToggleSelectAll = (visibleOptions: Option[]) => {
+  const handleToggleSelectAll = (visibleOptions: string[]) => {
     setSelectedOptions((prevSelectedOptions) => {
       const newSelectedOptions = selectAll
         ? prevSelectedOptions.filter((option) => !visibleOptions.includes(option))
         : [...new Set([...prevSelectedOptions, ...visibleOptions])]; // Append visible options
 
+      onChange(newSelectedOptions);
       return newSelectedOptions;
     });
     setSelectAll((prev) => !prev); // Toggle selectAll state
   };
 
-  const handleChange = (_: any, value: Option[], reason: string) => {
+  const handleChange = (_: any, value: string[], reason: string) => {
     if (reason === 'clear' || reason === 'removeOption') {
       setSelectAll(false);
     }
@@ -46,7 +52,22 @@ export default function FilterAutocomplete({
       setSelectAll(value.length === filteredOptions.length);
     }
     setSelectedOptions(value);
+    onChange(value);
   };
+
+  const url = filterByLabel === 'PDB ID' ? '/api/get_pdb_ids' : '/api/get_ccd_ids';
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((response) => {
+        setAllOptions(response.data);
+      })
+      .catch((error) => {
+        console.log('Error fetching data:', error);
+        return;
+      });
+  }, []);
 
   return (
     <Box
@@ -62,6 +83,9 @@ export default function FilterAutocomplete({
         filterSelectedOptions
         value={selectedOptions}
         onChange={handleChange}
+        options={allOptions}
+        getOptionLabel={(option) => option}
+        open={inputValue.length >= 2}
         PaperComponent={(paperProps) => {
           const { children, ...restPaperProps } = paperProps;
           const visibleOptions = filterOptions(allOptions, inputValue);
@@ -89,9 +113,6 @@ export default function FilterAutocomplete({
             </Paper>
           );
         }}
-        options={allOptions}
-        getOptionLabel={(option) => option}
-        open={inputValue.length >= 2}
         onInputChange={(_e, value) => {
           setInputValue(value);
           setSelectAll(false); // Unselect "Select All" when input changes

@@ -51,15 +51,31 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'PDB ID',
     accessorKey: 'pdb_id',
     size: 60,
-    Filter: () => {
-      return <FilterAutocomplete allOptions={pdbOptions} filterByLabel="PDB ID" />;
+    Filter: ({ column }) => {
+      return (
+        <FilterAutocomplete
+          filterByLabel="PDB ID"
+          selectedValues={column.getFilterValue() as string[]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
+        />
+      );
     },
   },
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: () => {
-      return <FilterAutocomplete allOptions={ccdOptions} filterByLabel="CCD ID" />;
+    Filter: ({ column }) => {
+      return (
+        <FilterAutocomplete
+          filterByLabel="CCD ID"
+          selectedValues={column.getFilterValue() as string[]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
+        />
+      );
     },
   },
   {

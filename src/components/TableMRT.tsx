@@ -131,7 +131,7 @@ const TableMRT = () => {
     data,
     columnFilterDisplayMode: 'custom',
     getRowId: (row) => row['Ring ID'],
-    enableFacetedValues: true,
+    // enableFacetedValues: true,
     defaultColumn: {
       minSize: 10,
       maxSize: 100,

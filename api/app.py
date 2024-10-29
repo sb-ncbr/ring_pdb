@@ -52,6 +52,17 @@ print(data['experimental_method'].value_counts())
 #     lambda x: next((key for key, values in conformation_mapping.items() if x in values), None)
 # )
 
+@app.route('/api/get_pdb_ids', methods=['GET'])
+def get_pdb_ids():
+    pdb_ids = data['pdb_id'].unique().tolist()
+    return jsonify(pdb_ids), 200
+
+
+@app.route('/api/get_ccd_ids', methods=['GET'])
+def get_ccd_ids():
+    ccd_ids = data['ccd_id'].unique().tolist()
+    return jsonify(ccd_ids), 200
+
 
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():
@@ -81,6 +92,10 @@ def get_paginated_data():
             filtered_data = filtered_data[filtered_data['conformation'].isin(filter['value'])]
         elif filter['id'] == 'experimental_method':
             filtered_data = filtered_data[filtered_data['experimental_method'].isin(filter['value'])]
+        elif filter['id'] == 'pdb_id':
+            filtered_data = filtered_data[filtered_data['pdb_id'].isin(filter['value'])]
+        elif filter['id'] == 'ccd_id':
+            filtered_data = filtered_data[filtered_data['ccd_id'].isin(filter['value'])]
 
     paginated_data = filtered_data.iloc[start_idx:end_idx]
     response = {
