@@ -59,7 +59,7 @@ export const FilterAutocompleteSimple = ({
                   const { key, ...tagProps } = getTagProps({ index });
                   return (
                     <Chip
-                      key={key}
+                      key={`${option}-${selectedValues.length}`}
                       label={option}
                       {...tagProps}
                       sx={{ ...getChipStyles(option, theme) }}
