@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { Checkbox, Paper } from '@mui/material';
@@ -29,6 +29,11 @@ export default function FilterAutocomplete({
       return input.toLowerCase().trim() === option.slice(0, input.length).toLowerCase().trim();
     });
   };
+
+  const filterOptionsMUI = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option,
+  });
 
   const handleToggleSelectAll = (visibleOptions: string[]) => {
     setSelectedOptions((prevSelectedOptions) => {
@@ -81,6 +86,7 @@ export default function FilterAutocomplete({
         // size="small"
         // limitTags={10}
         filterSelectedOptions
+        filterOptions={filterOptionsMUI}
         value={selectedOptions}
         onChange={handleChange}
         options={allOptions}
