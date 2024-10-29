@@ -64,15 +64,14 @@ def get_paginated_data():
     start_idx = (page_index - 1) * page_size
     end_idx = start_idx + page_size
 
-    filters = received_data.get('filters', {})
-    print(filters['ring'])
-    print(filters['confs'])
+    filters = received_data.get('filters', [])
+    filtered_data = data
 
-    data['filter_by_ring'] = data['ring_type'] == filters.get('ring')
-    data['filter_by_conf'] = data['conformation'].isin(filters.get('confs'))
-
-    data['filter_final'] = data[['filter_by_ring', 'filter_by_conf']].all(axis=1)
-    filtered_data = data[data['filter_final']]
+    for filter in filters:
+        if filter['id'] == 'ring_type':
+            filtered_data = filtered_data[filtered_data['ring_type'].isin(filter['value'])]
+        elif filter['id'] == 'conformation':
+            filtered_data = filtered_data[filtered_data['conformation'].isin(filter['value'])]
 
     paginated_data = filtered_data.iloc[start_idx:end_idx]
     response = {

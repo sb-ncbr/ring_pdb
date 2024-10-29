@@ -72,11 +72,15 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
-    Filter: () => {
+    Filter: ({ column }) => {
       return (
         <FilterAutocompleteSimple
           options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
           filterByLabel="ring type"
+          selectedValues={column.getFilterValue() as string[]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
         />
       );
     },
@@ -113,11 +117,15 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'conformation',
     enableSorting: false,
 
-    Filter: () => {
+    Filter: ({ column }) => {
       return (
         <FilterAutocompleteSimple
           options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
           filterByLabel="conformation"
+          selectedValues={column.getFilterValue() as string[]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
         />
       );
     },

@@ -10,9 +10,13 @@ import { getChipStyles } from '../data/columnData.tsx';
 export const FilterAutocompleteSimple = ({
   options,
   filterByLabel,
+  selectedValues,
+  onChange,
 }: {
   options: string[];
   filterByLabel: string;
+  selectedValues: string[];
+  onChange: (newValue) => void;
 }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -26,10 +30,13 @@ export const FilterAutocompleteSimple = ({
     >
       <Autocomplete
         multiple
-        // size="small"
         disableCloseOnSelect
         options={options}
+        value={selectedValues}
         getOptionLabel={(option) => option}
+        onChange={(event, newValue) => {
+          onChange(newValue);
+        }}
         renderInput={(params) => <TextField {...params} label={`Filter by ${filterByLabel}`} />}
         renderOption={(props, option, { selected }) => {
           const { key, ...optionProps } = props;
@@ -54,7 +61,6 @@ export const FilterAutocompleteSimple = ({
                     <Chip
                       key={key}
                       label={option}
-                      // size="small"
                       {...tagProps}
                       sx={{ ...getChipStyles(option, theme) }}
                     />

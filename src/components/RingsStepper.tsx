@@ -114,8 +114,8 @@ export default function RingsStepper() {
     navigate('/data', {
       state: {
         filters: {
-          ring: filterValues.ring,
-          confs: Array.from(filterValues.confs),
+          ring_type: Array(filterValues.ring),
+          conformation: Array.from(filterValues.confs),
         },
       },
     });

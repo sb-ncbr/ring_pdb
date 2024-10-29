@@ -6,6 +6,7 @@ import {
   type MRT_ColumnDef,
   type MRT_SortingState,
   MRT_TableHeadCellFilterContainer,
+  MRT_ColumnFiltersState,
 } from 'material-react-table';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
@@ -22,8 +23,6 @@ import { useLocation } from 'react-router-dom';
 
 const TableMRT = () => {
   const location = useLocation();
-  console.log(location.state);
-
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
   const [data, setData] = useState<APIData[]>([]);
   const [isError, setIsError] = useState(false);
@@ -32,17 +31,14 @@ const TableMRT = () => {
   const [isCompactView, setIsCompactView] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
 
-  const [pageFilters, setPageFilters] = useState({
-    ring: [],
-    confs: [],
-    pdb_id: [],
-    ccd_id: [],
-  });
+  const initialFilters = location.state?.filters
+    ? Object.entries(location.state.filters).map(([id, value]) => ({
+        id, // columnKey
+        value,
+      }))
+    : [];
 
-  const filters = {
-    ...location.state?.filters,
-    // ...pageFilters,
-  };
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(initialFilters);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -74,7 +70,7 @@ const TableMRT = () => {
       .post('http://localhost:5000/api/data', {
         pageIndex: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        filters: location.state.filters,
+        filters: columnFilters,
       })
       .then((response) => {
         setData(response.data.rows);
@@ -86,7 +82,7 @@ const TableMRT = () => {
         setIsError(true);
         return;
       });
-  }, [pagination.pageIndex, pagination.pageSize, pageFilters]);
+  }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
 
   useEffect(() => {
     if (isCompactView) {
@@ -153,6 +149,7 @@ const TableMRT = () => {
     manualPagination: true,
     rowCount: totalRows,
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
     paginationDisplayMode: 'pages',
     initialState: {
       density: 'compact',
@@ -175,7 +172,7 @@ const TableMRT = () => {
     },
     onSortingChange: setSorting,
     isMultiSortEvent: () => false,
-    state: { isLoading, sorting, columnVisibility, pagination },
+    state: { isLoading, sorting, columnVisibility, pagination, columnFilters },
     renderTopToolbar: () => {
       const defaultFilterKeys = ['ring_type', 'conformation'];
       const advancedFilterKeys = [
