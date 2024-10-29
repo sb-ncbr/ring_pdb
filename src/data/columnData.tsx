@@ -165,11 +165,24 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: () => {
+    Filter: ({ column }) => {
       return (
         <FilterAutocompleteSimple
-          options={['X-ray diffraction', 'Hybrid method']}
+          options={[
+            'X-ray diffraction',
+            'Solution NMR',
+            'Electron microscopy',
+            'Electron crystallography',
+            'Solid-state NMR',
+            'Solution scattering',
+            'Neutron diffraction',
+            'Hybrid method',
+          ]}
           filterByLabel="experimental method"
+          selectedValues={column.getFilterValue() as string[]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
         />
       );
     },

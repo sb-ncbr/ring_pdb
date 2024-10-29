@@ -21,8 +21,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 mapping_methods = {
     'X-RAY DIFFRACTION': 'X-ray diffraction',
-    'SOLUTION NMR': 'Solution NMR ',
+    'SOLUTION NMR': 'Solution NMR',
     'ELECTRON MICROSCOPY': 'Electron microscopy',
+    'ELECTRON CRYSTALLOGRAPHY': 'Electron crystallography',
+    'SOLID-STATE NMR': 'Solid-state NMR',
+    'SOLUTION SCATTERING': 'Solution scattering',
+    'NEUTRON DIFFRACTION': 'Neutron diffraction',
 }
 
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
@@ -37,6 +41,8 @@ data['conformation'] = data['conformation'].replace({
     'Tw boat right': 'Twist boat'
 })
 data['experimental_method'] = data['experimental_method'].replace(mapping_methods)
+
+print(data['experimental_method'].value_counts())
 
 # conformation_mapping = {
 #     'Twist boat': ['Tw boat left', 'Tw boat right']
@@ -67,11 +73,14 @@ def get_paginated_data():
     filters = received_data.get('filters', [])
     filtered_data = data
 
-    for filter in filters:
+    non_empty_filters = [filter for filter in filters if filter['value']]
+    for filter in non_empty_filters:
         if filter['id'] == 'ring_type':
             filtered_data = filtered_data[filtered_data['ring_type'].isin(filter['value'])]
         elif filter['id'] == 'conformation':
             filtered_data = filtered_data[filtered_data['conformation'].isin(filter['value'])]
+        elif filter['id'] == 'experimental_method':
+            filtered_data = filtered_data[filtered_data['experimental_method'].isin(filter['value'])]
 
     paginated_data = filtered_data.iloc[start_idx:end_idx]
     response = {
@@ -103,6 +112,7 @@ def get_row_data():
 
 print(f"Environment: {app.config['ENV']}")
 print(f"Debug: {app.config['DEBUG']}")
+
 
 if __name__ == "__main__":
     app.run()

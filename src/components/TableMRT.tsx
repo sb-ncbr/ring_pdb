@@ -31,12 +31,29 @@ const TableMRT = () => {
   const [isCompactView, setIsCompactView] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
 
-  const initialFilters = location.state?.filters
+  const defaultFilterKeys = ['ring_type', 'conformation'];
+  const advancedFilterKeys = [
+    'pdb_id',
+    'ccd_id',
+    'experimental_method',
+    'resolution',
+    'ring_coverage',
+    'ligand_coverage',
+    'rsr',
+    'rscc',
+  ];
+
+  const previousFilters = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
         value,
       }))
     : [];
+
+  const initialFilters = [
+    ...previousFilters,
+    ...advancedFilterKeys.map((id) => ({ id, value: [] })),
+  ];
 
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(initialFilters);
 
@@ -174,18 +191,6 @@ const TableMRT = () => {
     isMultiSortEvent: () => false,
     state: { isLoading, sorting, columnVisibility, pagination, columnFilters },
     renderTopToolbar: () => {
-      const defaultFilterKeys = ['ring_type', 'conformation'];
-      const advancedFilterKeys = [
-        'pdb_id',
-        'ccd_id',
-        'experimental_method',
-        'resolution',
-        'ring_coverage',
-        'ligand_coverage',
-        'rsr',
-        'rscc',
-      ];
-
       function renderFilters(filterKeys: string[], index?: number) {
         return (
           <Box key={index} sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
