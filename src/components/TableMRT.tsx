@@ -24,13 +24,14 @@ import { useLocation } from 'react-router-dom';
 const TableMRT = () => {
   const location = useLocation();
   const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
-  const [data, setData] = useState<APIData[]>([]);
-  const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [isCompactView, setIsCompactView] = useState(false);
-  const [totalRows, setTotalRows] = useState(0);
 
+  let tableContainerMaxWidth = '1900px';
+  const columnDefaultState = {
+    experimental_method: true,
+    rsr: true,
+    rscc: true,
+    ligand_coverage: true,
+  };
   const defaultFilterKeys = ['ring_type', 'conformation'];
   const advancedFilterKeys = [
     'pdb_id',
@@ -42,36 +43,33 @@ const TableMRT = () => {
     'rsr',
     'rscc',
   ];
-
   const previousFilters = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
         value,
       }))
     : [];
-
   const initialFilters = [
     ...previousFilters,
     ...advancedFilterKeys.map((id) => ({ id, value: [] })),
   ];
-
+  const [data, setData] = useState<APIData[]>([]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const [isCompactView, setIsCompactView] = useState(false);
+  const [totalRows, setTotalRows] = useState(0);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(initialFilters);
-
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
-
-  let tableContainerMaxWidth = '1900px';
-
-  const columnDefaultState = {
-    experimental_method: true,
-    rsr: true,
-    rscc: true,
-    ligand_coverage: true,
-  };
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const handleSortingChange = (newSorting) => {
+    setSorting(newSorting);
+  };
 
   const toggleAdvancedFilter = () => {
     setShowAdvancedFilters((prev) => !prev);
@@ -88,9 +86,14 @@ const TableMRT = () => {
         pageIndex: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
         filters: columnFilters,
+        sorting: sorting,
       })
       .then((response) => {
-        setData(response.data.rows);
+        const transformedData = response.data.rows.map((item) => ({
+          ...item,
+          img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
+        }));
+        setData(transformedData);
         setTotalRows(response.data.totalRows);
         setIsLoading(false);
       })
@@ -99,7 +102,7 @@ const TableMRT = () => {
         setIsError(true);
         return;
       });
-  }, [pagination.pageIndex, pagination.pageSize, columnFilters]);
+  }, [pagination.pageIndex, pagination.pageSize, columnFilters, sorting]);
 
   useEffect(() => {
     if (isCompactView) {
@@ -187,7 +190,7 @@ const TableMRT = () => {
         width: 'auto',
       },
     },
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
     isMultiSortEvent: () => false,
     state: { isLoading, sorting, columnVisibility, pagination, columnFilters },
     renderTopToolbar: () => {

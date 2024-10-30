@@ -30,9 +30,6 @@ const isFavorable = (ringName, confName) => {
   return conf ? conf.favorable : null;
 };
 
-const pdbOptions: string[] = generateUniqueOptions(100, 'pdb');
-const ccdOptions: string[] = generateUniqueOptions(100, 'ccd');
-
 export const getChipStyles = (type: string, theme) => {
   switch (type) {
     case 'Cyclohexane':

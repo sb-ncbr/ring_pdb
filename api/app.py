@@ -42,7 +42,7 @@ data['conformation'] = data['conformation'].replace({
 })
 data['experimental_method'] = data['experimental_method'].replace(mapping_methods)
 
-print(data['experimental_method'].value_counts())
+# print(data['experimental_method'].value_counts())
 
 # conformation_mapping = {
 #     'Twist boat': ['Tw boat left', 'Tw boat right']
@@ -71,12 +71,8 @@ def get_paginated_data():
     page_index = received_data.get('pageIndex', 1)
     page_size = received_data.get('pageSize', 10)
 
-    try:
-        page_index = int(page_index)
-        page_size = int(page_size)
-    except (ValueError, TypeError):
-        page_index = 1
-        page_size = 10
+    page_index = int(page_index)
+    page_size = int(page_size)
 
     start_idx = (page_index - 1) * page_size
     end_idx = start_idx + page_size
@@ -97,7 +93,23 @@ def get_paginated_data():
         elif filter['id'] == 'ccd_id':
             filtered_data = filtered_data[filtered_data['ccd_id'].isin(filter['value'])]
 
-    paginated_data = filtered_data.iloc[start_idx:end_idx]
+    sorting = received_data.get('sorting', [])
+    sorted_data = filtered_data
+
+    if sorting:
+        sort_column = sorting[0].get('id')
+        sort_order_desc = sorting[0].get('desc')
+        try:
+            if sort_column == 'ring_coverage':
+                # ring_coverage_num
+                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'], errors='coerce')
+                sorted_data = sorted_data.sort_values('ring_coverage_float', ascending=(not sort_order_desc))
+            else:
+                sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
+        except Exception as e:
+            print('Error occurred while sorting: ', e)
+
+    paginated_data = sorted_data.iloc[start_idx:end_idx]
     response = {
         'rows': paginated_data.to_dict(orient='records'),
         'totalRows': len(filtered_data)
