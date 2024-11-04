@@ -7,6 +7,14 @@ import LinkIcon from '@mui/icons-material/Link';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Loader from '../components/Spinner.tsx';
 
+const getRingCoverageCounts = (rowValue) => {
+  if (rowValue == 'N/A') {
+    return;
+  }
+  const [covered, total] = rowValue.split(';');
+  return covered + '/' + total + ' rings';
+};
+
 const RingDetails: React.FC = () => {
   const { ringID } = useParams<{ ringID: string }>();
   // console.log(ringID);
@@ -126,7 +134,14 @@ const RingDetails: React.FC = () => {
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           Ring coverage:
         </Typography>
-        <Typography variant="body2">{ringData.ring_coverage}</Typography>
+        <Typography variant="body2">
+          {ringData.ring_coverage != 'N/A'
+            ? getRingCoverageCounts(ringData.ring_coverage_counts) +
+              ' (' +
+              ringData.ring_coverage +
+              ')'
+            : ringData.ring_coverage}
+        </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
