@@ -19,38 +19,16 @@ CORS(app)
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
 
-mapping_methods = {
-    'X-RAY DIFFRACTION': 'X-ray diffraction',
-    'SOLUTION NMR': 'Solution NMR',
-    'ELECTRON MICROSCOPY': 'Electron microscopy',
-    'ELECTRON CRYSTALLOGRAPHY': 'Electron crystallography',
-    'SOLID-STATE NMR': 'Solid-state NMR',
-    'SOLUTION SCATTERING': 'Solution scattering',
-    'NEUTRON DIFFRACTION': 'Neutron diffraction',
-}
-
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
 data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'N/A')
 data['rsr'] = data['rsr'].replace(np.nan, 'N/A')
 data['rscc'] = data['rscc'].replace(np.nan, 'N/A')
 data['resolution'] = data['resolution'].replace(np.nan, 'N/A')
+data['ring_coverage_counts'] = data['ring_coverage_counts'].replace(np.nan, 'N/A')
+data['ring_coverage_float'] = data['ring_coverage_float'].replace(np.nan, 'N/A')
 data['ring_id'] = data.index
-data['conformation'] = data['conformation'].str.replace('_', ' ').str.capitalize()
-data['conformation'] = data['conformation'].replace({
-    'Tw boat left': 'Twist boat',
-    'Tw boat right': 'Twist boat'
-})
-data['experimental_method'] = data['experimental_method'].replace(mapping_methods)
+print(data['experimental_method'].value_counts())
 
-# print(data['experimental_method'].value_counts())
-
-# conformation_mapping = {
-#     'Twist boat': ['Tw boat left', 'Tw boat right']
-# }
-
-# data['mapped_conformation'] = data['conformation'].map(
-#     lambda x: next((key for key, values in conformation_mapping.items() if x in values), None)
-# )
 
 @app.route('/api/get_pdb_ids', methods=['GET'])
 def get_pdb_ids():
@@ -101,15 +79,15 @@ def get_paginated_data():
         sort_order_desc = sorting[0].get('desc')
         try:
             if sort_column == 'ring_coverage':
-                # ring_coverage_num
-                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'], errors='coerce')
+                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'], errors='coerce').astype('object')
                 sorted_data = sorted_data.sort_values('ring_coverage_float', ascending=(not sort_order_desc))
+                sorted_data['ring_coverage_float'] = sorted_data['ring_coverage_float'].apply(lambda x: 'N/A' if pd.isna(x) else x)
             else:
                 sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
         except Exception as e:
             print('Error occurred while sorting: ', e)
 
-    paginated_data = sorted_data.iloc[start_idx:end_idx]
+    paginated_data = sorted_data.iloc[start_idx:end_idx].fillna('N/A')
     response = {
         'rows': paginated_data.to_dict(orient='records'),
         'totalRows': len(filtered_data)
