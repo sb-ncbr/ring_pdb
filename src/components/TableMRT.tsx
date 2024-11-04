@@ -30,7 +30,7 @@ const TableMRT = () => {
     experimental_method: true,
     rsr: true,
     rscc: true,
-    ligand_coverage: true,
+    ligand_coverage: false,
   };
   const defaultFilterKeys = ['ring_type', 'conformation'];
   const advancedFilterKeys = [
@@ -74,10 +74,6 @@ const TableMRT = () => {
   const toggleAdvancedFilter = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
-
-  if (isCompactView) {
-    tableContainerMaxWidth = '1200px';
-  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -323,7 +319,14 @@ const TableMRT = () => {
   });
 
   return (
-    <Box sx={{ margin: '0 8px' }}>
+    <Box
+      sx={{
+        margin: '0 8px',
+        '.MuiTableHead-root .MuiIconButton-root': {
+          display: 'none',
+        },
+      }}
+    >
       <MaterialReactTable table={table} />
     </Box>
   );

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
 import { Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
+import LaunchIcon from '@mui/icons-material/Launch';
 import Loader from '../components/Spinner.tsx';
 
 const RingDetails: React.FC = () => {
@@ -75,12 +76,16 @@ const RingDetails: React.FC = () => {
             rel="noopener noreferrer"
             style={{
               textDecoration: 'none',
-              color: 'inherit',
+              color: '#0000FF',
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            {ringData.pdb_id} <LinkIcon fontSize="small" sx={{ marginLeft: '4px' }} />
+            <LinkIcon
+              fontSize="small"
+              sx={{ marginRight: '4px', marginLeft: '1px', color: '#0000FF' }}
+            />
+            {ringData.pdb_id}{' '}
           </a>
         </Typography>
       </Box>
@@ -95,12 +100,13 @@ const RingDetails: React.FC = () => {
             rel="noopener noreferrer"
             style={{
               textDecoration: 'none',
-              color: 'inherit',
+              color: '#0000FF',
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            {ringData.ccd_id} <LinkIcon fontSize="small" sx={{ marginLeft: '4px' }} />
+            <LinkIcon fontSize="small" sx={{ marginRight: '4px', color: '#0000FF' }} />
+            {ringData.ccd_id}{' '}
           </a>
         </Typography>
       </Box>
