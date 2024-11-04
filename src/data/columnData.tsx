@@ -15,33 +15,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
-import { generateUniqueOptions } from './testGeneratedData.ts';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import ringCards from '../content/ringCards.json';
 import { useState } from 'react';
-
-const isFavorable = (ringName, confName) => {
-  const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
-
-  if (!ring) return null;
-  const conf = ring.confs.find((c) => {
-    return c.name === confName;
-  });
-  return conf ? conf.favorable : null;
-};
-
-export const getChipStyles = (type: string, theme) => {
-  switch (type) {
-    case 'Cyclohexane':
-      return { backgroundColor: theme.palette.custom.paleGreen };
-    case 'Cyclopentane':
-      return { backgroundColor: theme.palette.custom.paleOrange };
-    case 'Benzene':
-      return { backgroundColor: theme.palette.custom.paleViolet };
-    default:
-      return { backgroundColor: theme.palette.background.default };
-  }
-};
+import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -102,7 +78,7 @@ export const columnsData: ColumnDataMRT[] = [
       const theme = useTheme();
       return (
         <Chip
-          label={ringType.charAt(0).toUpperCase() + ringType.slice(1)}
+          label={ringType}
           sx={{ ...getChipStyles(ringType, theme), color: '#000', width: 123 }}
         />
       );

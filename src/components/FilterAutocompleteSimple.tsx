@@ -5,7 +5,7 @@ import { Checkbox, Chip } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useTheme } from '@mui/material/styles';
-import { getChipStyles } from '../data/columnData.tsx';
+import { getChipStyles } from '../helperFunctions/helpers.ts';
 
 export const FilterAutocompleteSimple = ({
   options,

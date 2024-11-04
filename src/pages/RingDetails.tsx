@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
-import { Typography } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Loader from '../components/Spinner.tsx';
+import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
+import { useTheme } from '@mui/material/styles';
 
 const getRingCoverageCounts = (rowValue) => {
   if (rowValue == 'N/A') {
@@ -17,9 +19,9 @@ const getRingCoverageCounts = (rowValue) => {
 
 const RingDetails: React.FC = () => {
   const { ringID } = useParams<{ ringID: string }>();
-  // console.log(ringID);
   const [ringData, setRingData] = useState(null);
   const [error, setError] = useState(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchRingData = async () => {
@@ -50,6 +52,11 @@ const RingDetails: React.FC = () => {
     );
   }
 
+  const conf = ringData.conformation;
+  const ring = ringData.ring_type;
+  const favorable = isFavorable(ring, conf);
+  const mainColor = favorable ? '#2587E2' : '#CD4139';
+
   return (
     <Box
       sx={{
@@ -64,7 +71,6 @@ const RingDetails: React.FC = () => {
     >
       <Typography
         variant="h4"
-        component="div"
         sx={{
           width: '100%',
           margin: '16px 0',
@@ -72,7 +78,17 @@ const RingDetails: React.FC = () => {
         }}
       >
         Ring details
+        <Chip
+          label={ringData.ring_type}
+          sx={{
+            ...getChipStyles(ringData.ring_type, theme),
+            color: '#000',
+            width: 123,
+            marginLeft: '8px',
+          }}
+        />
       </Typography>
+
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           PDB ID:
@@ -126,12 +142,6 @@ const RingDetails: React.FC = () => {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
-          Ring type:
-        </Typography>
-        <Typography variant="body2">{ringData.ring_type}</Typography>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           Ring coverage:
         </Typography>
         <Typography variant="body2">
@@ -148,6 +158,12 @@ const RingDetails: React.FC = () => {
           Assigned conformation:
         </Typography>
         <Typography variant="body2">{ringData.conformation}</Typography>
+        <Chip
+          label={favorable ? 'favorable' : 'unfavorable'}
+          size="small"
+          variant="outlined"
+          sx={{ borderColor: mainColor, color: mainColor, marginLeft: '8px' }}
+        />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
