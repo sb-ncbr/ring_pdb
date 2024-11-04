@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
 import { Chip, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
-import LaunchIcon from '@mui/icons-material/Launch';
 import Loader from '../components/Spinner.tsx';
 import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
 import { useTheme } from '@mui/material/styles';
+import Link from '@mui/material/Link';
 
 const getRingCoverageCounts = (rowValue) => {
   if (rowValue == 'N/A') {
@@ -22,6 +22,7 @@ const RingDetails: React.FC = () => {
   const [ringData, setRingData] = useState(null);
   const [error, setError] = useState(null);
   const theme = useTheme();
+  const linkColor = 'info.main';
 
   useEffect(() => {
     const fetchRingData = async () => {
@@ -94,23 +95,23 @@ const RingDetails: React.FC = () => {
           PDB ID:
         </Typography>
         <Typography variant="body2">
-          <a
+          <Link
             href={`https://www.ebi.ac.uk/pdbe/entry/pdb/${ringData.pdb_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
+            sx={{
               textDecoration: 'none',
-              color: '#0000FF',
+              color: linkColor,
               display: 'flex',
               alignItems: 'center',
             }}
           >
             <LinkIcon
               fontSize="small"
-              sx={{ marginRight: '4px', marginLeft: '1px', color: '#0000FF' }}
+              sx={{ marginRight: '4px', marginLeft: '1px', color: linkColor }}
             />
             {ringData.pdb_id}{' '}
-          </a>
+          </Link>
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -118,20 +119,20 @@ const RingDetails: React.FC = () => {
           {labels.ccdID}:{' '}
         </Typography>
         <Typography variant="body2">
-          <a
+          <Link
             href={`https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/${ringData.ccd_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
+            sx={{
               textDecoration: 'none',
-              color: '#0000FF',
+              color: linkColor,
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            <LinkIcon fontSize="small" sx={{ marginRight: '4px', color: '#0000FF' }} />
+            <LinkIcon fontSize="small" sx={{ marginRight: '4px', color: linkColor }} />
             {ringData.ccd_id}{' '}
-          </a>
+          </Link>
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -152,18 +153,6 @@ const RingDetails: React.FC = () => {
               ')'
             : ringData.ring_coverage}
         </Typography>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
-          Assigned conformation:
-        </Typography>
-        <Typography variant="body2">{ringData.conformation}</Typography>
-        <Chip
-          label={favorable ? 'favorable' : 'unfavorable'}
-          size="small"
-          variant="outlined"
-          sx={{ borderColor: mainColor, color: mainColor, marginLeft: '8px' }}
-        />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
@@ -198,6 +187,18 @@ const RingDetails: React.FC = () => {
           RSCC:
         </Typography>
         <Typography variant="body2">{ringData.rscc}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Assigned conformation:
+        </Typography>
+        <Typography variant="body2">{ringData.conformation}</Typography>
+        <Chip
+          label={favorable ? 'favorable' : 'unfavorable'}
+          size="small"
+          variant="outlined"
+          sx={{ borderColor: mainColor, color: mainColor, marginLeft: '8px' }}
+        />
       </Box>
     </Box>
   );
