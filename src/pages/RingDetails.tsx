@@ -17,6 +17,15 @@ const getRingCoverageCounts = (rowValue) => {
   return covered + '/' + total + ' rings';
 };
 
+const getChainID = (ringID) => {
+  return ringID.split('_')[1];
+};
+
+const getAtoms = (ringID) => {
+  const atoms = ringID.split('_')[4];
+  return atoms.replaceAll('-', ' ');
+};
+
 const RingDetails: React.FC = () => {
   const { ringID } = useParams<{ ringID: string }>();
   const [ringData, setRingData] = useState(null);
@@ -137,6 +146,12 @@ const RingDetails: React.FC = () => {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Chain ID:
+        </Typography>
+        <Typography variant="body2">{getChainID(ringID)}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
           Residue ID:
         </Typography>
         <Typography variant="body2">{ringData.residue_id}</Typography>
@@ -187,6 +202,12 @@ const RingDetails: React.FC = () => {
           RSCC:
         </Typography>
         <Typography variant="body2">{ringData.rscc}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+          Atoms:
+        </Typography>
+        <Typography variant="body2">{getAtoms(ringID)}</Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
