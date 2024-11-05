@@ -99,7 +99,7 @@ def get_paginated_data():
 
     filtersValueRange = {
         'resolution': get_min_max(sorted_data['resolution']),
-        'ringCoverage': get_min_max(sorted_data['ring_coverage_float']),
+        'ring_coverage': get_min_max(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
         'rsr': get_min_max(sorted_data['rsr']),
         'rscc': get_min_max(sorted_data['rscc']),
     }

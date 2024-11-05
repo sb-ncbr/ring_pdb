@@ -24,27 +24,36 @@ import RangeSlider from './RangeSlider.tsx';
 
 const TableMRT = () => {
   const location = useLocation();
-  const [resolutionRange, setResolutionRange] = useState();
-  // Memoize columns with injected min/max values
-  const memoizedColumns = useMemo(() => {
+  const [filterSliderRanges, setFilterSliderRanges] = useState({
+    resolution: {},
+    ring_coverage: {},
+    rsr: {},
+    rscc: {},
+  });
+
+  const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
+    const createFilter =
+      (key) =>
+      ({ column }) => (
+        <RangeSlider
+          filterBy={column.columnDef.header}
+          minVal={filterSliderRanges[key]?.min}
+          maxVal={filterSliderRanges[key]?.max}
+          step={0.01}
+          disabled={filterSliderRanges[key]?.min === undefined}
+        />
+      );
+
     return columnsData.map((column) => {
-      if (column.accessorKey === 'resolution') {
+      if (['resolution', 'ring_coverage', 'rsr', 'rscc'].includes(column.accessorKey)) {
         return {
           ...column,
-          Filter: ({ column }) => (
-            <RangeSlider
-              filterBy={column.columnDef.header}
-              minVal={resolutionRange.min}
-              maxVal={resolutionRange.max}
-              step={0.01}
-              disabled={resolutionRange.min === undefined}
-            />
-          ),
+          Filter: createFilter(column.accessorKey),
         };
       }
       return column;
-    });
-  }, [resolutionRange]);
+    }) as MRT_ColumnDef<RowData>[];
+  }, [filterSliderRanges]);
 
   const tableContainerMaxWidth = '1900px';
   const columnDefaultState = {
@@ -111,8 +120,7 @@ const TableMRT = () => {
           ...item,
           img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
         }));
-        const resolution = response.data.filtersValueRange.resolution;
-        setResolutionRange({ ...resolution });
+        setFilterSliderRanges({ ...response.data.filtersValueRange });
         setData(transformedData);
         setTotalRows(response.data.totalRows);
         setIsLoading(false);

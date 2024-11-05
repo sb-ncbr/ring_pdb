@@ -88,7 +88,7 @@ export const columnsData: ColumnDataMRT[] = [
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
   },
   {
-    header: 'RING COVERAGE',
+    header: 'RING COVERAGE [%]',
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
