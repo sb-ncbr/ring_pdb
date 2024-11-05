@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
+import { useEffect, useState } from 'react';
 
 const Input = styled(MuiInput)`
   font-size: 0.9rem;
@@ -29,45 +29,48 @@ export default function RangeSlider({
   maxVal: number;
   step: number;
 }) {
-  const [value, setValue] = React.useState<number[]>([minVal, maxVal]);
+  const [range, setRange] = useState({ min: minVal, max: maxVal });
+  const [value, setValue] = useState<number[]>([minVal, maxVal]);
+
+  useEffect(() => {
+    setRange({ min: minVal, max: maxVal });
+  }, [minVal, maxVal]);
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
   };
 
-  const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newMax = Number(event.target.value) || maxVal;
-
-    if (newMax >= value[0]) {
-      setValue([value[0], newMax]);
-    } else {
-      setValue([value[0], value[0]]);
+  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(',', '.');
+    const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
+    if (isValidInput) {
+      setValue([inputValue, value[1]]);
     }
   };
 
-  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newMin = Number(event.target.value) || minVal;
-
-    if (newMin <= value[1]) {
-      setValue([newMin, value[1]]);
-    } else {
-      setValue([value[1], value[1]]);
+  const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(',', '.');
+    const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
+    if (isValidInput) {
+      setValue([value[0], inputValue]);
     }
   };
 
   const handleBlurMin = () => {
-    if (value[0] < minVal) {
-      setValue([minVal, value[1]]);
-    } else if (value[0] > maxVal) {
-      setValue([maxVal, value[1]]);
+    const parsedValue = parseFloat(value[0]);
+    if (!isNaN(parsedValue) && parsedValue >= range.min && parsedValue <= value[1]) {
+      setValue([parsedValue, value[1]]);
+    } else {
+      setValue([range.min, value[1]]);
     }
   };
 
   const handleBlurMax = () => {
-    if (value[1] < minVal) {
-      setValue([value[0], minVal]);
-    } else if (value[1] > maxVal) {
-      setValue([value[0], maxVal]);
+    const parsedValue = parseFloat(value[1]);
+    if (!isNaN(parsedValue) && parsedValue <= range.max && parsedValue >= value[0]) {
+      setValue([value[0], parsedValue]);
+    } else {
+      setValue([value[0], range.max]);
     }
   };
 
@@ -86,10 +89,7 @@ export default function RangeSlider({
             onChange={handleMinInputChange}
             onBlur={handleBlurMin}
             inputProps={{
-              step: step,
-              min: minVal,
-              max: maxVal,
-              type: 'number',
+              type: 'text',
               label: 'Min',
               'aria-labelledby': 'input-slider',
             }}
@@ -102,22 +102,18 @@ export default function RangeSlider({
             onChange={handleMaxInputChange}
             onBlur={handleBlurMax}
             inputProps={{
-              step: step,
-              min: minVal,
-              max: maxVal,
-              type: 'number',
-              inputMode: 'decimal',
+              type: 'text',
               label: 'Max',
               'aria-labelledby': 'input-slider',
+              sx: { textAlign: 'right' },
             }}
-            // sx={{ width: 'auto' }}
           />
         </Grid>
         <Grid size={12}>
           <CustomSlider
             value={value}
-            min={minVal}
-            max={maxVal}
+            min={range.min}
+            max={range.max}
             step={step}
             color="primary"
             valueLabelDisplay="off"

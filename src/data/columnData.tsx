@@ -28,7 +28,6 @@ export const columnsData: ColumnDataMRT[] = [
       return (
         <FilterAutocomplete
           filterByLabel="PDB ID"
-          selectedValues={column.getFilterValue() as string[]}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
@@ -43,7 +42,6 @@ export const columnsData: ColumnDataMRT[] = [
       return (
         <FilterAutocomplete
           filterByLabel="CCD ID"
-          selectedValues={column.getFilterValue() as string[]}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
@@ -66,7 +64,7 @@ export const columnsData: ColumnDataMRT[] = [
         <FilterAutocompleteSimple
           options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
           filterByLabel="ring type"
-          selectedValues={column.getFilterValue() as string[]}
+          selectedValues={(column.getFilterValue() as string[]) || []}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
@@ -88,9 +86,6 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header} minVal={0.85} maxVal={3.04} step={0.01} />
-    ),
   },
   {
     header: 'RING COVERAGE',
@@ -98,7 +93,7 @@ export const columnsData: ColumnDataMRT[] = [
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
     Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={6} step={1} />
+      <RangeSlider filterBy={column.columnDef.header + ' [%]'} minVal={0} maxVal={100} step={1} />
     ),
   },
   {
@@ -111,7 +106,7 @@ export const columnsData: ColumnDataMRT[] = [
         <FilterAutocompleteSimple
           options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
           filterByLabel="conformation"
-          selectedValues={column.getFilterValue() as string[]}
+          selectedValues={(column.getFilterValue() as string[]) || []}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
@@ -168,7 +163,7 @@ export const columnsData: ColumnDataMRT[] = [
             'Hybrid method',
           ]}
           filterByLabel="experimental method"
-          selectedValues={column.getFilterValue() as string[]}
+          selectedValues={(column.getFilterValue() as string[]) || []}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}

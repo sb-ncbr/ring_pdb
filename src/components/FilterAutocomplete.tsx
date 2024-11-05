@@ -10,11 +10,9 @@ import axios from 'axios';
 
 export default function FilterAutocomplete({
   filterByLabel,
-  selectedValues,
   onChange,
 }: {
   filterByLabel: string;
-  selectedValues: string[];
   onChange: (newValue) => void;
 }) {
   const [allOptions, setAllOptions] = useState([]);

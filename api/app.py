@@ -20,12 +20,6 @@ CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
-data['ring_coverage'] = data['ring_coverage'].replace(np.nan, 'N/A')
-data['rsr'] = data['rsr'].replace(np.nan, 'N/A')
-data['rscc'] = data['rscc'].replace(np.nan, 'N/A')
-data['resolution'] = data['resolution'].replace(np.nan, 'N/A')
-data['ring_coverage_counts'] = data['ring_coverage_counts'].replace(np.nan, 'N/A')
-data['ring_coverage_float'] = data['ring_coverage_float'].replace(np.nan, 'N/A')
 data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
 
@@ -79,20 +73,33 @@ def get_paginated_data():
         sort_order_desc = sorting[0].get('desc')
         try:
             if sort_column == 'ring_coverage':
-                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'], errors='coerce').astype('object')
+                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'],
+                                                                   errors='coerce').astype('object')
                 sorted_data = sorted_data.sort_values('ring_coverage_float', ascending=(not sort_order_desc))
-                sorted_data['ring_coverage_float'] = sorted_data['ring_coverage_float'].apply(lambda x: 'N/A' if pd.isna(x) else x)
+                sorted_data['ring_coverage_float'] = sorted_data['ring_coverage_float']
             else:
                 sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
         except Exception as e:
             print('Error occurred while sorting: ', e)
 
+
     paginated_data = sorted_data.iloc[start_idx:end_idx].fillna('N/A')
+    print(paginated_data)
+
     response = {
         'rows': paginated_data.to_dict(orient='records'),
-        'totalRows': len(filtered_data)
+        'totalRows': len(filtered_data),
+        'filtersValueRange': {
+            'resolution': {
+                'min': sorted_data['resolution'].min(),
+                'max': sorted_data['resolution'].max()
+            },
+            'ringCoverage': [sorted_data['ring_coverage_float'].min(), sorted_data['ring_coverage_float'].max()],
+            'rsr': [sorted_data['rsr'].min(), sorted_data['rsr'].max()],
+            'rscc': [sorted_data['rscc'].min(), sorted_data['rscc'].max()]
+        }
     }
-    print(paginated_data)
+
 
     return jsonify(response)
 
@@ -117,7 +124,6 @@ def get_row_data():
 
 print(f"Environment: {app.config['ENV']}")
 print(f"Debug: {app.config['DEBUG']}")
-
 
 if __name__ == "__main__":
     app.run()

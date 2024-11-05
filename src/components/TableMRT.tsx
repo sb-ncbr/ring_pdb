@@ -20,12 +20,32 @@ import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import { useLocation } from 'react-router-dom';
+import RangeSlider from './RangeSlider.tsx';
 
 const TableMRT = () => {
   const location = useLocation();
-  const columns = useMemo<MRT_ColumnDef<RowData>[]>(() => columnsData, []);
+  const [resolutionRange, setResolutionRange] = useState();
+  // Memoize columns with injected min/max values
+  const memoizedColumns = useMemo(() => {
+    return columnsData.map((column) => {
+      if (column.accessorKey === 'resolution') {
+        return {
+          ...column,
+          Filter: ({ column }) => (
+            <RangeSlider
+              filterBy={column.columnDef.header}
+              minVal={resolutionRange.min}
+              maxVal={resolutionRange.max}
+              step={0.01}
+            />
+          ),
+        };
+      }
+      return column;
+    });
+  }, [resolutionRange]);
 
-  let tableContainerMaxWidth = '1900px';
+  const tableContainerMaxWidth = '1900px';
   const columnDefaultState = {
     experimental_method: true,
     rsr: true,
@@ -89,6 +109,8 @@ const TableMRT = () => {
           ...item,
           img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
         }));
+        const filtersValueRange = response.data.filtersValueRange.resolution;
+        setResolutionRange({ ...filtersValueRange });
         setData(transformedData);
         setTotalRows(response.data.totalRows);
         setIsLoading(false);
@@ -126,7 +148,7 @@ const TableMRT = () => {
   };
 
   const table = useMaterialReactTable({
-    columns,
+    columns: memoizedColumns,
     data,
     columnFilterDisplayMode: 'custom',
     getRowId: (row) => row['Ring ID'],
