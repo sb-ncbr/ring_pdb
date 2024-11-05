@@ -23,17 +23,23 @@ export default function RangeSlider({
   minVal,
   maxVal,
   step,
+  disabled,
 }: {
   filterBy: string;
-  minVal: number;
-  maxVal: number;
+  minVal: number | 'N/A' | undefined;
+  maxVal: number | 'N/A' | undefined;
   step: number;
+  disabled: boolean;
 }) {
-  const [range, setRange] = useState({ min: minVal, max: maxVal });
+  if (minVal === undefined) {
+    minVal = 'N/A';
+    maxVal = 'N/A';
+  }
+
   const [value, setValue] = useState<number[]>([minVal, maxVal]);
 
   useEffect(() => {
-    setRange({ min: minVal, max: maxVal });
+    setValue([minVal, maxVal]); // Reset to new min/max values
   }, [minVal, maxVal]);
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
@@ -58,19 +64,19 @@ export default function RangeSlider({
 
   const handleBlurMin = () => {
     const parsedValue = parseFloat(value[0]);
-    if (!isNaN(parsedValue) && parsedValue >= range.min && parsedValue <= value[1]) {
+    if (!isNaN(parsedValue) && parsedValue >= minVal && parsedValue <= value[1]) {
       setValue([parsedValue, value[1]]);
     } else {
-      setValue([range.min, value[1]]);
+      setValue([minVal, value[1]]);
     }
   };
 
   const handleBlurMax = () => {
     const parsedValue = parseFloat(value[1]);
-    if (!isNaN(parsedValue) && parsedValue <= range.max && parsedValue >= value[0]) {
+    if (!isNaN(parsedValue) && parsedValue <= maxVal && parsedValue >= value[0]) {
       setValue([value[0], parsedValue]);
     } else {
-      setValue([value[0], range.max]);
+      setValue([value[0], maxVal]);
     }
   };
 
@@ -88,6 +94,7 @@ export default function RangeSlider({
             size="small"
             onChange={handleMinInputChange}
             onBlur={handleBlurMin}
+            disabled={disabled}
             inputProps={{
               type: 'text',
               label: 'Min',
@@ -101,6 +108,7 @@ export default function RangeSlider({
             size="small"
             onChange={handleMaxInputChange}
             onBlur={handleBlurMax}
+            disabled={disabled}
             inputProps={{
               type: 'text',
               label: 'Max',
@@ -112,14 +120,15 @@ export default function RangeSlider({
         <Grid size={12}>
           <CustomSlider
             value={value}
-            min={range.min}
-            max={range.max}
+            min={minVal}
+            max={maxVal}
             step={step}
             color="primary"
             valueLabelDisplay="off"
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
             disableSwap
+            disabled={disabled}
           />
         </Grid>
       </Grid>

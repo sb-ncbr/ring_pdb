@@ -24,6 +24,17 @@ data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
 
 
+def get_min_max(data_series):
+    """Calculate min and max while handling NaN values."""
+    min_value = data_series.min()
+    max_value = data_series.max()
+
+    if np.isnan(min_value) or np.isnan(max_value):
+        return {}
+    else:
+        return {'min': min_value, 'max': max_value}
+
+
 @app.route('/api/get_pdb_ids', methods=['GET'])
 def get_pdb_ids():
     pdb_ids = data['pdb_id'].unique().tolist()
@@ -86,20 +97,18 @@ def get_paginated_data():
     paginated_data = sorted_data.iloc[start_idx:end_idx].fillna('N/A')
     print(paginated_data)
 
+    filtersValueRange = {
+        'resolution': get_min_max(sorted_data['resolution']),
+        'ringCoverage': get_min_max(sorted_data['ring_coverage_float']),
+        'rsr': get_min_max(sorted_data['rsr']),
+        'rscc': get_min_max(sorted_data['rscc']),
+    }
+
     response = {
         'rows': paginated_data.to_dict(orient='records'),
         'totalRows': len(filtered_data),
-        'filtersValueRange': {
-            'resolution': {
-                'min': sorted_data['resolution'].min(),
-                'max': sorted_data['resolution'].max()
-            },
-            'ringCoverage': [sorted_data['ring_coverage_float'].min(), sorted_data['ring_coverage_float'].max()],
-            'rsr': [sorted_data['rsr'].min(), sorted_data['rsr'].max()],
-            'rscc': [sorted_data['rscc'].min(), sorted_data['rscc'].max()]
-        }
+        'filtersValueRange': filtersValueRange
     }
-
 
     return jsonify(response)
 

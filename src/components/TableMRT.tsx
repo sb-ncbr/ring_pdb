@@ -37,6 +37,7 @@ const TableMRT = () => {
               minVal={resolutionRange.min}
               maxVal={resolutionRange.max}
               step={0.01}
+              disabled={resolutionRange.min === undefined}
             />
           ),
         };
@@ -105,12 +106,13 @@ const TableMRT = () => {
         sorting: sorting,
       })
       .then((response) => {
+        console.log(response);
         const transformedData = response.data.rows.map((item) => ({
           ...item,
           img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
         }));
-        const filtersValueRange = response.data.filtersValueRange.resolution;
-        setResolutionRange({ ...filtersValueRange });
+        const resolution = response.data.filtersValueRange.resolution;
+        setResolutionRange({ ...resolution });
         setData(transformedData);
         setTotalRows(response.data.totalRows);
         setIsLoading(false);
