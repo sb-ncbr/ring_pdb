@@ -39,7 +39,7 @@ const TableMRT = () => {
           filterBy={column.columnDef.header}
           minVal={filterSliderRanges[key]?.min}
           maxVal={filterSliderRanges[key]?.max}
-          step={0.01}
+          step={filterSliderRanges[key]?.step}
           disabled={filterSliderRanges[key]?.min === undefined}
         />
       );

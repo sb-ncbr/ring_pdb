@@ -24,15 +24,16 @@ data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
 
 
-def get_min_max(data_series):
-    """Calculate min and max while handling NaN values."""
+def get_range_with_step(data_series):
+    """Calculate min, max, and step while handling NaN values."""
     min_value = data_series.min()
     max_value = data_series.max()
 
     if np.isnan(min_value) or np.isnan(max_value):
         return {}
     else:
-        return {'min': min_value, 'max': max_value}
+        step = 0.01
+        return {'min': min_value, 'max': max_value, 'step': step}
 
 
 @app.route('/api/get_pdb_ids', methods=['GET'])
@@ -93,21 +94,21 @@ def get_paginated_data():
         except Exception as e:
             print('Error occurred while sorting: ', e)
 
-
     paginated_data = sorted_data.iloc[start_idx:end_idx].fillna('N/A')
     print(paginated_data)
 
-    filtersValueRange = {
-        'resolution': get_min_max(sorted_data['resolution']),
-        'ring_coverage': get_min_max(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
-        'rsr': get_min_max(sorted_data['rsr']),
-        'rscc': get_min_max(sorted_data['rscc']),
+    filters_value_range = {
+        'resolution': get_range_with_step(sorted_data['resolution']),
+        'ring_coverage': get_range_with_step(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
+        # 'ligand_coverage': {},
+        'rsr': get_range_with_step(sorted_data['rsr']),
+        'rscc': get_range_with_step(sorted_data['rscc']),
     }
 
     response = {
         'rows': paginated_data.to_dict(orient='records'),
         'totalRows': len(filtered_data),
-        'filtersValueRange': filtersValueRange
+        'filtersValueRange': filters_value_range
     }
 
     return jsonify(response)

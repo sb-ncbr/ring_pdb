@@ -92,9 +92,6 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header + ' [%]'} minVal={0} maxVal={100} step={1} />
-    ),
   },
   {
     header: 'CONFORMATION',
@@ -200,27 +197,18 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'rsr',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={1} step={0.01} />
-    ),
   },
   {
     header: 'RSCC',
     accessorKey: 'rscc',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={1} step={0.01} />
-    ),
   },
   {
-    header: 'LIGAND COVERAGE',
+    header: 'LIGAND COVERAGE [%]',
     accessorKey: 'ligand_coverage',
     filterVariant: 'text',
     Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
-    Filter: ({ column }) => (
-      <RangeSlider filterBy={column.columnDef.header} minVal={0} maxVal={100} step={0.1} />
-    ),
   },
   {
     header: 'DETAILS',

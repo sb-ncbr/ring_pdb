@@ -36,7 +36,7 @@ export default function RangeSlider({
     maxVal = 'N/A';
   }
 
-  const [value, setValue] = useState<number[]>([minVal, maxVal]);
+  const [value, setValue] = useState([minVal, maxVal]);
 
   useEffect(() => {
     setValue([minVal, maxVal]); // Reset to new min/max values
