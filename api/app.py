@@ -77,6 +77,13 @@ def get_paginated_data():
         elif filter['id'] == 'ccd_id':
             filtered_data = filtered_data[filtered_data['ccd_id'].isin(filter['value'])]
 
+
+    data_for_calc_ranges = filtered_data
+    for filter in non_empty_filters:
+        if filter['id'] == 'resolution':
+            filtered_data = filtered_data[(filtered_data['resolution'] >= filter['value'][0]) &
+                                          (filtered_data['resolution'] <= filter['value'][1])]
+
     sorting = received_data.get('sorting', [])
     sorted_data = filtered_data
 
@@ -98,7 +105,7 @@ def get_paginated_data():
     print(paginated_data)
 
     filters_value_range = {
-        'resolution': get_range_with_step(sorted_data['resolution']),
+        'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
         'ring_coverage': get_range_with_step(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
         # 'ligand_coverage': {},
         'rsr': get_range_with_step(sorted_data['rsr']),

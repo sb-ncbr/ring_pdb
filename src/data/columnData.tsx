@@ -157,6 +157,7 @@ export const columnsData: ColumnDataMRT[] = [
             'Solid-state NMR',
             'Solution scattering',
             'Neutron diffraction',
+            'Powder diffraction',
             'Hybrid method',
           ]}
           filterByLabel="experimental method"

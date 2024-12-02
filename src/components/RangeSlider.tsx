@@ -4,7 +4,8 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { debounce } from 'lodash';
 
 const Input = styled(MuiInput)`
   font-size: 0.9rem;
@@ -24,12 +25,14 @@ export default function RangeSlider({
   maxVal,
   step,
   disabled,
+  onChange,
 }: {
   filterBy: string;
   minVal: number | 'N/A' | undefined;
   maxVal: number | 'N/A' | undefined;
   step: number;
   disabled: boolean;
+  onChange: (newValue) => void;
 }) {
   if (minVal === undefined) {
     minVal = 'N/A';
@@ -42,16 +45,31 @@ export default function RangeSlider({
     setValue([minVal, maxVal]); // Reset to new min/max values
   }, [minVal, maxVal]);
 
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
+  const handleSliderChange = (event: Event, newValue: [number, number]) => {
+    console.log('DEBUGGG');
+    console.log(newValue);
+
+    onChange(newValue as [number, number]);
   };
 
-  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // const debouncedOnSliderChange = useCallback(debounce(handleSliderChange, 300), []);
+  const debouncedResults = useMemo(() => {
+    return debounce(handleSliderChange, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      debouncedResults.cancel();
+    };
+  });
+  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>, newValue) => {
     const inputValue = event.target.value.replace(',', '.');
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       setValue([inputValue, value[1]]);
     }
+
+    onChange(newValue);
   };
 
   const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +143,10 @@ export default function RangeSlider({
             step={step}
             color="primary"
             valueLabelDisplay="off"
-            onChange={handleSliderChange}
+            onChange={(event, value) => {
+              setValue(value as number[]);
+              debouncedResults();
+            }}
             aria-labelledby="input-slider"
             disableSwap
             disabled={disabled}
@@ -138,3 +159,5 @@ export default function RangeSlider({
     </Box>
   );
 }
+
+// setValue(newValue as number[]);

@@ -189,7 +189,7 @@ const RingDetails: React.FC = () => {
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
               RMSD with template:
             </Typography>
-            <Typography variant="body2">{ringData.rmsd} [Å]</Typography>
+            <Typography variant="body2">{ringData.rmsd} Å</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
@@ -202,7 +202,7 @@ const RingDetails: React.FC = () => {
               <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
                 Resolution:
               </Typography>
-              <Typography variant="body2">{ringData.resolution}</Typography>
+              <Typography variant="body2">{ringData.resolution} Å</Typography>
             </Box>
           )}
 

@@ -4,31 +4,31 @@
     "name": "Cyclohexane",
     "ccd": 1653,
     "pdb": 3355,
-    "total": 7157,
+    "total": 11001,
     "confs": [
       {
         "name": "Chair",
-        "count": 100,
+        "count": 7290,
         "favorable": true
       },
       {
         "name": "Twist boat",
-        "count": 30,
-        "favorable": true
+        "count": 982,
+        "favorable": false
       },
       {
         "name": "Boat",
-        "count": 50,
-        "favorable": true
+        "count": 670,
+        "favorable": false
       },
       {
         "name": "Half chair",
-        "count": 10,
+        "count": 995,
         "favorable": false
       },
       {
         "name": "Flat",
-        "count": 10,
+        "count": 64,
         "favorable": false
       }
     ]
@@ -37,21 +37,21 @@
     "name": "Cyclopentane",
     "ccd": 856,
     "pdb": 2169,
-    "total": 4888,
+    "total": 8889,
     "confs": [
       {
         "name": "Envelope",
-        "count": 50,
+        "count": 4964,
         "favorable": true
       },
       {
         "name": "Half chair",
-        "count": 55,
+        "count": 3459,
         "favorable": true
       },
       {
         "name": "Flat",
-        "count": 10,
+        "count": 466,
         "favorable": false
       }
     ]
@@ -60,21 +60,26 @@
     "name": "Benzene",
     "ccd": 22254,
     "pdb": 38498,
-    "total": 111219,
+    "total": 118412,
     "confs": [
       {
         "name": "Flat",
-        "count": 500,
+        "count": 118363,
         "favorable": true
       },
       {
         "name": "Chair",
-        "count": 5,
+        "count": 18,
         "favorable": false
       },
       {
         "name": "Boat",
-        "count": 1,
+        "count": 2,
+        "favorable": false
+      },
+      {
+        "name": "Half chair",
+        "count": 28,
         "favorable": false
       }
     ]

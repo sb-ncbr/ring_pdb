@@ -41,6 +41,9 @@ const TableMRT = () => {
           maxVal={filterSliderRanges[key]?.max}
           step={filterSliderRanges[key]?.step}
           disabled={filterSliderRanges[key]?.min === undefined}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
         />
       );
 
@@ -107,6 +110,7 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log(columnFilters);
     axios
       .post('http://localhost:5000/api/data', {
         pageIndex: pagination.pageIndex + 1,
@@ -115,7 +119,6 @@ const TableMRT = () => {
         sorting: sorting,
       })
       .then((response) => {
-        console.log(response);
         const transformedData = response.data.rows.map((item) => ({
           ...item,
           img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
@@ -198,7 +201,7 @@ const TableMRT = () => {
     rowCount: totalRows,
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
-    paginationDisplayMode: 'pages',
+    paginationDisplayMode: 'default',
     initialState: {
       density: 'compact',
       showColumnFilters: true,
