@@ -138,7 +138,6 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
   const theme = useTheme();
   const { viewer } = useMolstar();
 
-
   const linkColor = 'info.main';
   const conf = ringData.conformation;
   const ring = ringData.ring_type;
@@ -406,6 +405,7 @@ function ToggleBallAndStickButton({ viewer }: { viewer: MolstarViewerModel }) {
 
 function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel }) {
   const [isLoading] = useBehavior(viewer.state.isLoading);
+  const [disableElectronDensity] = useBehavior(viewer.state.disableElectronDensity);
   const [showElectronDensity, setShowElectronDensity] = useBehavior(
     viewer.state.showElectronDensity,
   );
@@ -416,10 +416,11 @@ function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel })
         <Switch
           checked={showElectronDensity}
           onChange={() => setShowElectronDensity(!showElectronDensity)}
-          disabled={isLoading}
+          disabled={isLoading || disableElectronDensity}
         />
       }
       label="Show electron density"
+      title={disableElectronDensity ? 'PDB entry has many models' : ''}
       sx={{
         '& .MuiTypography-root': {
           fontSize: '1rem',

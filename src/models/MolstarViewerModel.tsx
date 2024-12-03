@@ -1,7 +1,7 @@
 import { PluginUIContext } from 'molstar/lib/commonjs/mol-plugin-ui/context';
 import { DefaultPluginUISpec, PluginUISpec } from 'molstar/lib/commonjs/mol-plugin-ui/spec';
 import { Color } from 'molstar/lib/commonjs/mol-util/color';
-import { QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
+import { Model, QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
 import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
 import { compile } from 'molstar/lib/commonjs/mol-script/runtime/query/base';
 import { StructureSelectionQuery } from 'molstar/lib/commonjs/mol-plugin-state/helpers/structure-selection-query';
@@ -41,6 +41,7 @@ export default class MolstarViewerModel {
     isInitialized: new BehaviorSubject<boolean>(false),
     isLoading: new BehaviorSubject<boolean>(false),
     showElectronDensity: new BehaviorSubject<boolean>(false),
+    disableElectronDensity: new BehaviorSubject<boolean>(false),
     showBallAndStick: new BehaviorSubject<boolean>(false),
   };
 
@@ -144,6 +145,10 @@ export default class MolstarViewerModel {
       name: 'assembly',
       params: {},
     });
+
+    // check if trajectory has more models
+    const count = Model.TrajectoryInfo.get(model?.cell?.obj?.data).size;
+    this.state.disableElectronDensity.next(count > 1);
 
     // create components
     const polymer = await this._plugin.builders.structure.tryCreateComponentStatic(
