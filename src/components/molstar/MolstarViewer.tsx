@@ -1,50 +1,44 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { useMolstar } from '../context/MolstarContext';
-import { useBehavior } from '../lib/hooks/use-behavior';
-import 'molstar/lib/mol-plugin-ui/skin/colors/light.scss';
-import { parseStructureString } from '../lib/utils';
+import { useMolstar } from '../../context/MolstarContext';
+import { useBehavior } from '../../lib/hooks/use-behavior';
+import { parseStructureString } from '../../lib/utils';
+import { ViewerLayout } from './ViewerLayout';
+import 'molstar/lib/mol-plugin-ui/skin/light.scss';
 
 interface MolstarViewerProps {
   ringId: string;
 }
 
 const MolstarViewer: React.FC<MolstarViewerProps> = ({ ringId }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const { viewer } = useMolstar();
+
   const [isLoading] = useBehavior(viewer.state.isLoading);
+  const [isInitialized] = useBehavior(viewer.state.isInitialized);
 
   const { pdbId, chainId, compId, residueId, atomIds } = useMemo(
     () => parseStructureString(ringId),
     [ringId],
   );
 
-  // handle mount
+  // handle subs
   useEffect(() => {
-    if (!containerRef.current) return;
+    viewer.sub();
+    return () => viewer.unsub();
+  }, [viewer]);
 
-    viewer.mount(containerRef.current);
-
+  // handle load
+  useEffect(() => {
     viewer.load(pdbId, {
       chainId,
       compId,
       residueId,
       atomIds,
     });
-
-    return () => viewer.unmount();
   }, [atomIds, chainId, compId, pdbId, residueId, viewer]);
-
-  // handle subs
-  useEffect(() => {
-    viewer.sub();
-
-    return () => viewer.unsub();
-  }, [viewer]);
 
   return (
     <Box
-      ref={containerRef}
       sx={{
         position: 'relative',
         height: '100%',
@@ -58,11 +52,13 @@ const MolstarViewer: React.FC<MolstarViewerProps> = ({ ringId }) => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
+            zIndex: 10,
           }}
         >
-          <CircularProgress />
+          <CircularProgress thickness={7} />
         </Box>
       )}
+      {isInitialized && <ViewerLayout viewer={viewer} />}
     </Box>
   );
 };
