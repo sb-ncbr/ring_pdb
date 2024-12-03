@@ -12,65 +12,168 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import MolstarViewer from '../components/MolstarViewer.tsx';
+import { parseStructureString } from '../lib/utils.ts';
+import { useMolstar } from '../context/MolstarContext.tsx';
+import { useBehavior } from '../lib/hooks/use-behavior.ts';
 
-const getRingCoverageCounts = (rowValue) => {
-  if (rowValue == 'N/A') {
-    return;
-  }
+const getRingCoverageCounts = (rowValue: string | null) => {
+  if (!rowValue) return;
   const [covered, total] = rowValue.split(';');
   return covered + '/' + total + ' rings';
 };
 
-const getChainID = (ringID) => {
-  return ringID.split('_')[1];
+const getChainID = (ringId: string) => {
+  const { chainId } = parseStructureString(ringId);
+  return chainId;
 };
 
-const getAtoms = (ringID) => {
-  const atoms = ringID.split('_')[4];
-  return atoms.replaceAll('-', ' ');
+const getAtoms = (ringId: string) => {
+  const { atomIds } = parseStructureString(ringId);
+  return atomIds.join(' ');
 };
 
-const RingDetails: React.FC = () => {
+interface RingData {
+  ccd_id: string;
+  conformation: string;
+  experimental_method: string;
+  pdb_id: string;
+  residue_id: number;
+  ring_id: string;
+  ring_type: string;
+  rmsd: number;
+  resolution: number | null;
+  ring_coverage: string | null;
+  ring_coverage_counts: string | null;
+  ring_coverage_float: number | null;
+  rscc: number | null;
+  rsr: number | null;
+}
+
+const RingDetailsWrapper: React.FC = () => {
   const { ringID } = useParams<{ ringID: string }>();
-  const [ringData, setRingData] = useState(null);
-  const [error, setError] = useState(null);
-  const [showElectronDensity, setShowElectronDensity] = useState(false);
-  const theme = useTheme();
-  const linkColor = 'info.main';
+
+  const [ringData, setRingData] = useState<RingData | undefined>(undefined);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchRingData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/get_row_data?ringID=${ringID}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch(`http://localhost:5000/api/get_row_data?ringID=${ringID}`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Server did not return JSON data');
         }
-        const data = await response.json();
-        setRingData(data);
-        // console.log(data);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Network response was not ok (${response.status}): ${errorText}`);
+        }
+
+        const jsonPromise = response.json();
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('JSON parsing timed out')), 5000),
+        );
+
+        const data = await Promise.race([jsonPromise, timeoutPromise]);
+        setRingData(data as RingData);
       } catch (error) {
-        setError(error.message);
+        if (error.name === 'AbortError') {
+          setError('Request timed out. Please try again.');
+        } else {
+          setError(error.message || 'An error occurred while fetching data');
+        }
+        console.error('Fetch error:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchRingData();
+
+    if (ringID) {
+      fetchRingData();
+    }
   }, [ringID]);
 
-  if (!ringData) {
+  if (isLoading) {
     return <Loader />;
   }
 
   if (error) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', margin: '24px auto', padding: '0 16px' }}>
-        <Typography>{error}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
     );
   }
 
+  if (!ringData) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', margin: '24px auto', padding: '0 16px' }}>
+        <Typography>No data found for this ring ID.</Typography>
+      </Box>
+    );
+  }
+
+  return <RingDetails ringData={ringData} />;
+};
+
+interface RingDetailsProps {
+  ringData: RingData;
+}
+
+const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
+  const theme = useTheme();
+  const { viewer } = useMolstar();
+
+  const [showElectronDensity, setShowElectronDensity] = useBehavior(
+    viewer.state.showElectronDensity,
+  );
+  const [showBas, setShowBas] = useBehavior(viewer.state.showBallAndStick);
+
+  const linkColor = 'info.main';
   const conf = ringData.conformation;
   const ring = ringData.ring_type;
   const favorable = isFavorable(ring, conf);
   const mainColor = favorable ? '#2587E2' : '#CD4139';
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(
+        `https://www.ebi.ac.uk/pdbe/entry-files/download/${ringData.pdb_id}.cif`,
+      );
+      const data = await response.text();
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([data]));
+
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${ringData.pdb_id.toLowerCase()}.cif`);
+
+      // Append link to body, click it, and remove it
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      // Clean up the URL
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      // You might want to add error handling UI here
+    }
+  };
 
   return (
     <>
@@ -164,7 +267,7 @@ const RingDetails: React.FC = () => {
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
               Chain ID:
             </Typography>
-            <Typography variant="body2">{getChainID(ringID)}</Typography>
+            <Typography variant="body2">{getChainID(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
@@ -177,12 +280,12 @@ const RingDetails: React.FC = () => {
               Ring coverage:
             </Typography>
             <Typography variant="body2">
-              {ringData.ring_coverage != 'N/A'
+              {ringData.ring_coverage
                 ? getRingCoverageCounts(ringData.ring_coverage_counts) +
                   ' (' +
                   ringData.ring_coverage +
                   ')'
-                : ringData.ring_coverage}
+                : 'N/A'}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -197,7 +300,7 @@ const RingDetails: React.FC = () => {
             </Typography>
             <Typography variant="body2">{ringData.experimental_method}</Typography>
           </Box>
-          {ringData.resolution == 'N/A' ? null : (
+          {ringData.resolution && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
                 Resolution:
@@ -210,20 +313,20 @@ const RingDetails: React.FC = () => {
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
               RSR:
             </Typography>
-            <Typography variant="body2">{ringData.rsr}</Typography>
+            <Typography variant="body2">{ringData.rsr ?? 'N/A'}</Typography>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
               RSCC:
             </Typography>
-            <Typography variant="body2">{ringData.rscc}</Typography>
+            <Typography variant="body2">{ringData.rscc ?? 'N/A'}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
               Atoms:
             </Typography>
-            <Typography variant="body2">{getAtoms(ringID)}</Typography>
+            <Typography variant="body2">{getAtoms(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
@@ -254,9 +357,12 @@ const RingDetails: React.FC = () => {
               minHeight: '420px',
               height: '460px',
               border: 1,
+              borderWidth: '2px',
               borderRadius: 1,
             }}
-          ></Box>
+          >
+            <MolstarViewer ringId={ringData.ring_id} />
+          </Box>
           <Box
             sx={{
               display: 'flex',
@@ -265,6 +371,18 @@ const RingDetails: React.FC = () => {
               margin: '12px 0',
             }}
           >
+            <FormControlLabel
+              control={
+                <Switch checked={showBas} onChange={() => setShowBas(!showBas)} />
+              }
+              label="Show ball and stick"
+              sx={{
+                '& .MuiTypography-root': {
+                  fontSize: '1rem',
+                  whiteSpace: 'nowrap',
+                },
+              }}
+            />
             <FormControlLabel
               control={
                 <Switch
@@ -281,7 +399,7 @@ const RingDetails: React.FC = () => {
               }}
             />
             <Button
-              onClick={() => {}}
+              onClick={handleDownload}
               startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
               sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
             >
@@ -294,4 +412,4 @@ const RingDetails: React.FC = () => {
   );
 };
 
-export default RingDetails;
+export default RingDetailsWrapper;
