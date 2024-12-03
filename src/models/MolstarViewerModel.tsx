@@ -1,15 +1,15 @@
 import { PluginUIContext } from 'molstar/lib/commonjs/mol-plugin-ui/context';
 import { DefaultPluginUISpec, PluginUISpec } from 'molstar/lib/commonjs/mol-plugin-ui/spec';
 import { Color } from 'molstar/lib/commonjs/mol-util/color';
-import { RxEventHelper } from 'molstar/lib/mol-util/rx-event-helper';
 import { QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
 import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
 import { compile } from 'molstar/lib/commonjs/mol-script/runtime/query/base';
 import { StructureSelectionQuery } from 'molstar/lib/commonjs/mol-plugin-state/helpers/structure-selection-query';
-import { Subscription, Observable } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { StateObjectCell } from 'molstar/lib/commonjs/mol-state';
 import { setSubtreeVisibility } from 'molstar/lib/commonjs/mol-plugin/behavior/static/state';
 import { InitVolumeStreaming } from 'molstar/lib/commonjs/mol-plugin/behavior/dynamic/volume-streaming/transformers';
+import { Expression } from 'molstar/lib/commonjs/mol-script/language/expression';
 
 interface RingSelection {
   chainId: string;
@@ -20,23 +20,28 @@ interface RingSelection {
 
 interface CellRefs {
   assembly?: StateObjectCell;
-  polymer?: StateObjectCell;
+  polymer?: {
+    cartoon?: StateObjectCell;
+    bas?: StateObjectCell;
+  };
   ligand?: StateObjectCell;
   ring?: StateObjectCell;
   volumeStreaming?: string;
 }
 
 export default class MolstarViewerModel {
-  private _plugin: PluginUIContext;
-  private _ev = RxEventHelper.create();
-  private _subscriptions: Subscription[] = [];
+  private readonly _plugin: PluginUIContext;
+  private readonly _volumeStreamingTag = 'volume-streaming';
   private _cellRefs: CellRefs = {};
+  private _subscriptions: Subscription[] = [];
 
   public state = {
-    isInitializing: this._ev.behavior<boolean>(false),
-    isLoading: this._ev.behavior<boolean>(false),
-    showElectronDensity: this._ev.behavior<boolean>(false),
-    showBallAndStick: this._ev.behavior<boolean>(false),
+    showControls: new BehaviorSubject<boolean>(false),
+    isExpanded: new BehaviorSubject<boolean>(false),
+    isInitialized: new BehaviorSubject<boolean>(false),
+    isLoading: new BehaviorSubject<boolean>(false),
+    showElectronDensity: new BehaviorSubject<boolean>(false),
+    showBallAndStick: new BehaviorSubject<boolean>(false),
   };
 
   constructor() {
@@ -45,79 +50,33 @@ export default class MolstarViewerModel {
       ...defaultSpec,
       layout: {
         initial: {
-          isExpanded: true,
-          showControls: true,
-        },
-      },
-      canvas3d: {
-        renderer: {
-          // backgroundColor: Color(0xf1f1f1),
-          backgroundColor: Color(0xffffff),
+          isExpanded: this.state.isExpanded.value,
+          showControls: this.state.showControls.value,
         },
       },
     };
     this._plugin = new PluginUIContext(spec);
 
-    // initialize
     this._init();
   }
 
-  mount(target: HTMLElement) {
-    this._plugin.mount(target);
-  }
-
-  unmount() {
-    this._plugin.unmount();
+  get plugin() {
+    return this._plugin;
   }
 
   sub() {
-    this._subscribe(this.state.showBallAndStick, async (showBallAndStick) => {
-      if (!this._cellRefs.polymer) return;
-
-      this.state.isLoading.next(true);
-
-      setSubtreeVisibility(
-        this._plugin.state.data,
-        this._cellRefs.polymer.transform.ref,
-        !showBallAndStick,
-      );
-
-      // await this._plugin.state.data
-      //   .build()
-      //   .to(this._visualRef.polymer)
-      //   .update((old) => {
-      //     if (!old.type) return;
-      //     old.type = "ball-and-stick"
-      //   })
-      //   .commit();
-
-      this.state.isLoading.next(false);
+    this._subscribe(this.state.showBallAndStick, (showBallAndStick) => {
+      this._handleVisualsToggle(showBallAndStick);
     });
-    this._subscribe(this.state.showElectronDensity, async (showElectronDensity) => {
-      if (showElectronDensity && !this._cellRefs.volumeStreaming) {
-        const asm = this._cellRefs.assembly?.obj;
-        if (!asm) return;
-        const params = InitVolumeStreaming.createDefaultParams(asm, this._plugin);
-        params.defaultView = 'auto';
-        params.options.behaviorRef = 'volume-streaming';
-        params.options.channelParams['fo-fc(+ve)'] = { wireframe: true };
-        params.options.channelParams['fo-fc(-ve)'] = { wireframe: true };
-        await this._plugin.runTask(
-          this._plugin.state.data.applyAction(
-            InitVolumeStreaming,
-            params,
-            this._cellRefs.assembly?.transform.ref,
-          ),
-        );
-        this._cellRefs.volumeStreaming = 'volume-streaming';
-      }
 
-      if (this._cellRefs.volumeStreaming)
-        setSubtreeVisibility(
-          this._plugin.state.data,
-          this._cellRefs.volumeStreaming,
-          !showElectronDensity,
-        );
+    this._subscribe(this.state.showElectronDensity, (showElectronDensity) => {
+      this._handleShowDensityToggle(showElectronDensity);
+    });
+
+    // sync UI layout controls
+    this._subscribe(this._plugin!.layout.events.updated, () => {
+      this.state.showControls.next(this._plugin.layout.state.showControls);
+      this.state.isExpanded.next(this._plugin.layout.state.isExpanded);
     });
   }
 
@@ -132,15 +91,49 @@ export default class MolstarViewerModel {
 
     this.state.isLoading.next(true);
 
-    console.log('loading');
-
     await this._plugin.clear();
     await this._load(pdbId, selection);
+    this.focusRing(selection);
 
     this.state.isLoading.next(false);
   }
 
+  focusRing(selection: RingSelection) {
+    const structureRef = this.plugin.managers.structure.hierarchy.current.structures[0];
+    const structure = structureRef.cell.obj?.data;
+    if (!structure) return;
+
+    const expression = this._getExpression(selection);
+    const query = compile<StructureSelection>(expression);
+    const structureSelection = query(new QueryContext(structure));
+    const loci = StructureSelection.toLociWithSourceUnits(structureSelection);
+
+    this._plugin.managers.camera.focusLoci(loci);
+    // this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
+    // this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
+    // this.plugin.managers.structure.focus.setFromLoci(loci);
+  }
+
+  private async _init() {
+    await this._plugin.init();
+
+    this._plugin.managers.interactivity.setProps({
+      granularity: 'element',
+    });
+    this._plugin.behaviors.layout.leftPanelTabName.next('data');
+
+    this.state.isInitialized.next(true);
+  }
+
+  private _subscribe<T>(observable: Observable<T>, sub: (v: T) => void) {
+    this._subscriptions.push(observable.subscribe(sub));
+  }
+
   private async _load(pdbId: string, selection: RingSelection) {
+    const expression = this._getExpression(selection);
+    const ringSelectionQuery = StructureSelectionQuery('Ring', expression);
+
+    // load and create structure
     const data = await this._plugin.builders.data.download({
       url: `https://www.ebi.ac.uk/pdbe/entry-files/download/${pdbId}.bcif`,
       isBinary: true,
@@ -152,53 +145,46 @@ export default class MolstarViewerModel {
       params: {},
     });
 
+    // create components
     const polymer = await this._plugin.builders.structure.tryCreateComponentStatic(
       structure,
       'polymer',
     );
-    if (!polymer) return;
-
     const ligand = await this._plugin.builders.structure.tryCreateComponentStatic(
       structure,
       'ligand',
     );
-    if (!ligand) return;
-
-    const { atomIds, chainId, compId, residueId } = selection;
-    const expression = MS.struct.generator.atomGroups({
-      'atom-test': MS.core.logic.and([
-        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_asym_id(), chainId]),
-        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_comp_id(), compId]),
-        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_seq_id(), residueId]),
-        MS.core.logic.or([
-          ...atomIds.map((atomId: string) =>
-            MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_atom_id(), atomId]),
-          ),
-        ]),
-      ]),
-    });
-
-    const structureSelectionQuery = StructureSelectionQuery('Something', expression);
-
     const ring = await this._plugin.builders.structure.tryCreateComponentFromSelection(
       structure,
-      structureSelectionQuery,
+      ringSelectionQuery,
       'ring-selection',
     );
-    if (!ring) return;
 
-    const polymerVisual = await this._plugin.builders.structure.representation.addRepresentation(
-      polymer,
-      {
+    // check successful build
+    if (!polymer || !ligand || !ring) return;
+
+    // create visual representations
+    const polymerCartoonVisual =
+      await this._plugin.builders.structure.representation.addRepresentation(polymer, {
         type: 'cartoon',
         typeParams: {
           alpha: 0.4,
         },
         color: 'element-symbol',
         colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
+      });
+    const polymerBasVisual = await this._plugin.builders.structure.representation.addRepresentation(
+      polymer,
+      {
+        type: 'ball-and-stick',
+        typeParams: {
+          alpha: 0.4,
+        },
+        color: 'element-symbol',
+        colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
       },
+      { initialState: { isHidden: true } },
     );
-
     const ligandVisual = await this._plugin.builders.structure.representation.addRepresentation(
       ligand,
       {
@@ -207,7 +193,6 @@ export default class MolstarViewerModel {
         colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
       },
     );
-
     const ringVisual = await this._plugin.builders.structure.representation.addRepresentation(
       ring,
       {
@@ -228,39 +213,90 @@ export default class MolstarViewerModel {
       },
     );
 
+    // save node refs
     this._cellRefs = {
       assembly: structure.cell,
-      polymer: polymerVisual.cell,
+      polymer: {
+        cartoon: polymerCartoonVisual.cell,
+        bas: polymerBasVisual.cell,
+      },
       ligand: ligandVisual.cell,
       ring: ringVisual.cell,
     };
-
-    const query = compile<StructureSelection>(expression);
-    const struct = structure.cell?.obj?.data;
-    if (!struct) return;
-    const structureSelection = query(new QueryContext(struct));
-
-    const loci = StructureSelection.toLociWithSourceUnits(structureSelection);
-
-    this._plugin.managers.camera.focusLoci(loci);
-    // this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
-    // this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
-    // this.plugin.managers.structure.focus.setFromLoci(loci);
   }
 
-  private async _init() {
-    this.state.isInitializing.next(true);
+  private _getExpression(selection: RingSelection): Expression {
+    const { atomIds, chainId, compId, residueId } = selection;
 
-    await this._plugin.init();
-
-    this._plugin.managers.interactivity.setProps({
-      granularity: 'element',
+    const expression = MS.struct.generator.atomGroups({
+      'atom-test': MS.core.logic.and([
+        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_asym_id(), chainId]),
+        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_comp_id(), compId]),
+        MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_seq_id(), residueId]),
+        MS.core.logic.or([
+          ...atomIds.map((atomId: string) =>
+            MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_atom_id(), atomId]),
+          ),
+        ]),
+      ]),
     });
 
-    this.state.isInitializing.next(false);
+    return expression;
   }
 
-  private _subscribe<T>(observable: Observable<T>, sub: (v: T) => void) {
-    this._subscriptions.push(observable.subscribe(sub));
+  private _handleVisualsToggle(showBallAndStick: boolean) {
+    if (!this._cellRefs.polymer?.cartoon || !this._cellRefs.polymer?.bas) return;
+
+    setSubtreeVisibility(
+      this._plugin.state.data,
+      this._cellRefs.polymer.cartoon.transform.ref,
+      showBallAndStick,
+    );
+
+    setSubtreeVisibility(
+      this._plugin.state.data,
+      this._cellRefs.polymer.bas.transform.ref,
+      !showBallAndStick,
+    );
+  }
+
+  private async _handleShowDensityToggle(showElectronDensity: boolean) {
+    if (showElectronDensity && !this._cellRefs.volumeStreaming) {
+      await this._createDensity();
+    }
+
+    if (!this._cellRefs.volumeStreaming) return;
+
+    setSubtreeVisibility(
+      this._plugin.state.data,
+      this._cellRefs.volumeStreaming,
+      !showElectronDensity,
+    );
+  }
+
+  private async _createDensity() {
+    this.state.isLoading.next(true);
+
+    const asm = this._cellRefs.assembly?.obj;
+    if (!asm) return;
+
+    const params = InitVolumeStreaming.createDefaultParams(asm, this._plugin);
+    params.defaultView = 'auto';
+    params.options.behaviorRef = this._volumeStreamingTag;
+    params.options.channelParams['fo-fc(+ve)'] = { wireframe: true };
+    params.options.channelParams['fo-fc(-ve)'] = { wireframe: true };
+
+    await this._plugin.runTask(
+      this._plugin.state.data.applyAction(
+        InitVolumeStreaming,
+        params,
+        this._cellRefs.assembly?.transform.ref,
+      ),
+    );
+
+    // save node ref
+    this._cellRefs.volumeStreaming = this._volumeStreamingTag;
+
+    this.state.isLoading.next(false);
   }
 }
