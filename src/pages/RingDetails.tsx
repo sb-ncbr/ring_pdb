@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
@@ -12,10 +12,12 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import MolstarViewer from '../components/MolstarViewer.tsx';
 import { parseStructureString } from '../lib/utils.ts';
 import { useMolstar } from '../context/MolstarContext.tsx';
 import { useBehavior } from '../lib/hooks/use-behavior.ts';
+import MolstarViewer from '../components/molstar/MolstarViewer.tsx';
+import MolstarViewerModel from '../models/MolstarViewerModel.tsx';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 const getRingCoverageCounts = (rowValue: string | null) => {
   if (!rowValue) return;
@@ -136,44 +138,12 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
   const theme = useTheme();
   const { viewer } = useMolstar();
 
-  const [showElectronDensity, setShowElectronDensity] = useBehavior(
-    viewer.state.showElectronDensity,
-  );
-  const [showBas, setShowBas] = useBehavior(viewer.state.showBallAndStick);
 
   const linkColor = 'info.main';
   const conf = ringData.conformation;
   const ring = ringData.ring_type;
   const favorable = isFavorable(ring, conf);
   const mainColor = favorable ? '#2587E2' : '#CD4139';
-
-  const handleDownload = async () => {
-    try {
-      const response = await fetch(
-        `https://www.ebi.ac.uk/pdbe/entry-files/download/${ringData.pdb_id}.cif`,
-      );
-      const data = await response.text();
-
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(new Blob([data]));
-
-      // Create a temporary link element
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${ringData.pdb_id.toLowerCase()}.cif`);
-
-      // Append link to body, click it, and remove it
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-
-      // Clean up the URL
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading file:', error);
-      // You might want to add error handling UI here
-    }
-  };
 
   return (
     <>
@@ -352,12 +322,11 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
         >
           <Box
             sx={{
-              minWidth: '420px',
               width: '800px',
-              minHeight: '420px',
               height: '460px',
               border: 1,
-              borderWidth: '2px',
+              borderWidth: '3px',
+              borderColor: '#e0ddd4',
               borderRadius: 1,
             }}
           >
@@ -371,45 +340,132 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
               margin: '12px 0',
             }}
           >
-            <FormControlLabel
-              control={
-                <Switch checked={showBas} onChange={() => setShowBas(!showBas)} />
-              }
-              label="Show ball and stick"
-              sx={{
-                '& .MuiTypography-root': {
-                  fontSize: '1rem',
-                  whiteSpace: 'nowrap',
-                },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={showElectronDensity}
-                  onChange={() => setShowElectronDensity(!showElectronDensity)}
-                />
-              }
-              label="Show electron density"
-              sx={{
-                '& .MuiTypography-root': {
-                  fontSize: '1rem',
-                  whiteSpace: 'nowrap',
-                },
-              }}
-            />
-            <Button
-              onClick={handleDownload}
-              startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
-              sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
-            >
-              Download Structure
-            </Button>
+            <ResetFocusButton viewer={viewer} ringId={ringData.ring_id} />
+            <ToggleBallAndStickButton viewer={viewer} />{' '}
+            <ToggleElectronDensityButton viewer={viewer} />{' '}
+            <DownloadStructureButton pdbId={ringData.pdb_id} />
           </Box>
         </Box>
       </Box>
     </>
   );
 };
+
+function ResetFocusButton({ viewer, ringId }: { viewer: MolstarViewerModel; ringId: string }) {
+  const [isLoading] = useBehavior(viewer.state.isLoading);
+
+  const { chainId, compId, residueId, atomIds } = useMemo(
+    () => parseStructureString(ringId),
+    [ringId],
+  );
+
+  function handleReset() {
+    viewer.focusRing({
+      chainId,
+      compId,
+      residueId,
+      atomIds,
+    });
+  }
+
+  return (
+    <Button
+      onClick={handleReset}
+      startIcon={<RestartAltIcon sx={{ color: '#7C7C7C' }} />}
+      sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
+      disabled={isLoading}
+    >
+      Reset View
+    </Button>
+  );
+}
+
+function ToggleBallAndStickButton({ viewer }: { viewer: MolstarViewerModel }) {
+  const [isLoading] = useBehavior(viewer.state.isLoading);
+  const [showBallAndStick, setShowBallAndStick] = useBehavior(viewer.state.showBallAndStick);
+
+  return (
+    <FormControlLabel
+      control={
+        <Switch
+          checked={showBallAndStick}
+          onChange={() => setShowBallAndStick(!showBallAndStick)}
+          disabled={isLoading}
+        />
+      }
+      label="Show ball and stick"
+      sx={{
+        '& .MuiTypography-root': {
+          fontSize: '1rem',
+          whiteSpace: 'nowrap',
+        },
+      }}
+    />
+  );
+}
+
+function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel }) {
+  const [isLoading] = useBehavior(viewer.state.isLoading);
+  const [showElectronDensity, setShowElectronDensity] = useBehavior(
+    viewer.state.showElectronDensity,
+  );
+
+  return (
+    <FormControlLabel
+      control={
+        <Switch
+          checked={showElectronDensity}
+          onChange={() => setShowElectronDensity(!showElectronDensity)}
+          disabled={isLoading}
+        />
+      }
+      label="Show electron density"
+      sx={{
+        '& .MuiTypography-root': {
+          fontSize: '1rem',
+          whiteSpace: 'nowrap',
+        },
+      }}
+    />
+  );
+}
+
+function DownloadStructureButton({ pdbId }: { pdbId: string }) {
+  async function handleDownload() {
+    try {
+      const response = await fetch(`https://www.ebi.ac.uk/pdbe/entry-files/download/${pdbId}.cif`);
+      const data = await response.text();
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([data]));
+
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${pdbId.toLowerCase()}.cif`);
+
+      // Append link to body, click it, and remove it
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      // Clean up the URL
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      // You might want to add error handling UI here
+    }
+  }
+
+  return (
+    <Button
+      onClick={handleDownload}
+      startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
+      sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
+    >
+      Download Structure
+    </Button>
+  );
+}
 
 export default RingDetailsWrapper;
