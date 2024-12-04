@@ -13,7 +13,7 @@ import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
@@ -154,11 +154,22 @@ const TableMRT = () => {
     useKeysAsHeaders: true,
   });
 
+  // TODO: add this as endpoint to backend instead of generating this on the frontend
   const handleExportRows = (rows: MRT_Row<RowData>[]) => {
     const rowData = rows.map((row) => row.original);
     const csv = generateCsv(csvConfig)(rowData);
     download(csvConfig)(csv);
   };
+
+  // Define a fixed row height and number of rows to show
+  const ROW_HEIGHT = 53; // Adjust this value based on your table's row height
+  const ROWS_PER_PAGE = pagination.pageSize;
+  const TABLE_HEADER_HEIGHT = 56; // Material table header height
+  const PAGINATION_HEIGHT = 52; // Material pagination height
+
+  // Calculate the fixed height for the table body
+  const tableBodyHeight = ROW_HEIGHT * ROWS_PER_PAGE;
+  const totalTableHeight = tableBodyHeight + TABLE_HEADER_HEIGHT + PAGINATION_HEIGHT;
 
   const table = useMaterialReactTable({
     columns: memoizedColumns,
@@ -215,6 +226,7 @@ const TableMRT = () => {
     enablePagination: true,
     muiTableContainerProps: {
       sx: {
+        height: `${totalTableHeight}px`, // Set fixed height
         maxHeight: '1000px',
         maxWidth: tableContainerMaxWidth,
         margin: '0 auto',
@@ -224,6 +236,52 @@ const TableMRT = () => {
     onSortingChange: handleSortingChange,
     isMultiSortEvent: () => false,
     state: { isLoading, sorting, columnVisibility, pagination, columnFilters },
+
+    muiTableBodyProps: {
+      sx: {
+        height: `${tableBodyHeight}px`, // Set fixed height for table body
+        // Show loading state while maintaining height
+        ...(isLoading && {
+          position: 'relative',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        }),
+      },
+    },
+    // Add loading overlay
+    renderEmptyRowsFallback: ({ table }) => {
+      if (isLoading) {
+        return (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1rem',
+            }}
+          >
+            <CircularProgress />
+            <span>Loading data...</span>
+          </Box>
+        );
+      }
+      return null;
+    },
+    // Ensure empty rows are rendered to maintain height
     renderTopToolbar: () => {
       function renderFilters(filterKeys: string[], index?: number) {
         return (
@@ -360,6 +418,9 @@ const TableMRT = () => {
         '.MuiTableHead-root .MuiIconButton-root': {
           display: 'none',
         },
+        // Add a container with relative positioning
+        position: 'relative',
+        minHeight: `${totalTableHeight}px`,
       }}
     >
       <MaterialReactTable table={table} />
