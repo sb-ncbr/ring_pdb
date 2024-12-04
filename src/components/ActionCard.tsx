@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import CardActionArea from '@mui/material/CardActionArea';
 
-
 interface ActionCardProps {
   header: string;
   body: string;
@@ -17,8 +16,15 @@ interface ActionCardProps {
   url?: string;
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValue, color, url }) => {
-  const navigate = useNavigate()
+const ActionCard: React.FC<ActionCardProps> = ({
+  header,
+  body,
+  action,
+  inputValue,
+  color,
+  url,
+}) => {
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -30,22 +36,24 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValu
         backgroundColor: color,
       }}
     >
-      <CardActionArea sx={{ height: '100%' }} onClick={action === "button" ? () => navigate(url) : undefined}>
+      <CardActionArea
+        sx={{ height: '100%' }}
+        onClick={action === 'button' ? () => navigate(url) : undefined}
+      >
         <CardContent
           sx={{
             flex: '1 0 auto',
-            padding: '48px',
+            padding: '0 48px',
           }}
         >
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ marginBottom: '48px' }}>
             {header}
           </Typography>
-          <Typography variant="body2" sx={{ mt: 1 }}>
+          <Typography variant="body2" sx={{ mt: 1, marginBottom: '24px' }}>
             {body}
           </Typography>
-          {action === "input" ? <Box
-              component="form"
-            >
+          {action === 'input' ? (
+            <Box component="form" sx={{ marginTop: '12px' }}>
               <TextField
                 id="search-by"
                 variant="outlined"
@@ -58,11 +66,12 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, inputValu
                   },
                 }}
               />
-            </Box> : null}
+            </Box>
+          ) : null}
         </CardContent>
       </CardActionArea>
     </Card>
   );
-}
+};
 
 export default ActionCard;

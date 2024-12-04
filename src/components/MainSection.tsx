@@ -1,29 +1,44 @@
-import React from "react";
-import { Typography } from "@mui/material";
+import React from 'react';
+import { Typography } from '@mui/material';
 
-export const MainSection: React.FC<{ section: { header: string; body: string } }> = ({ section }) => {
-    const { header, body } = section;
-    return (
-        <>
-            <Typography variant="h4" component="div" sx={{
-                width: '100%',
-                margin: '16px 0',
-                textAlign: 'left'
-            }}
-            >
-                {header}
-            </Typography>
+export const MainSection: React.FC<{ section: { header: string; body: object } }> = ({
+  section,
+}) => {
+  const { header, body } = section;
+  console.log(typeof body);
+  console.log(body);
+  return (
+    <>
+      <Typography
+        variant="h4"
+        component="div"
+        sx={{
+          width: '100%',
+          margin: '16px 0',
+          textAlign: 'left',
+        }}
+      >
+        {header}
+      </Typography>
 
-            <Typography variant="body2" component="div" sx={{
-                width: '100%',
-                margin: '16px 0',
-                textAlign: 'left'
-            }}
-            >
-                {body}
-            </Typography>
-        </>
-    )
-}
+      <Typography
+        variant="body2"
+        component="div"
+        sx={{
+          width: '100%',
+          margin: '16px 0',
+          textAlign: 'left',
+        }}
+      >
+        {body.map((item, index) => (
+          <div key={index}>
+            {item.para && <p>{item.para}</p>}
+            {item.listItem && <li>{item.listItem}</li>}
+          </div>
+        ))}
+      </Typography>
+    </>
+  );
+};
 
 export default MainSection;

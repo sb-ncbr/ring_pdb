@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
 import Stack from '@mui/material/Stack';
-import { Box } from "@mui/material";
-import ActionCard from "../components/ActionCard";
-import MainSection from "../components/MainSection";
-import ExampleCard from "../components/ExampleCard";
+import { Box } from '@mui/material';
+import ActionCard from '../components/ActionCard';
+import MainSection from '../components/MainSection';
+import ExampleCard from '../components/ExampleCard';
 
-import cards from "../content/cards.json"
-import sections from "../content/main.json"
-
+import cards from '../content/cards.json';
+import sections from '../content/main.json';
 
 export const Home: React.FC = () => {
   return (
@@ -18,7 +17,7 @@ export const Home: React.FC = () => {
         flexDirection: 'column',
         alignItems: 'center',
         padding: '0 16px',
-        margin: '24px auto'
+        margin: '24px auto',
       }}
     >
       <MainSection section={sections.first} />
@@ -26,12 +25,12 @@ export const Home: React.FC = () => {
         direction={{ xs: 'column', sm: 'row' }}
         gap="24px"
         sx={{
-          justifyContent: "center",
-          alignItems: "stretch",
-          margin: '16px 0'
+          justifyContent: 'center',
+          alignItems: 'stretch',
+          margin: '16px 0',
         }}
       >
-        {cards["action-cards"].map((card, index) => (
+        {cards['action-cards'].map((card, index) => (
           <ActionCard key={index} {...card} />
         ))}
       </Stack>
@@ -41,11 +40,11 @@ export const Home: React.FC = () => {
         direction={{ xs: 'column', sm: 'row' }}
         gap="24px"
         sx={{
-          justifyContent: "center",
-          margin: '16px 0'
+          justifyContent: 'center',
+          margin: '16px 0',
         }}
       >
-        {cards["example-cards"].map((card, index) => (
+        {cards['example-cards'].map((card, index) => (
           <ExampleCard key={index} {...card} />
         ))}
       </Stack>
