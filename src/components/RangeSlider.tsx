@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 
 const Input = styled(MuiInput)`
@@ -45,31 +45,29 @@ export default function RangeSlider({
     setValue([minVal, maxVal]); // Reset to new min/max values
   }, [minVal, maxVal]);
 
-  const handleSliderChange = (event: Event, newValue: [number, number]) => {
-    console.log('DEBUGGG');
-    console.log(newValue);
-
-    onChange(newValue as [number, number]);
+  const handleSliderChange = (event, newValue) => {
+    setValue(newValue);
+    debouncedChange(newValue);
   };
 
-  // const debouncedOnSliderChange = useCallback(debounce(handleSliderChange, 300), []);
-  const debouncedResults = useMemo(() => {
-    return debounce(handleSliderChange, 300);
-  }, []);
+  const debouncedChange = useMemo(
+    () => debounce((newValue: (number | 'N/A' | undefined)[]) => onChange(newValue), 500),
+    [onChange],
+  );
 
   useEffect(() => {
     return () => {
-      debouncedResults.cancel();
+      debouncedChange.cancel();
     };
-  });
-  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>, newValue) => {
+  }, [debouncedChange]);
+
+  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value.replace(',', '.');
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       setValue([inputValue, value[1]]);
+      debouncedChange([parseFloat(inputValue), value[1]]);
     }
-
-    onChange(newValue);
   };
 
   const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,24 +75,33 @@ export default function RangeSlider({
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       setValue([value[0], inputValue]);
+      debouncedChange([value[0], parseFloat(inputValue)]);
     }
   };
 
   const handleBlurMin = () => {
     const parsedValue = parseFloat(value[0]);
     if (!isNaN(parsedValue) && parsedValue >= minVal && parsedValue <= value[1]) {
-      setValue([parsedValue, value[1]]);
+      const val = [parsedValue, value[1]];
+      setValue(val);
+      debouncedChange(val);
     } else {
-      setValue([minVal, value[1]]);
+      const val = [minVal, value[1]];
+      setValue(val);
+      debouncedChange(val);
     }
   };
 
   const handleBlurMax = () => {
     const parsedValue = parseFloat(value[1]);
     if (!isNaN(parsedValue) && parsedValue <= maxVal && parsedValue >= value[0]) {
-      setValue([value[0], parsedValue]);
+      const val = [value[0], parsedValue];
+      setValue(val);
+      debouncedChange(val);
     } else {
-      setValue([value[0], maxVal]);
+      const val = [value[0], maxVal];
+      setValue(val);
+      debouncedChange(val);
     }
   };
 
@@ -143,10 +150,7 @@ export default function RangeSlider({
             step={step}
             color="primary"
             valueLabelDisplay="off"
-            onChange={(event, value) => {
-              setValue(value as number[]);
-              debouncedResults();
-            }}
+            onChange={handleSliderChange}
             aria-labelledby="input-slider"
             disableSwap
             disabled={disabled}
@@ -159,5 +163,3 @@ export default function RangeSlider({
     </Box>
   );
 }
-
-// setValue(newValue as number[]);

@@ -77,12 +77,20 @@ def get_paginated_data():
         elif filter['id'] == 'ccd_id':
             filtered_data = filtered_data[filtered_data['ccd_id'].isin(filter['value'])]
 
-
     data_for_calc_ranges = filtered_data
     for filter in non_empty_filters:
         if filter['id'] == 'resolution':
             filtered_data = filtered_data[(filtered_data['resolution'] >= filter['value'][0]) &
                                           (filtered_data['resolution'] <= filter['value'][1])]
+        elif filter['id'] == 'ring_coverage':
+            filtered_data = filtered_data[(filtered_data['ring_coverage_float']*100 >= filter['value'][0]) &
+                                          (filtered_data['ring_coverage_float']*100 <= filter['value'][1])]
+        elif filter['id'] == 'rsr':
+            filtered_data = filtered_data[(filtered_data['rsr'] >= filter['value'][0]) &
+                                          (filtered_data['rsr'] <= filter['value'][1])]
+        elif filter['id'] == 'rscc':
+            filtered_data = filtered_data[(filtered_data['rscc'] >= filter['value'][0]) &
+                                          (filtered_data['rscc'] <= filter['value'][1])]
 
     sorting = received_data.get('sorting', [])
     sorted_data = filtered_data
@@ -106,10 +114,11 @@ def get_paginated_data():
 
     filters_value_range = {
         'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
-        'ring_coverage': get_range_with_step(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
+        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_float']*100),
+        # 'ring_coverage': get_range_with_step(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
         # 'ligand_coverage': {},
-        'rsr': get_range_with_step(sorted_data['rsr']),
-        'rscc': get_range_with_step(sorted_data['rscc']),
+        'rsr': get_range_with_step(data_for_calc_ranges['rsr']),
+        'rscc': get_range_with_step(data_for_calc_ranges['rscc']),
     }
 
     response = {
