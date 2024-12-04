@@ -2,19 +2,17 @@
   "action-cards": [
     {
       "header": "Search for rings in the PDB entries by PDB ID(s)",
-      "body": "Here you can enter PDB ids separated by comma or space",
+      "body": "Here you can enter PDB IDs separated by comma or space",
       "action": "input",
-      "inputValue": "1tup 2f4i",
       "color": "#f3eed9",
-      "url": "/data"
+      "idType": "pdb"
     },
     {
       "header": "Search for rings in the PDB entries by CCD ID(s)",
-      "body": "Here you can enter CCD ids separated by comma or space",
+      "body": "Here you can enter CCD IDs separated by comma or space",
       "action": "input",
-      "inputValue": "53K FHR",
       "color": "#fff3f0",
-      "url": "/data"
+      "idType": "ccd"
     },
     {
       "header": "Browse available rings and conformations",

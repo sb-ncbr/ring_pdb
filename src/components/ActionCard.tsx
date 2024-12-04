@@ -6,25 +6,58 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import CardActionArea from '@mui/material/CardActionArea';
+import { useState } from 'react';
+import { IconButton, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface ActionCardProps {
   header: string;
   body: string;
   action: string;
-  inputValue?: string;
   color: string;
   url?: string;
+  idType?: 'pdb' | 'ccd';
 }
 
-const ActionCard: React.FC<ActionCardProps> = ({
-  header,
-  body,
-  action,
-  inputValue,
-  color,
-  url,
-}) => {
+const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, url, idType }) => {
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState<string>('');
+  const [validatedIds, setValidatedIds] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const regex = idType == 'pdb' ? /^[0-9][a-zA-Z0-9]{3}$/ : /[a-zA-Z0-9]{3}$/;
+
+  const handleInputChange = (event: React.FormEvent) => {
+    const value = event.target.value;
+    setInputValue(value);
+    const ids = value.split(/[\s,;]+/).filter((id) => id);
+    // const finished = ids.every((id) => id.length >= 4);
+    const isValid = ids.every((id) => regex.test(id));
+
+    if (isValid || inputValue.trim() === '') {
+      setError(null);
+      setValidatedIds(ids);
+    } else {
+      setError(`Incorrect entry`);
+    }
+  };
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (inputValue.length != 0 && !error) {
+      navigate('/data', {
+        state: {
+          filters:
+            idType == 'pdb'
+              ? {
+                  pdb_id: validatedIds.map((id) => id.toLowerCase()),
+                }
+              : {
+                  ccd_id: validatedIds.map((id) => id.toUpperCase()),
+                },
+        },
+      });
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -53,17 +86,30 @@ const ActionCard: React.FC<ActionCardProps> = ({
             {body}
           </Typography>
           {action === 'input' ? (
-            <Box component="form" sx={{ marginTop: '12px' }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ marginTop: '12px' }}>
               <TextField
-                id="search-by"
+                id={`search-by-${idType}`}
                 variant="outlined"
-                placeholder={inputValue}
+                onChange={handleInputChange}
+                error={!!error}
+                label={error ? 'Error' : ''}
+                helperText={error ? 'Incorrect entry' : ''}
                 sx={{
                   height: '40px',
                   '& .MuiInputBase-root': {
                     height: '100%',
                     padding: '0 10px',
+                    flex: 1,
                   },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSubmit}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
             </Box>

@@ -82,10 +82,13 @@ const TableMRT = () => {
         value,
       }))
     : [];
-  const initialFilters = [
-    ...previousFilters,
-    ...advancedFilterKeys.map((id) => ({ id, value: [] })),
-  ];
+
+  const combinedFilters = new Map(advancedFilterKeys.map((id) => [id, { id, value: [] }]));
+  previousFilters.forEach((filter) => {
+    combinedFilters.set(filter.id, filter);
+  });
+  const initialFilters = Array.from(combinedFilters.values());
+
   const [data, setData] = useState<APIData[]>([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

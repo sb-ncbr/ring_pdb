@@ -31,6 +31,7 @@ export const columnsData: ColumnDataMRT[] = [
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
+          selectedValues={(column.getFilterValue() as string[]) || []}
         />
       );
     },
@@ -45,6 +46,7 @@ export const columnsData: ColumnDataMRT[] = [
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
+          selectedValues={(column.getFilterValue() as string[]) || []}
         />
       );
     },

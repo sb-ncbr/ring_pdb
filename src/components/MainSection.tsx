@@ -5,8 +5,6 @@ export const MainSection: React.FC<{ section: { header: string; body: object } }
   section,
 }) => {
   const { header, body } = section;
-  console.log(typeof body);
-  console.log(body);
   return (
     <>
       <Typography
