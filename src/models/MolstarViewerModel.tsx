@@ -142,9 +142,14 @@ export default class MolstarViewerModel {
     const trajectory = await this._plugin.builders.structure.parseTrajectory(data, 'mmcif');
     const model = await this._plugin.builders.structure.createModel(trajectory);
     const structure = await this._plugin.builders.structure.createStructure(model, {
-      name: 'assembly',
+      name: 'auto',
       params: {},
     });
+
+    if (!model?.cell?.obj?.data) {
+      console.error('Missing model');
+      return;
+    }
 
     // check if trajectory has more models
     const count = Model.TrajectoryInfo.get(model?.cell?.obj?.data).size;
@@ -166,7 +171,10 @@ export default class MolstarViewerModel {
     );
 
     // check successful build
-    if (!polymer || !ligand || !ring) return;
+    if (!polymer || !ligand || !ring) {
+      console.error('Failed to create component');
+      return;
+    }
 
     // create visual representations
     const polymerCartoonVisual =
