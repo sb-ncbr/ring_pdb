@@ -229,7 +229,7 @@ const TableMRT = () => {
     enablePagination: true,
     muiTableContainerProps: {
       sx: {
-        height: `${totalTableHeight}px`, // Set fixed height
+        // height: `${totalTableHeight}px`, // Set fixed height
         maxHeight: '1000px',
         maxWidth: tableContainerMaxWidth,
         margin: '0 auto',
@@ -242,7 +242,7 @@ const TableMRT = () => {
 
     muiTableBodyProps: {
       sx: {
-        height: `${tableBodyHeight}px`, // Set fixed height for table body
+        // height: `${tableBodyHeight}px`, // Set fixed height for table body
         // Show loading state while maintaining height
         ...(isLoading && {
           position: 'relative',
