@@ -8,6 +8,8 @@ import logging
 import pandas as pd
 from flask_cors import CORS
 
+from utils import is_favorable, get_range_with_step
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -22,18 +24,6 @@ logging.basicConfig(level=logging.DEBUG)
 data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", index_col=0)
 data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
-
-
-def get_range_with_step(data_series):
-    """Calculate min, max, and step while handling NaN values."""
-    min_value = data_series.min()
-    max_value = data_series.max()
-
-    if np.isnan(min_value) or np.isnan(max_value):
-        return {}
-    else:
-        step = 0.01
-        return {'min': min_value, 'max': max_value, 'step': step}
 
 
 @app.route('/api/get_pdb_ids', methods=['GET'])
@@ -68,8 +58,24 @@ def get_paginated_data():
     for filter in non_empty_filters:
         if filter['id'] == 'ring_type':
             filtered_data = filtered_data[filtered_data['ring_type'].isin(filter['value'])]
+
         elif filter['id'] == 'conformation':
-            filtered_data = filtered_data[filtered_data['conformation'].isin(filter['value'])]
+            selected_values = filter['value'].get('selectedValues', [])
+            show_favorable = filter['value'].get('showFavorable', True)
+            show_unfavorable = filter['value'].get('showUnfavorable', True)
+
+            if selected_values:
+                filtered_data = filtered_data[filtered_data['conformation'].isin(selected_values)]
+
+            if not (show_favorable and show_unfavorable):
+                filtered_data = filtered_data[
+                    filtered_data.apply(
+                        lambda row: (is_favorable(row['ring_type'], row['conformation']) and show_favorable) or
+                                    (not is_favorable(row['ring_type'], row['conformation']) and show_unfavorable),
+                        axis=1
+                    )
+                ]
+
         elif filter['id'] == 'experimental_method':
             filtered_data = filtered_data[filtered_data['experimental_method'].isin(filter['value'])]
         elif filter['id'] == 'pdb_id':

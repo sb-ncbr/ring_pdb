@@ -10,3 +10,8 @@ def get_range_with_step(data_series):
     else:
         step = 0.01
         return {'min': min_value, 'max': max_value, 'step': step}
+
+
+def is_favorable(ring, conf):
+    return ((ring == "Cyclohexane" and conf == "Chair") or (ring == "Benzene" and conf == "Flat") or
+            (ring == "Cyclopentane" and conf in ["Envelope", "Half chair"]))

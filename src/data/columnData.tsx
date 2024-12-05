@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  FormGroup,
   IconButton,
   Menu,
   MenuItem,
@@ -18,6 +19,8 @@ import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 import { useState } from 'react';
 import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -99,19 +102,69 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-
     Filter: ({ column }) => {
+      const filterValue = column.getFilterValue() || {};
+      const selectedValues = filterValue.selectedValues || [];
+      const showFavorable = filterValue.showFavorable ?? true;
+      const showUnfavorable = filterValue.showUnfavorable ?? true;
+
+      const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
+        column.setFilterValue({
+          ...filterValue,
+          [key]: value,
+        });
+      };
+
+      const handleAutocompleteChange = (newSelectedValues: string[]) => {
+        column.setFilterValue({
+          ...filterValue,
+          selectedValues: newSelectedValues,
+        });
+      };
+
       return (
-        <FilterAutocompleteSimple
-          options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
-          filterByLabel="conformation"
-          selectedValues={(column.getFilterValue() as string[]) || []}
-          onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
-          }}
-        />
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <FilterAutocompleteSimple
+            options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
+            filterByLabel="conformation"
+            selectedValues={selectedValues}
+            onChange={handleAutocompleteChange}
+          />
+          <FormGroup row>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={showFavorable}
+                  onChange={(e) => handleSwitchChange('showFavorable', e.target.checked)}
+                />
+              }
+              label="Show Favorable"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={showUnfavorable}
+                  onChange={(e) => handleSwitchChange('showUnfavorable', e.target.checked)}
+                />
+              }
+              label="Show Unfavorable"
+            />
+          </FormGroup>
+        </Box>
       );
     },
+
+    filterFn: (row, columnId, filterValue) => {
+      const conf = row.original[columnId];
+      const ring = row.original.ring_type;
+      const favorable = isFavorable(ring, conf);
+
+      const { selectedValues = [], showFavorable = true, showUnfavorable = true } = filterValue;
+      const matchesAutocomplete = selectedValues.length === 0 || selectedValues.includes(conf);
+      const matchesSwitches = (favorable && showFavorable) || (!favorable && showUnfavorable);
+      return matchesAutocomplete && matchesSwitches;
+    },
+
     Cell: ({ row }) => {
       const conf = row.original.conformation;
       const ring = row.original.ring_type;

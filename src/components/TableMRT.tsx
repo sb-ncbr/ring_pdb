@@ -65,7 +65,7 @@ const TableMRT = () => {
     rscc: true,
     ligand_coverage: false,
   };
-  const defaultFilterKeys = ['ring_type', 'conformation'];
+  const defaultFilterKeys = ['conformation', 'ring_type'];
   const advancedFilterKeys = [
     'pdb_id',
     'ccd_id',
