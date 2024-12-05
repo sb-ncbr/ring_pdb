@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import os
 from dotenv import load_dotenv
 import logging
@@ -149,9 +149,8 @@ def get_row_data():
     if ring_id not in data.index:
         return jsonify({"error": "Ring ID not found"}), 404
 
-    row_data = data.loc[ring_id].to_dict()
-
-    return jsonify(row_data), 200
+    row_data = data.loc[ring_id].to_json()
+    return Response(status=200, mimetype="application/json", response=row_data)
 
 
 print(f"Environment: {app.config['ENV']}")
