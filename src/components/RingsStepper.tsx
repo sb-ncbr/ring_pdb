@@ -10,10 +10,7 @@ import { RingCard } from './RingCard.tsx';
 import ringCards from '../content/ringCards.json';
 import { ConformationCard } from './ConformationCard.tsx';
 import { StepContent, Typography } from '@mui/material';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
-import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
@@ -25,11 +22,13 @@ const StickyButton = styled(Button)(({ theme }) => ({
   borderRadius: '8px',
   border: 'none',
   cursor: 'pointer',
+  color: '#fff',
   transition: 'transform 0.3s ease-in-out, background-color 0.5s ease',
   animation: 'colorChange 2s forwards',
   backgroundColor: 'transparent',
-  position: 'sticky',
-  top: '20px',
+  position: 'fixed',
+  bottom: '20px',
+  right: '20px',
   '@keyframes colorChange': {
     '0%': {
       backgroundColor: 'transparent',
@@ -39,35 +38,6 @@ const StickyButton = styled(Button)(({ theme }) => ({
     },
   },
 }));
-
-const AnimatedCard = styled(Card)`
-  padding: 16px;
-  color: #fff;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  //box-shadow: 3;
-  transition:
-    transform 0.3s ease-in-out,
-    background-color 0.5s ease;
-  animation: colorChange 2s forwards;
-
-  @keyframes colorChange {
-    0% {
-      background-color: transparent;
-    }
-    100% {
-      background-color: ${({ theme }) => theme.palette.primary.main};
-    }
-  }
-
-  &:hover {
-    //transform: scale(1.05); // Scale on hover
-    //box-shadow: 6;
-  }
-`;
 
 export default function RingsStepper() {
   const navigate = useNavigate();
@@ -115,7 +85,11 @@ export default function RingsStepper() {
       state: {
         filters: {
           ring_type: Array(filterValues.ring),
-          conformation: Array.from(filterValues.confs),
+          conformation: {
+            selectedValues: Array.from(filterValues.confs),
+            showFavorable: true,
+            showUnfavorable: true,
+          },
         },
       },
     });
@@ -188,30 +162,13 @@ export default function RingsStepper() {
                     favorable={conf.favorable}
                   />
                 ))}
-                {/* Button Card */}
-                {showStickyButton && (
-                  <AnimatedCard sx={{ width: '292px' }}>
-                    <CardActionArea
-                      sx={{
-                        height: '100%',
-                      }}
-                      onClick={handleBrowseData}
-                      disabled={isLoading}
-                    >
-                      <CardContent>
-                        <Typography variant="h6">Browse the data</Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </AnimatedCard>
-                )}
               </Box>
             </StepContent>
-            {/*Change this*/}
-            {/*{showStickyButton && (*/}
-            {/*  <StickyButton>*/}
-            {/*    <Typography variant="h6">Browse the data</Typography>*/}
-            {/*  </StickyButton>*/}
-            {/*)}*/}
+            {showStickyButton && (
+              <StickyButton onClick={handleBrowseData} disabled={isLoading}>
+                <Typography variant="h6">Browse the data</Typography>
+              </StickyButton>
+            )}
           </Step>
         )}
       </Stepper>
