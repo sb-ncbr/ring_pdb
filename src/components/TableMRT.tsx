@@ -335,10 +335,19 @@ const TableMRT = () => {
                         marginTop: '16px',
                       }}
                     >
-                      {/* First Row - First 3 filters */}
-                      {advancedFilterKeys
-                        .slice(0, 3)
-                        .map((key, index) => renderFilters([key], index))}
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          gap: '16px',
+                          marginTop: '16px',
+                        }}
+                      >
+                        {/* First Row - First 3 filters */}
+                        {advancedFilterKeys
+                          .slice(0, 3)
+                          .map((key, index) => renderFilters([key], index))}
+                      </Box>
 
                       {/* Second Row - Remaining filters-sliders */}
                       <Box
