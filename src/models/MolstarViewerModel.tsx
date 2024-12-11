@@ -1,15 +1,17 @@
+import { Model, QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
+import { StructureSelectionQuery } from 'molstar/lib/commonjs/mol-plugin-state/helpers/structure-selection-query';
 import { PluginUIContext } from 'molstar/lib/commonjs/mol-plugin-ui/context';
 import { DefaultPluginUISpec, PluginUISpec } from 'molstar/lib/commonjs/mol-plugin-ui/spec';
-import { Color } from 'molstar/lib/commonjs/mol-util/color';
-import { Model, QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
-import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
-import { compile } from 'molstar/lib/commonjs/mol-script/runtime/query/base';
-import { StructureSelectionQuery } from 'molstar/lib/commonjs/mol-plugin-state/helpers/structure-selection-query';
-import { BehaviorSubject, Subscription, Observable } from 'rxjs';
-import { StateObjectCell } from 'molstar/lib/commonjs/mol-state';
-import { setSubtreeVisibility } from 'molstar/lib/commonjs/mol-plugin/behavior/static/state';
+import { VolumeStreaming } from 'molstar/lib/commonjs/mol-plugin/behavior/dynamic/volume-streaming/behavior';
 import { InitVolumeStreaming } from 'molstar/lib/commonjs/mol-plugin/behavior/dynamic/volume-streaming/transformers';
+import { setSubtreeVisibility } from 'molstar/lib/commonjs/mol-plugin/behavior/static/state';
+import { PluginCommands } from 'molstar/lib/commonjs/mol-plugin/commands';
 import { Expression } from 'molstar/lib/commonjs/mol-script/language/expression';
+import { compile } from 'molstar/lib/commonjs/mol-script/runtime/query/base';
+import { StateObjectCell, StateSelection } from 'molstar/lib/commonjs/mol-state';
+import { Color } from 'molstar/lib/commonjs/mol-util/color';
+import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 interface RingSelection {
   chainId: string;
@@ -71,6 +73,7 @@ export default class MolstarViewerModel {
     });
 
     this._subscribe(this.state.showElectronDensity, (showElectronDensity) => {
+      if (this.state.disableElectronDensity.value) return;
       this._handleShowDensityToggle(showElectronDensity);
     });
 
@@ -153,7 +156,8 @@ export default class MolstarViewerModel {
 
     // check if trajectory has more models
     const count = Model.TrajectoryInfo.get(model?.cell?.obj?.data).size;
-    this.state.disableElectronDensity.next(count > 1);
+    const disable = count > 1 || !this._canCreateDensity();
+    this.state.disableElectronDensity.next(disable);
 
     // create components
     const polymer = await this._plugin.builders.structure.tryCreateComponentStatic(
@@ -276,6 +280,19 @@ export default class MolstarViewerModel {
   private async _handleShowDensityToggle(showElectronDensity: boolean) {
     if (showElectronDensity && !this._cellRefs.volumeStreaming) {
       await this._createDensity();
+
+      if (!this._wasDensityCreated()) {
+        PluginCommands.Toast.Show(this.plugin, {
+          title: 'Error',
+          message: 'No density data available',
+          key: 'toast-custom',
+        });
+
+        this.state.disableElectronDensity.next(true);
+        this.state.showElectronDensity.next(false);
+
+        return;
+      }
     }
 
     if (!this._cellRefs.volumeStreaming) return;
@@ -296,8 +313,7 @@ export default class MolstarViewerModel {
     const params = InitVolumeStreaming.createDefaultParams(asm, this._plugin);
     params.defaultView = 'auto';
     params.options.behaviorRef = this._volumeStreamingTag;
-    params.options.channelParams['fo-fc(+ve)'] = { wireframe: true };
-    params.options.channelParams['fo-fc(-ve)'] = { wireframe: true };
+    params.options.serverUrl = 'https://www.ebi.ac.uk/pdbe/volume-server/';
 
     await this._plugin.runTask(
       this._plugin.state.data.applyAction(
@@ -311,5 +327,28 @@ export default class MolstarViewerModel {
     this._cellRefs.volumeStreaming = this._volumeStreamingTag;
 
     this.state.isLoading.next(false);
+  }
+
+  private _canCreateDensity() {
+    const { selection } = this.plugin.managers.structure.hierarchy;
+    if (selection.structures.length !== 1) return false;
+    const pivot = this.plugin.managers.structure.hierarchy.selection.structures[0].cell;
+    if (!pivot.obj) return false;
+    return !!InitVolumeStreaming.definition.isApplicable?.(pivot.obj, pivot.transform, this.plugin);
+  }
+
+  private _wasDensityCreated() {
+    const pivot = this.plugin.managers.structure.hierarchy.selection.structures[0].cell;
+
+    if (!pivot.parent) return null;
+
+    const root = StateSelection.findTagInSubtree(
+      pivot.parent.tree,
+      pivot.transform.ref,
+      VolumeStreaming.RootTag,
+    );
+    const rootCell = root && pivot.parent.cells.get(root);
+
+    return rootCell && rootCell.status === 'ok';
   }
 }
