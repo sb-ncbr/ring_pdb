@@ -13,7 +13,7 @@ export const TablePage: React.FC = () => {
           color: '#3A3A3A',
         }}
       >
-        Table name
+        {/*Table name*/}
       </Typography>
       <TableMRT />
     </>
