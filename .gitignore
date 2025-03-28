@@ -13,3 +13,4 @@ dist
 
 # artifacts
 data_cache.pkl
+api/.env
