@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { labels } from '../constants';
 import data from '../content/examples.json';
 import { Typography } from '@mui/material';

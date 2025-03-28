@@ -10,7 +10,7 @@ export function generateUniqueOptions(count: number, type: 'ccd' | 'pdb'): strin
 }
 
 export function generateOptions(type: 'ccd' | 'pdb'): string {
-  let characters;
+  let characters = '';
   let length = 0;
   let result = '';
 

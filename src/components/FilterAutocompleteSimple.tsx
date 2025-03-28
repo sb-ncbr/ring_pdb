@@ -16,7 +16,7 @@ export const FilterAutocompleteSimple = ({
   options: string[];
   filterByLabel: string;
   selectedValues: string[];
-  onChange: (newValue) => void;
+  onChange: (newValue: any) => void;
 }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -34,7 +34,7 @@ export const FilterAutocompleteSimple = ({
         options={options}
         value={selectedValues}
         getOptionLabel={(option) => option}
-        onChange={(event, newValue) => {
+        onChange={(_e, newValue) => {
           onChange(newValue);
         }}
         renderInput={(params) => <TextField {...params} label={`Filter by ${filterByLabel}`} />}
@@ -66,7 +66,7 @@ export const FilterAutocompleteSimple = ({
                     />
                   );
                 })
-            : null
+            : undefined
         }
       />
     </Box>

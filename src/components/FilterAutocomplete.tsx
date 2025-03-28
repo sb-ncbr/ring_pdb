@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
@@ -14,7 +13,7 @@ export default function FilterAutocomplete({
   selectedValues,
 }: {
   filterByLabel: string;
-  onChange: (newValue) => void;
+  onChange: (newValue: any) => void;
   selectedValues: string[];
 }) {
   const [allOptions, setAllOptions] = useState([]);
@@ -32,7 +31,7 @@ export default function FilterAutocomplete({
 
   const filterOptionsMUI = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option) => option,
+    stringify: (option) => String(option),
   });
 
   const handleToggleSelectAll = (visibleOptions: string[]) => {
@@ -47,17 +46,18 @@ export default function FilterAutocomplete({
     setSelectAll((prev) => !prev); // Toggle selectAll state
   };
 
-  const handleChange = (_: any, value: string[], reason: string) => {
+  const handleChange = (_: any, value: unknown[], reason: string) => {
+    const stringValue = value as string[];
     if (reason === 'clear' || reason === 'removeOption') {
       setSelectAll(false);
     }
 
     const filteredOptions = filterOptions(allOptions, inputValue);
     if (reason === 'selectOption') {
-      setSelectAll(value.length === filteredOptions.length);
+      setSelectAll(stringValue.length === filteredOptions.length);
     }
-    setSelectedOptions(value);
-    onChange(value);
+    setSelectedOptions(stringValue);
+    onChange(stringValue);
   };
 
   const url = filterByLabel === 'PDB ID' ? '/api/get_pdb_ids' : '/api/get_ccd_ids';
@@ -91,6 +91,7 @@ export default function FilterAutocomplete({
         onChange={handleChange}
         options={allOptions}
         getOptionLabel={(option) => option}
+        // getOptionLabel={(option: unknown) => () => (option: string) => option}
         open={inputValue.length >= 2}
         PaperComponent={(paperProps) => {
           const { children, ...restPaperProps } = paperProps;

@@ -91,10 +91,12 @@ const RingDetailsWrapper: React.FC = () => {
         const data = await Promise.race([jsonPromise, timeoutPromise]);
         setRingData(data as RingData);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          setError('Request timed out. Please try again.');
-        } else {
-          setError(error.message || 'An error occurred while fetching data');
+        if (error instanceof Error) {
+          if (error.name === 'AbortError') {
+            setError('Request timed out. Please try again.');
+          } else {
+            setError(error.message || 'An error occurred while fetching data');
+          }
         }
         console.error('Fetch error:', error);
       } finally {
@@ -448,7 +450,7 @@ function DownloadStructureButton({ pdbId }: { pdbId: string }) {
       // Append link to body, click it, and remove it
       document.body.appendChild(link);
       link.click();
-      link.parentNode.removeChild(link);
+      link.parentNode?.removeChild(link);
 
       // Clean up the URL
       window.URL.revokeObjectURL(url);

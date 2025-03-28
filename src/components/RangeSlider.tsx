@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 
 const Input = styled(MuiInput)`
@@ -12,7 +12,7 @@ const Input = styled(MuiInput)`
   //width: 42px;
 `;
 
-const CustomSlider = styled(Slider)(({ theme }) => ({
+const CustomSlider = styled(Slider)(() => ({
   '& .MuiSlider-thumb': {
     width: 16,
     height: 16,
@@ -32,7 +32,7 @@ export default function RangeSlider({
   maxVal: number | 'N/A' | undefined;
   step: number;
   disabled: boolean;
-  onChange: (newValue) => void;
+  onChange: (newValue: any) => void;
 }) {
   if (minVal === undefined) {
     minVal = 'N/A';
@@ -45,7 +45,7 @@ export default function RangeSlider({
     setValue([minVal, maxVal]); // Reset to new min/max values
   }, [minVal, maxVal]);
 
-  const handleSliderChange = (event, newValue) => {
+  const handleSliderChange = (_e: Event, newValue: any) => {
     setValue(newValue);
     debouncedChange(newValue);
   };
@@ -65,8 +65,9 @@ export default function RangeSlider({
     const inputValue = event.target.value.replace(',', '.');
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
-      setValue([inputValue, value[1]]);
-      debouncedChange([parseFloat(inputValue), value[1]]);
+      const inputValueNumber = parseFloat(inputValue);
+      setValue([inputValueNumber, value[1]]);
+      debouncedChange([inputValueNumber, value[1]]);
     }
   };
 
@@ -74,14 +75,26 @@ export default function RangeSlider({
     const inputValue = event.target.value.replace(',', '.');
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
-      setValue([value[0], inputValue]);
-      debouncedChange([value[0], parseFloat(inputValue)]);
+      const inputValueNumber = parseFloat(inputValue);
+      setValue([value[0], inputValueNumber]);
+      debouncedChange([value[0], inputValueNumber]);
     }
   };
 
   const handleBlurMin = () => {
-    const parsedValue = parseFloat(value[0]);
-    if (!isNaN(parsedValue) && parsedValue >= minVal && parsedValue <= value[1]) {
+    const parsedValue =
+      typeof value[0] === 'number'
+        ? value[0]
+        : value[0] === 'N/A' || value[0] === undefined
+          ? undefined
+          : parseFloat(value[0]);
+    if (
+      parsedValue &&
+      typeof minVal === 'number' &&
+      typeof value[1] === 'number' &&
+      parsedValue >= minVal &&
+      parsedValue <= value[1]
+    ) {
       const val = [parsedValue, value[1]];
       setValue(val);
       debouncedChange(val);
@@ -93,8 +106,14 @@ export default function RangeSlider({
   };
 
   const handleBlurMax = () => {
-    const parsedValue = parseFloat(value[1]);
-    if (!isNaN(parsedValue) && parsedValue <= maxVal && parsedValue >= value[0]) {
+    const parsedValue = parseFloat(value[1] as string);
+    if (
+      !isNaN(parsedValue) &&
+      typeof maxVal === 'number' &&
+      typeof value[0] === 'number' &&
+      parsedValue <= maxVal &&
+      parsedValue >= value[0]
+    ) {
       const val = [value[0], parsedValue];
       setValue(val);
       debouncedChange(val);
@@ -144,9 +163,9 @@ export default function RangeSlider({
         </Grid>
         <Grid size={12}>
           <CustomSlider
-            value={value}
-            min={minVal}
-            max={maxVal}
+            value={typeof value === 'number' ? value : undefined}
+            min={typeof minVal === 'number' ? minVal : undefined}
+            max={typeof maxVal === 'number' ? maxVal : undefined}
             step={step}
             color="primary"
             valueLabelDisplay="off"

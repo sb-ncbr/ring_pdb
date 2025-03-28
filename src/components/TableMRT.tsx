@@ -22,19 +22,21 @@ import Divider from '@mui/material/Divider';
 import { useLocation } from 'react-router-dom';
 import RangeSlider from './RangeSlider.tsx';
 
+type FilterKey = 'resolution' | 'ring_coverage' | 'rsr' | 'rscc';
+
 const TableMRT = () => {
   const location = useLocation();
   const [filterSliderRanges, setFilterSliderRanges] = useState({
-    resolution: {},
-    ring_coverage: {},
-    rsr: {},
-    rscc: {},
+    resolution: { min: 1, max: 100, step: 1 },
+    ring_coverage: { min: 0, max: 50, step: 0.5 },
+    rsr: { min: 0.1, max: 10, step: 0.1 },
+    rscc: { min: 0, max: 5, step: 0.2 },
   });
 
   const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
     const createFilter =
-      (key) =>
-      ({ column }) => (
+      (key: FilterKey) =>
+      ({ column }: { column: any }) => (
         <RangeSlider
           filterBy={column.columnDef.header}
           minVal={filterSliderRanges[key]?.min}
@@ -103,7 +105,7 @@ const TableMRT = () => {
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const handleSortingChange = (newSorting) => {
+  const handleSortingChange = (newSorting: any) => {
     setSorting(newSorting);
   };
 
@@ -122,7 +124,7 @@ const TableMRT = () => {
         sorting: sorting,
       })
       .then((response) => {
-        const transformedData = response.data.rows.map((item) => ({
+        const transformedData = response.data.rows.map((item: any) => ({
           ...item,
           img_url: `https://cdn.rcsb.org/images/ccd/labeled/${item.ccd_id[0]}/${item.ccd_id}.svg`,
         }));
@@ -134,6 +136,7 @@ const TableMRT = () => {
       .catch((error) => {
         console.error('Error fetching data:', error);
         setIsError(true);
+        console.log(isError); //use this variable
         return;
       });
   }, [pagination.pageIndex, pagination.pageSize, columnFilters, sorting]);
@@ -178,7 +181,7 @@ const TableMRT = () => {
     columns: memoizedColumns,
     data,
     columnFilterDisplayMode: 'custom',
-    getRowId: (row) => row['Ring ID'],
+    getRowId: (row) => row['ring_id'],
     // enableFacetedValues: true,
     defaultColumn: {
       minSize: 10,
@@ -262,7 +265,7 @@ const TableMRT = () => {
       },
     },
     // Add loading overlay
-    renderEmptyRowsFallback: ({ table }) => {
+    renderEmptyRowsFallback: () => {
       if (isLoading) {
         return (
           <Box

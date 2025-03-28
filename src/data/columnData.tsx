@@ -14,10 +14,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
-import RangeSlider from '../components/RangeSlider.tsx';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -27,7 +26,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'PDB ID',
     accessorKey: 'pdb_id',
     size: 60,
-    Filter: ({ column }) => {
+    Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocomplete
           filterByLabel="PDB ID"
@@ -42,7 +41,7 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: ({ column }) => {
+    Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocomplete
           filterByLabel="CCD ID"
@@ -64,7 +63,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
-    Filter: ({ column }) => {
+    Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocompleteSimple
           options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
@@ -102,7 +101,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    Filter: ({ column }) => {
+    Filter: ({ column }: { column: any }) => {
       const filterValue = column.getFilterValue() || {};
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
@@ -154,7 +153,7 @@ export const columnsData: ColumnDataMRT[] = [
       );
     },
 
-    filterFn: (row, columnId, filterValue) => {
+    filterFn: (row: any, columnId: any, filterValue: any) => {
       const conf = row.original[columnId];
       const ring = row.original.ring_type;
       const favorable = isFavorable(ring, conf);
@@ -201,7 +200,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: ({ column }) => {
+    Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocompleteSimple
           options={[
@@ -223,7 +222,7 @@ export const columnsData: ColumnDataMRT[] = [
         />
       );
     },
-    Cell: ({ cell, row }) => {
+    Cell: ({ cell }) => {
       const text = cell.getValue<string>();
       return (
         <Box
@@ -277,7 +276,7 @@ export const columnsData: ColumnDataMRT[] = [
       );
       const [openOverlay, setOpenOverlay] = useState(false);
 
-      const handleContextMenu = (event: MouseEvent) => {
+      const handleContextMenu: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
         event.preventDefault();
         setContextMenu({
           mouseX: event.clientX + 2,
@@ -301,7 +300,7 @@ export const columnsData: ColumnDataMRT[] = [
             to={`/ring-details/${row.original.ring_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            underline="none"
+            // underline="none"
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -346,7 +345,7 @@ export const columnsData: ColumnDataMRT[] = [
               }}
             >
               <Typography variant="h6">
-                Ring atoms: {row.original.ring_id.split('_')[4].replaceAll('-', ' ')}
+                Ring atoms: {row.original.ring_id.split('_')[4].replace('/-/g', ' ')}
               </Typography>
               <Box
                 component="img"

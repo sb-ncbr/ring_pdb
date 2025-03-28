@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@mui/material';
 
-export const MainSection: React.FC<{ section: { header: string; body: object } }> = ({
+export const MainSection: React.FC<{ section: { header: string; body: any[] } }> = ({
   section,
 }) => {
   const { header, body } = section;
@@ -28,7 +28,7 @@ export const MainSection: React.FC<{ section: { header: string; body: object } }
           textAlign: 'left',
         }}
       >
-        {body.map((item, index) => (
+        {body.map((item: any, index: number) => (
           <div key={index}>
             {item.para && <p>{item.para}</p>}
             {item.listItem && <li>{item.listItem}</li>}

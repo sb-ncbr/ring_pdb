@@ -1,6 +1,6 @@
 import ringCards from '../content/ringCards.json';
 
-export const isFavorable = (ringName, confName) => {
+export const isFavorable = (ringName: string, confName: string) => {
   const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
 
   if (!ring) return null;
@@ -10,7 +10,7 @@ export const isFavorable = (ringName, confName) => {
   return conf ? conf.favorable : null;
 };
 
-export const getChipStyles = (type: string, theme) => {
+export const getChipStyles = (type: string, theme: any) => {
   switch (type) {
     case 'Cyclohexane':
       return { backgroundColor: theme.palette.custom.paleGreen };
@@ -23,6 +23,6 @@ export const getChipStyles = (type: string, theme) => {
   }
 };
 
-export function formatNumber(num) {
+export function formatNumber(num: number) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }

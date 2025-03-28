@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -42,13 +41,15 @@ const StickyButton = styled(Button)(({ theme }) => ({
 export default function RingsStepper() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
+  // const [filterValues, setFilterValues] = useState({ ring: '', confs: new Set() });
+  // const [selectedRing, setSelectedRing] = useState({ name: '', index: -1 });
   const [filterValues, setFilterValues] = useState({ ring: null, confs: new Set() });
   const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRingSelect = (ring) => {
+  const handleRingSelect = (ring: { name: string; index: number }) => {
     setSelectedRing(ring);
     setFilterValues({ ring: ring.name, confs: new Set() });
     setIsStepTwoComplete(false);
@@ -58,7 +59,7 @@ export default function RingsStepper() {
     }
   };
 
-  const handleConfCardClick = (conf) => {
+  const handleConfCardClick = (conf: { name: string; count: number }) => {
     setFilterValues((prevFilterValues) => {
       const confs = prevFilterValues.confs;
       if (confs.has(conf)) {
@@ -78,6 +79,10 @@ export default function RingsStepper() {
   const handleNext = () => {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
+
+  // const isValidName = (name: unknown): name is 'Cyclohexane' | 'Cyclopentane' | 'Benzene' => {
+  //   return name === 'Cyclohexane' || name === 'Cyclopentane' || name === 'Benzene';
+  // };
 
   const handleBrowseData = () => {
     setIsLoading(true);
@@ -129,11 +134,25 @@ export default function RingsStepper() {
                   disabled={isLoading}
                 />
               ))}
+              {/*{ringCards.rings.map((ring, index) => {*/}
+              {/*  const ringName = isValidName(ring.name) ? ring.name : undefined;*/}
+              {/*  return (*/}
+              {/*    <RingCard*/}
+              {/*      key={index}*/}
+              {/*      {...ring}*/}
+              {/*      name={ringName}*/}
+              {/*      handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}*/}
+              {/*      isSelected={selectedRing?.index === index}*/}
+              {/*      disabled={isLoading}*/}
+              {/*    />*/}
+              {/*  );*/}
+              {/*})}*/}
             </Stack>
           </StepContent>
         </Step>
 
         {/*second step*/}
+        {/*{selectedRing.index !== -1 && (*/}
         {selectedRing.index !== null && (
           <Step key={steps[1]} completed={isStepTwoComplete}>
             <StepLabel>

@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { RotatingMolecule } from './RotatingMolecule.tsx';
 
 interface RingCardProps {
-  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
+  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene' | undefined;
   ccd: number;
   pdb: number;
   total: number;
@@ -19,7 +19,11 @@ interface RingCardProps {
   disabled: boolean;
 }
 
-export const SelectableCard = styled(Card)(({ theme, selected }) => ({
+interface SelectableCardProps {
+  selected?: boolean;
+}
+
+export const SelectableCard = styled(Card)<SelectableCardProps>(({ theme, selected }) => ({
   transform: selected ? 'translateY(-10px)' : 'none',
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
   border: selected ? `1px solid ${theme.palette.primary.main}` : '0',

@@ -3,7 +3,9 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   typography: {
     fontSize: 15,
-    color: '#3A3A3A',
+    body1: {
+      color: '#3A3A3A',
+    },
   },
   palette: {
     primary: {

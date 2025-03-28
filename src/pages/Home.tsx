@@ -8,6 +8,10 @@ import ExampleCard from '../components/ExampleCard';
 import cards from '../content/cards.json';
 import sections from '../content/main.json';
 
+const isValidId = (id: unknown): id is 'pdb' | 'ccd' | undefined => {
+  return id === 'pdb' || id === 'ccd' || id === undefined;
+};
+
 export const Home: React.FC = () => {
   return (
     <Box
@@ -30,9 +34,10 @@ export const Home: React.FC = () => {
           margin: '16px 0',
         }}
       >
-        {cards['action-cards'].map((card, index) => (
-          <ActionCard key={index} {...card} />
-        ))}
+        {cards['action-cards'].map((card, index) => {
+          const id = isValidId(card.idType) ? card.idType : undefined;
+          return <ActionCard key={index} {...card} idType={id} />;
+        })}
       </Stack>
 
       <MainSection section={sections.second} />

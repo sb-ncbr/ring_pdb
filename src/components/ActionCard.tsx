@@ -16,7 +16,7 @@ interface ActionCardProps {
   action: string;
   color: string;
   url?: string;
-  idType?: 'pdb' | 'ccd';
+  idType?: 'pdb' | 'ccd' | undefined;
 }
 
 const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, url, idType }) => {
@@ -27,11 +27,12 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
   const regex = idType == 'pdb' ? /^[0-9][a-zA-Z0-9]{3}$/ : /[a-zA-Z0-9]{3}$/;
 
   const handleInputChange = (event: React.FormEvent) => {
-    const value = event.target.value;
+    const inputTarget = event.target as HTMLInputElement;
+    const value = inputTarget.value;
     setInputValue(value);
-    const ids = value.split(/[\s,;]+/).filter((id) => id);
+    const ids = value.split(/[\s,;]+/).filter((id: string) => id);
     // const finished = ids.every((id) => id.length >= 4);
-    const isValid = ids.every((id) => regex.test(id));
+    const isValid = ids.every((id: string) => regex.test(id));
 
     if (isValid || inputValue.trim() === '') {
       setError(null);
@@ -69,10 +70,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
         backgroundColor: color,
       }}
     >
-      <CardActionArea
-        sx={{ height: '100%' }}
-        onClick={action === 'button' ? () => navigate(url) : undefined}
-      >
+      <CardActionArea sx={{ height: '100%' }} onClick={url ? () => navigate(url) : undefined}>
         <CardContent
           sx={{
             flex: '1 0 auto',
