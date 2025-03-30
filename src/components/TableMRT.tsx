@@ -162,7 +162,10 @@ const TableMRT = () => {
 
   // TODO: add this as endpoint to backend instead of generating this on the frontend
   const handleExportRows = (rows: MRT_Row<RowData>[]) => {
-    const rowData = rows.map((row) => row.original);
+    const rowData = rows.map(
+      (row) =>
+        row.original as unknown as { [key: string]: string | number | boolean | null | undefined },
+    );
     const csv = generateCsv(csvConfig)(rowData);
     download(csvConfig)(csv);
   };
