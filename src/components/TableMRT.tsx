@@ -53,7 +53,7 @@ const TableMRT = () => {
       if (['resolution', 'ring_coverage', 'rsr', 'rscc'].includes(column.accessorKey)) {
         return {
           ...column,
-          Filter: createFilter(column.accessorKey),
+          Filter: createFilter(column.accessorKey as FilterKey),
         };
       }
       return column;
@@ -78,7 +78,7 @@ const TableMRT = () => {
     'rsr',
     'rscc',
   ];
-  const previousFilters = location.state?.filters
+  const previousFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
         value,
