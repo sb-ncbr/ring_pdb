@@ -1,5 +1,23 @@
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    custom: {
+      paleViolet: string;
+      paleOrange: string;
+      paleGreen: string;
+    };
+  }
+
+  interface PaletteOptions {
+    custom?: {
+      paleViolet?: string;
+      paleOrange?: string;
+      paleGreen?: string;
+    };
+  }
+}
+
 const theme = createTheme({
   typography: {
     fontSize: 15,
