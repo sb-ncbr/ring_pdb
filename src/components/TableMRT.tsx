@@ -115,7 +115,6 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log(columnFilters);
     axios
       .post('http://localhost:5000/api/data', {
         pageIndex: pagination.pageIndex + 1,

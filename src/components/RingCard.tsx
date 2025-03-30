@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { RotatingMolecule } from './RotatingMolecule.tsx';
 
 interface RingCardProps {
-  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene' | undefined;
+  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
   ccd: number;
   pdb: number;
   total: number;

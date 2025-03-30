@@ -41,10 +41,14 @@ const StickyButton = styled(Button)(({ theme }) => ({
 export default function RingsStepper() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  // const [filterValues, setFilterValues] = useState({ ring: '', confs: new Set() });
-  // const [selectedRing, setSelectedRing] = useState({ name: '', index: -1 });
-  const [filterValues, setFilterValues] = useState({ ring: null, confs: new Set() });
-  const [selectedRing, setSelectedRing] = useState({ name: null, index: null });
+  const [filterValues, setFilterValues] = useState<{
+    ring: string | null;
+    confs: Set<{ name: string; count: number; favorable: boolean }>;
+  }>({ ring: null, confs: new Set() });
+  const [selectedRing, setSelectedRing] = useState<{ name: string | null; index: number | null }>({
+    name: null,
+    index: null,
+  });
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +63,7 @@ export default function RingsStepper() {
     }
   };
 
-  const handleConfCardClick = (conf: { name: string; count: number }) => {
+  const handleConfCardClick = (conf: { name: string; count: number; favorable: boolean }) => {
     setFilterValues((prevFilterValues) => {
       const confs = prevFilterValues.confs;
       if (confs.has(conf)) {
@@ -69,7 +73,7 @@ export default function RingsStepper() {
       }
       return {
         ...prevFilterValues,
-        confs: confs,
+        confs,
       };
     });
     setIsStepTwoComplete(filterValues.confs.size != 0);
@@ -80,9 +84,11 @@ export default function RingsStepper() {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
-  // const isValidName = (name: unknown): name is 'Cyclohexane' | 'Cyclopentane' | 'Benzene' => {
-  //   return name === 'Cyclohexane' || name === 'Cyclopentane' || name === 'Benzene';
-  // };
+  const validRingNames = ['Cyclohexane', 'Cyclopentane', 'Benzene'] as const;
+  type ValidRingNames = (typeof validRingNames)[number];
+
+  const isValidName = (name: string): name is ValidRingNames =>
+    validRingNames.includes(name as ValidRingNames);
 
   const handleBrowseData = () => {
     setIsLoading(true);
@@ -99,6 +105,9 @@ export default function RingsStepper() {
       },
     });
   };
+
+  const ringName = selectedRing.name;
+  const ringIndex = selectedRing.index;
 
   return (
     <Box>
@@ -125,35 +134,38 @@ export default function RingsStepper() {
                 margin: '16px 0',
               }}
             >
-              {ringCards.rings.map((ring, index) => (
-                <RingCard
-                  key={index}
-                  {...ring}
-                  handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}
-                  isSelected={selectedRing?.index === index}
-                  disabled={isLoading}
-                />
-              ))}
-              {/*{ringCards.rings.map((ring, index) => {*/}
-              {/*  const ringName = isValidName(ring.name) ? ring.name : undefined;*/}
-              {/*  return (*/}
-              {/*    <RingCard*/}
-              {/*      key={index}*/}
-              {/*      {...ring}*/}
-              {/*      name={ringName}*/}
-              {/*      handleCardSelect={() => handleRingSelect({ name: ring.name, index: index })}*/}
-              {/*      isSelected={selectedRing?.index === index}*/}
-              {/*      disabled={isLoading}*/}
-              {/*    />*/}
-              {/*  );*/}
-              {/*})}*/}
+              {ringCards.rings
+                .filter(
+                  (
+                    ring,
+                  ): ring is {
+                    name: ValidRingNames;
+                    ccd: number;
+                    pdb: number;
+                    total: number;
+                    confs: { name: string; count: number; favorable: boolean }[];
+                  } => isValidName(ring.name),
+                )
+                .map((ring, index) => (
+                  <RingCard
+                    key={index}
+                    {...ring}
+                    handleCardSelect={() =>
+                      handleRingSelect({
+                        name: ring.name as 'Cyclohexane' | 'Cyclopentane' | 'Benzene',
+                        index,
+                      })
+                    }
+                    isSelected={selectedRing?.index === index}
+                    disabled={isLoading}
+                  />
+                ))}
             </Stack>
           </StepContent>
         </Step>
 
         {/*second step*/}
-        {/*{selectedRing.index !== -1 && (*/}
-        {selectedRing.index !== null && (
+        {ringIndex !== null && ringName !== null && (
           <Step key={steps[1]} completed={isStepTwoComplete}>
             <StepLabel>
               <Typography variant="h6">{steps[1]}</Typography>
@@ -170,15 +182,14 @@ export default function RingsStepper() {
                   gap: '16px',
                 }}
               >
-                {ringCards.rings[selectedRing.index]?.confs.map((conf, index) => (
+                {ringCards.rings[ringIndex].confs.map((conf, index) => (
                   <ConformationCard
                     key={index}
                     {...conf}
                     handleCardClick={() => handleConfCardClick(conf.name)}
                     isSelected={filterValues.confs.has(conf.name)}
                     disabled={isLoading}
-                    ring={selectedRing.name}
-                    favorable={conf.favorable}
+                    ring={ringName}
                   />
                 ))}
               </Box>
