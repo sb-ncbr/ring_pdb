@@ -43,12 +43,19 @@ export default function RingsStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const [filterValues, setFilterValues] = useState<{
     ring: string | null;
-    confs: Set<{ name: string; count: number; favorable: boolean }>;
+    confs: Set<string>;
   }>({ ring: null, confs: new Set() });
   const [selectedRing, setSelectedRing] = useState<{ name: string | null; index: number | null }>({
     name: null,
     index: null,
   });
+  const [selectedConfs, setSelectedConfs] = useState<
+    Set<{
+      name: string;
+      count: number;
+      favorable: boolean;
+    }>
+  >(new Set());
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,15 +72,22 @@ export default function RingsStepper() {
 
   const handleConfCardClick = (conf: { name: string; count: number; favorable: boolean }) => {
     setFilterValues((prevFilterValues) => {
-      const confs = prevFilterValues.confs;
+      const confs = selectedConfs;
       if (confs.has(conf)) {
         confs.delete(conf);
+        prevFilterValues.confs.delete(conf.name);
       } else {
         confs.add(conf);
+        prevFilterValues.confs.add(conf.name);
+        // refactor this later
+        setSelectedConfs((prevSelectedConfs) => {
+          const newSet = new Set(prevSelectedConfs);
+          newSet.add(conf);
+          return newSet;
+        });
       }
       return {
         ...prevFilterValues,
-        confs,
       };
     });
     setIsStepTwoComplete(filterValues.confs.size != 0);
@@ -96,6 +110,8 @@ export default function RingsStepper() {
       state: {
         filters: {
           ring_type: Array(filterValues.ring),
+          // conformation: Array.from(filterValues.confs),
+
           conformation: {
             selectedValues: Array.from(filterValues.confs),
             showFavorable: true,
@@ -186,8 +202,8 @@ export default function RingsStepper() {
                   <ConformationCard
                     key={index}
                     {...conf}
-                    handleCardClick={() => handleConfCardClick(conf.name)}
-                    isSelected={filterValues.confs.has(conf.name)}
+                    handleCardClick={() => handleConfCardClick(conf)}
+                    isSelected={selectedConfs.has(conf)}
                     disabled={isLoading}
                     ring={ringName}
                   />
