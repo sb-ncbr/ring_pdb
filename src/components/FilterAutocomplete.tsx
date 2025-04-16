@@ -90,8 +90,7 @@ export default function FilterAutocomplete({
         value={selectedOptions}
         onChange={handleChange}
         options={allOptions}
-        getOptionLabel={(option) => option}
-        // getOptionLabel={(option: unknown) => () => (option: string) => option}
+        // getOptionLabel={(option) => option}
         open={inputValue.length >= 2}
         PaperComponent={(paperProps) => {
           const { children, ...restPaperProps } = paperProps;

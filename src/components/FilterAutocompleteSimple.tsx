@@ -28,12 +28,12 @@ export const FilterAutocompleteSimple = ({
         minWidth: '290px',
       }}
     >
-      <Autocomplete
+      <Autocomplete<string, true, false, false>
         multiple
         disableCloseOnSelect
         options={options}
         value={selectedValues}
-        getOptionLabel={(option) => option}
+        // getOptionLabel={(option) => option as string}
         onChange={(_e, newValue) => {
           onChange(newValue);
         }}

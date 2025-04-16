@@ -104,6 +104,7 @@ export const columnsData: ColumnDataMRT[] = [
     Filter: ({ column }: { column: any }) => {
       const filterValue = column.getFilterValue() || {};
       const selectedValues = filterValue.selectedValues || [];
+      console.log('selected values: ', selectedValues);
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
 
