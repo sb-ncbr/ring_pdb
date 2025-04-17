@@ -1,5 +1,5 @@
 class Config:
-    WORKFLOW_OUTPUT_DATA = ".\\data"
+    WORKFLOW_OUTPUT_DATA = "data"
 
 
 class DevelopmentConfig(Config):

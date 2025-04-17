@@ -12,23 +12,29 @@ from utils import is_favorable, get_range_with_step
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../dist')
 
-load_dotenv()
-print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
-environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv instead of os.environ.get
-if not environment_configuration:
-    raise RuntimeError("CONFIGURATION_SETUP is not set!")
+# load_dotenv()
 
 # environment_configuration = os.environ['CONFIGURATION_SETUP']
+# print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
+environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv instead of os.environ.get
+#if not environment_configuration:
+#    raise RuntimeError("CONFIGURATION_SETUP is not set!")
+
+# environment_configuration = os.getenv('CONFIGURATION_SETUP')
 app.config.from_object(environment_configuration)
 
 CORS(app)
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
+path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'Rings.xlsx')
 
-data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", engine="openpyxl", index_col=0)
+# path = Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx"
+print(path)
+
+data = pd.read_excel(path, engine="openpyxl", index_col=0)
 data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
 
