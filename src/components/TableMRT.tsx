@@ -116,7 +116,7 @@ const TableMRT = () => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .post('http://localhost:5000/api/data', {
+      .post(`${import.meta.env.VITE_API_URL}/api/data`, {
         pageIndex: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
         filters: columnFilters,
