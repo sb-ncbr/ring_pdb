@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 const steps = ['Select a ring type', 'Select conformations'];
 
 const StickyButton = styled(Button)(({ theme }) => ({
+  zIndex: 1,
   padding: '10px 20px',
   fontSize: '16px',
   borderRadius: '8px',

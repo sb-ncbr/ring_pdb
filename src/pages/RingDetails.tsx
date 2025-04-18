@@ -64,13 +64,15 @@ const RingDetailsWrapper: React.FC = () => {
       try {
         setIsLoading(true);
         setError(null);
-
-        const response = await fetch(`http://localhost:5000/api/get_row_data?ringID=${ringID}`, {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/get_row_data?ringID=${ringID}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
           },
-        });
+        );
 
         // Check if response is JSON
         const contentType = response.headers.get('content-type');
