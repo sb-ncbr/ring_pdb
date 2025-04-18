@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Button, Grid2 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import logo from '../Logo.svg';
+import logo from '/Logo.svg';
 
 const Header: React.FC = () => {
   return (

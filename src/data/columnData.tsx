@@ -104,7 +104,6 @@ export const columnsData: ColumnDataMRT[] = [
     Filter: ({ column }: { column: any }) => {
       const filterValue = column.getFilterValue() || {};
       const selectedValues = filterValue.selectedValues || [];
-      console.log('selected values: ', selectedValues);
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
 
@@ -298,7 +297,7 @@ export const columnsData: ColumnDataMRT[] = [
       return (
         <>
           <Link
-            to={`/ring-details/${row.original.ring_id}`}
+            to={`${import.meta.env.VITE_API_URL}/ring-details/${row.original.ring_id}`}
             target="_blank"
             rel="noopener noreferrer"
             // underline="none"

@@ -2,7 +2,7 @@
   <br>
   <br>
   <a href="https://github.com/sb-ncbr/AlphaCharges">
-    <img src="./src/Logo.svg" alt="AlphaCharges" width="220">
+    <img src="public/Logo.svg" alt="AlphaCharges" width="220">
   </a>
   <br>
   <br>
