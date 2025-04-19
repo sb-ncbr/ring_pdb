@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { Layout } from './Layout.tsx';
@@ -18,7 +18,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <MolstarProvider>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
@@ -31,7 +31,7 @@ const App: React.FC = () => {
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </MolstarProvider>
     </ThemeProvider>
   );

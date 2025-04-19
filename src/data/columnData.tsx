@@ -297,7 +297,7 @@ export const columnsData: ColumnDataMRT[] = [
       return (
         <>
           <Link
-            to={`${import.meta.env.VITE_API_URL}/ring-details/${row.original.ring_id}`}
+            to={`/ring-details/${row.original.ring_id}`}
             target="_blank"
             rel="noopener noreferrer"
             // underline="none"

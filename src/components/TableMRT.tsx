@@ -135,7 +135,7 @@ const TableMRT = () => {
       .catch((error) => {
         console.error('Error fetching data:', error);
         setIsError(true);
-        console.log(isError); //use this variable
+        console.log(isError);
         return;
       });
   }, [pagination.pageIndex, pagination.pageSize, columnFilters, sorting]);
