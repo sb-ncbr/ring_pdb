@@ -15,11 +15,13 @@ app = Flask(__name__,
             static_folder='dist/static',
             template_folder='dist')
 
-load_dotenv()
-print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
+# load_dotenv()
+
+# environment_configuration = os.environ['CONFIGURATION_SETUP']
+# print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
 environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv instead of os.environ.get
-if not environment_configuration:
-    raise RuntimeError("CONFIGURATION_SETUP is not set!")
+#if not environment_configuration:
+#    raise RuntimeError("CONFIGURATION_SETUP is not set!")
 
 app.config.from_object(environment_configuration)
 
