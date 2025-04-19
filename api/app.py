@@ -3,6 +3,7 @@ from pathlib import Path
 import numpy as np
 from flask import Flask, jsonify, request, Response, render_template
 import os
+import json
 from dotenv import load_dotenv
 import logging
 import pandas as pd
@@ -10,9 +11,9 @@ from flask_cors import CORS
 
 from utils import is_favorable, get_range_with_step
 
-load_dotenv()
-
-app = Flask(__name__)
+app = Flask(__name__,
+            static_folder='dist/static',
+            template_folder='dist')
 
 load_dotenv()
 print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
@@ -20,15 +21,15 @@ environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv in
 if not environment_configuration:
     raise RuntimeError("CONFIGURATION_SETUP is not set!")
 
-# environment_configuration = os.environ['CONFIGURATION_SETUP']
 app.config.from_object(environment_configuration)
 
 CORS(app)
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
+path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'Rings.xlsx')
+data = pd.read_excel(path, engine="openpyxl", index_col=0)
 
-data = pd.read_excel(Path(app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx", engine="openpyxl", index_col=0)
 data['ring_id'] = data.index
 print(data['experimental_method'].value_counts())
 
@@ -37,7 +38,7 @@ def application(environ, start_response):
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
 @app.route('/api/get_pdb_ids', methods=['GET'])
 def get_pdb_ids():
