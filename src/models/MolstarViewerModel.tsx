@@ -177,6 +177,7 @@ export default class MolstarViewerModel {
     // check successful build
     if (!polymer || !ligand || !ring) {
       console.error('Failed to create component');
+      console.error('polymer: ', polymer, '\nligand: ', ligand, '\nring: ', ring);
       return;
     }
 

@@ -151,7 +151,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
   return (
     <>
       <Typography
-        variant="h4"
+        variant="h1"
         sx={{
           padding: '0 16px',
           margin: '24px',
@@ -160,12 +160,12 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
       >
         Ring details
         <Chip
-          label={ringData.ring_type}
+          label={<Typography variant="body2">{ringData.ring_type}</Typography>}
           sx={{
             ...getChipStyles(ringData.ring_type, theme),
             color: '#000',
             width: 123,
-            marginLeft: '8px',
+            marginLeft: '24px',
           }}
         />
       </Typography>
@@ -185,17 +185,14 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             display: 'flex',
             maxWidth: '1000px',
             flexDirection: 'column',
-            // alignItems: 'left',
             padding: '0 16px',
-            // margin: '0 auto',
-            color: 'text.primary',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               PDB ID:
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="outline">
               <Link
                 href={`https://www.ebi.ac.uk/pdbe/entry/pdb/${ringData.pdb_id}`}
                 target="_blank"
@@ -216,10 +213,10 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               {labels.ccdID}:{' '}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="outline">
               <Link
                 href={`https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/${ringData.ccd_id}`}
                 target="_blank"
@@ -237,22 +234,22 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Chain ID:
             </Typography>
-            <Typography variant="body2">{getChainID(ringData.ring_id)}</Typography>
+            <Typography variant="outline">{getChainID(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Residue ID:
             </Typography>
-            <Typography variant="body2">{ringData.residue_id}</Typography>
+            <Typography variant="outline">{ringData.residue_id}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Ring coverage:
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="outline">
               {ringData.ring_coverage
                 ? getRingCoverageCounts(ringData.ring_coverage_counts) +
                   ' (' +
@@ -262,52 +259,54 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RMSD with template:
             </Typography>
-            <Typography variant="body2">{ringData.rmsd} Å</Typography>
+            <Typography variant="outline">{ringData.rmsd} Å</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Experimental method:
             </Typography>
-            <Typography variant="body2">{ringData.experimental_method}</Typography>
+            <Typography variant="outline">{ringData.experimental_method}</Typography>
           </Box>
           {ringData.resolution && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
                 Resolution:
               </Typography>
-              <Typography variant="body2">{ringData.resolution} Å</Typography>
+              <Typography variant="outline">{ringData.resolution} Å</Typography>
             </Box>
           )}
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RSR:
             </Typography>
-            <Typography variant="body2">{ringData.rsr ?? 'N/A'}</Typography>
+            <Typography variant="outline">{ringData.rsr ?? 'N/A'}</Typography>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RSCC:
             </Typography>
-            <Typography variant="body2">{ringData.rscc ?? 'N/A'}</Typography>
+            <Typography variant="outline">{ringData.rscc ?? 'N/A'}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Atoms:
             </Typography>
-            <Typography variant="body2">{getAtoms(ringData.ring_id)}</Typography>
+            <Typography variant="outline">{getAtoms(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" sx={{ marginRight: '8px' }}>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Assigned conformation:
             </Typography>
-            <Typography variant="body2">{ringData.conformation}</Typography>
+            <Typography variant="outline">{ringData.conformation}</Typography>
             <Chip
-              label={favorable ? 'favorable' : 'unfavorable'}
+              label={
+                <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>
+              }
               size="small"
               variant="outlined"
               sx={{ borderColor: mainColor, color: mainColor, marginLeft: '8px' }}
@@ -320,7 +319,6 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             width: '800px',
             minHeight: '420px',
             padding: '0 16px',
-            // margin: '0 auto',
           }}
         >
           <Box
@@ -378,7 +376,7 @@ function ResetFocusButton({ viewer, ringId }: { viewer: MolstarViewerModel; ring
       sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
       disabled={isLoading}
     >
-      Reset View
+      <Typography>Reset View</Typography>
     </Button>
   );
 }
@@ -396,10 +394,9 @@ function ToggleBallAndStickButton({ viewer }: { viewer: MolstarViewerModel }) {
           disabled={isLoading}
         />
       }
-      label="Show ball and stick"
+      label={<Typography>Show ball and stick</Typography>}
       sx={{
         '& .MuiTypography-root': {
-          fontSize: '1rem',
           whiteSpace: 'nowrap',
         },
       }}
@@ -427,7 +424,6 @@ function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel })
       title={disableElectronDensity ? 'PDB entry has many models' : ''}
       sx={{
         '& .MuiTypography-root': {
-          fontSize: '1rem',
           whiteSpace: 'nowrap',
         },
       }}
@@ -466,9 +462,9 @@ function DownloadStructureButton({ pdbId }: { pdbId: string }) {
     <Button
       onClick={handleDownload}
       startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
-      sx={{ fontSize: '1rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
+      sx={{ whiteSpace: 'nowrap', color: '#3A3A3A' }}
     >
-      Download Structure
+      <Typography>Download Structure</Typography>
     </Button>
   );
 }
