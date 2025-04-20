@@ -20,7 +20,8 @@ declare module '@mui/material/styles' {
 
 const theme = createTheme({
   typography: {
-    fontSize: 15,
+    fontFamily: 'eireneSans, Arial, sans-serif',
+    fontSize: 18,
     body1: {
       color: '#3A3A3A',
     },
