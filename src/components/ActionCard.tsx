@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import CardActionArea from '@mui/material/CardActionArea';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IconButton, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -26,6 +26,11 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
   const [error, setError] = useState<string | null>(null);
   const regex = idType == 'pdb' ? /^[0-9][a-zA-Z0-9]{3}$/ : /[a-zA-Z0-9]{3}$/;
 
+  const inputRef = useRef(null);
+
+  const handleCardClick = () => {
+    inputRef.current?.focus();
+  };
   const handleInputChange = (event: React.FormEvent) => {
     const inputTarget = event.target as HTMLInputElement;
     const value = inputTarget.value;
@@ -61,6 +66,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
 
   return (
     <Card
+      onClick={handleCardClick}
       sx={{
         minWidth: 300,
         width: 300,
@@ -86,6 +92,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
           {action === 'input' ? (
             <Box component="form" onSubmit={handleSubmit} sx={{ marginTop: '12px' }}>
               <TextField
+                inputRef={inputRef}
                 id={`search-by-${idType}`}
                 variant="outlined"
                 onChange={handleInputChange}
