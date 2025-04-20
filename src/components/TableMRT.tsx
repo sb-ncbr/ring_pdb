@@ -21,6 +21,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import { useLocation } from 'react-router-dom';
 import RangeSlider from './RangeSlider.tsx';
+import Typography from '@mui/material/Typography';
 
 type FilterKey = 'resolution' | 'ring_coverage' | 'rsr' | 'rscc';
 
@@ -387,10 +388,9 @@ const TableMRT = () => {
 
               <FormControlLabel
                 control={<Switch checked={showAdvancedFilters} onChange={toggleAdvancedFilter} />}
-                label="Show advanced filters"
+                label={<Typography variant="caption">Show advanced filters</Typography>}
                 sx={{
                   '& .MuiTypography-root': {
-                    fontSize: '0.9rem',
                     whiteSpace: 'nowrap',
                   },
                 }}
@@ -403,10 +403,9 @@ const TableMRT = () => {
                     onChange={() => setIsCompactView(!isCompactView)}
                   />
                 }
-                label="Show compact table"
+                label={<Typography variant="caption">Show compact table</Typography>}
                 sx={{
                   '& .MuiTypography-root': {
-                    fontSize: '0.9rem',
                     whiteSpace: 'nowrap',
                   },
                 }}
@@ -418,7 +417,7 @@ const TableMRT = () => {
                 startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
                 sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
               >
-                Download Data
+                <Typography variant="caption">Download data</Typography>
               </Button>
             </Box>
           </Box>

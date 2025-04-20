@@ -20,10 +20,45 @@ declare module '@mui/material/styles' {
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'eireneSans, Arial, sans-serif',
-    fontSize: 18,
+    h1: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 700,
+      fontSize: '3rem',
+    },
+    h2: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 600,
+      fontSize: '2.25rem',
+    },
+    h3: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 600,
+      fontSize: '1.75rem',
+    },
+    subtitle1: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 600,
+      fontSize: '1.25rem',
+    },
+    subtitle2: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 500,
+      fontSize: '1rem',
+    },
     body1: {
-      color: '#3A3A3A',
+      fontFamily: 'EireneSans, sans-serif',
+      fontWeight: 400,
+      fontSize: '1rem',
+    },
+    body2: {
+      fontFamily: 'Lora, serif',
+      fontWeight: 400,
+      fontSize: '0.875rem',
+    },
+    caption: {
+      fontFamily: 'EireneSans, sans-serif',
+      fontWeight: 400,
+      fontSize: '0.875rem',
     },
   },
   palette: {
@@ -50,7 +85,7 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          fontSize: '0.9rem',
+          // fontSize: '0.9rem',
           color: '#3A3A3A',
         },
       },
@@ -93,24 +128,6 @@ const theme = createTheme({
         },
       },
     },
-    // MuiOutlinedInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       backgroundColor: '#FFFFFF',
-    //       '&.Mui-focused': {
-    //         backgroundColor: '#EDEEEF',
-    //       },
-    //       borderRadius: '50px',
-    //       '& .MuiOutlinedInput-notchedOutline': {
-    //         borderColor: 'black',
-    //       },
-    //       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    //         borderColor: 'black',
-    //         borderWidth: '1px',
-    //       },
-    //     },
-    //   },
-    // },
   },
 });
 

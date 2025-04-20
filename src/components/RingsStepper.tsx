@@ -139,7 +139,7 @@ export default function RingsStepper() {
         {/*first step*/}
         <Step key={steps[0]} expanded>
           <StepLabel>
-            <Typography variant="h6">{steps[0]}</Typography>
+            <Typography variant="subtitle1">{steps[0]}</Typography>
           </StepLabel>
           <StepContent>
             <Stack
@@ -185,7 +185,7 @@ export default function RingsStepper() {
         {ringIndex !== null && ringName !== null && (
           <Step key={steps[1]} completed={isStepTwoComplete}>
             <StepLabel>
-              <Typography variant="h6">{steps[1]}</Typography>
+              <Typography variant="subtitle1">{steps[1]}</Typography>
             </StepLabel>
             <StepContent>
               <Box
@@ -213,7 +213,7 @@ export default function RingsStepper() {
             </StepContent>
             {showStickyButton && (
               <StickyButton onClick={handleBrowseData} disabled={isLoading}>
-                <Typography variant="h6">Browse the data</Typography>
+                <Typography variant="subtitle1">Browse the data</Typography>
               </StickyButton>
             )}
           </Step>

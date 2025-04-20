@@ -8,7 +8,7 @@ export const MainSection: React.FC<{ section: { header: string; body: any[] } }>
   return (
     <>
       <Typography
-        variant="h4"
+        variant="h3"
         component="div"
         sx={{
           width: '100%',
@@ -20,7 +20,7 @@ export const MainSection: React.FC<{ section: { header: string; body: any[] } }>
       </Typography>
 
       <Typography
-        variant="body2"
+        variant="body1"
         component="div"
         sx={{
           width: '100%',

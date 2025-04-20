@@ -77,10 +77,10 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
             padding: '0 48px',
           }}
         >
-          <Typography variant="h6" component="div" sx={{ marginBottom: '48px' }}>
+          <Typography variant="subtitle1" component="div" sx={{ marginBottom: '48px' }}>
             {header}
           </Typography>
-          <Typography variant="body2" sx={{ mt: 1, marginBottom: '24px' }}>
+          <Typography variant="body1" sx={{ mt: 1, marginBottom: '24px' }}>
             {body}
           </Typography>
           {action === 'input' ? (

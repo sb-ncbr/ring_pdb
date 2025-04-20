@@ -33,7 +33,9 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
       <CardActionArea onClick={handleCardClick} disabled={disabled}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '16px' }}>
           <Chip
-            label={favorable ? 'favorable' : 'unfavorable'}
+            label={
+              <Typography variant="body1">{favorable ? 'favorable' : 'unfavorable'}</Typography>
+            }
             size="small"
             variant="outlined"
             sx={{ borderColor: mainColor, color: mainColor }}
@@ -43,10 +45,10 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           <RotatingMolecule modelPath={`/geometry/${ring}/${ring}-${name}.glb`} />
         </Box>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="subtitle1" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
             {formatNumber(count)} rings
           </Typography>
         </CardContent>

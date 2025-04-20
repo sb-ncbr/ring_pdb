@@ -57,7 +57,11 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
     enableColumnFilter: false,
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'RING TYPE',
@@ -80,7 +84,7 @@ export const columnsData: ColumnDataMRT[] = [
       const theme = useTheme();
       return (
         <Chip
-          label={ringType}
+          label={<Typography variant="body2">{ringType}</Typography>}
           sx={{ ...getChipStyles(ringType, theme), color: '#000', width: 123 }}
         />
       );
@@ -89,13 +93,21 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'RING COVERAGE [%]',
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'CONFORMATION',
@@ -137,7 +149,7 @@ export const columnsData: ColumnDataMRT[] = [
                   onChange={(e) => handleSwitchChange('showFavorable', e.target.checked)}
                 />
               }
-              label="Show Favorable"
+              label={<Typography variant="body1">Show favorable</Typography>}
             />
             <FormControlLabel
               control={
@@ -146,7 +158,7 @@ export const columnsData: ColumnDataMRT[] = [
                   onChange={(e) => handleSwitchChange('showUnfavorable', e.target.checked)}
                 />
               }
-              label="Show Unfavorable"
+              label={<Typography variant="body1">Show unfavorable</Typography>}
             />
           </FormGroup>
         </Box>
@@ -179,9 +191,12 @@ export const columnsData: ColumnDataMRT[] = [
             gap: '16px',
           }}
         >
-          <Typography sx={{ fontSize: '0.9rem' }}>{row.original.conformation}</Typography>
+          <Typography variant="body2">{row.original.conformation}</Typography>
+
           <Chip
-            label={favorable ? 'favorable' : 'unfavorable'}
+            label={
+              <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>
+            }
             size="small"
             variant="outlined"
             sx={{ borderColor: mainColor, color: mainColor }}
@@ -194,7 +209,11 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RMSD [Å]',
     accessorKey: 'rmsd',
     enableColumnFilter: false,
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'EXPERIMENTAL METHOD',
@@ -232,9 +251,8 @@ export const columnsData: ColumnDataMRT[] = [
         >
           {
             <Typography
+              variant="body2"
               sx={{
-                // width: '120px',
-                fontSize: '0.9rem',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 textWrap: 'nowrap',
@@ -251,19 +269,31 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RSR',
     accessorKey: 'rsr',
     filterVariant: 'text',
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'RSCC',
     accessorKey: 'rscc',
     filterVariant: 'text',
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'LIGAND COVERAGE [%]',
     accessorKey: 'ligand_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => <Box sx={{ textAlign: 'right' }}>{cell.getValue<number>()}</Box>,
+    Cell: ({ cell }) => (
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+      </Box>
+    ),
   },
   {
     header: 'DETAILS',

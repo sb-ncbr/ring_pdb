@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppBar, Button, Grid2 } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import logo from '/Logo.svg';
 
@@ -14,13 +15,13 @@ const Header: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 3 }}>
           <Button component={Link} to="/">
-            Home
+            <Typography variant="subtitle2">Home</Typography>
           </Button>
           <Button component={Link} to="/data-description">
-            Data description
+            <Typography variant="subtitle2">Data description</Typography>
           </Button>
           <Button component={Link} to="/user-guide">
-            User guide
+            <Typography variant="subtitle2">User guide</Typography>
           </Button>
         </Grid2>
       </Grid2>

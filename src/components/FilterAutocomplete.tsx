@@ -132,9 +132,7 @@ export default function FilterAutocomplete({
               label={`Filter by ${filterByLabel}`}
               placeholder={!selectedOptions.length ? 'Start typing for autocomplete...' : ''}
               sx={{
-                '& .MuiOutlinedInput-input': {
-                  fontSize: '0.9rem',
-                },
+                '& .MuiOutlinedInput-input': {},
               }}
               slotProps={{
                 input: {

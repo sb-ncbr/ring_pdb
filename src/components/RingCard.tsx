@@ -56,18 +56,12 @@ export const RingCard: React.FC<RingCardProps> = ({
           <Box sx={{ height: 300 }}>
             <RotatingMolecule modelPath={`/geometry/${name}.glb`} />
           </Box>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="subtitle1" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {formatNumber(ccd)} ligands in the CCD
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {formatNumber(pdb)} ligand instances in the PDB
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {formatNumber(total)} analyzed rings
-          </Typography>
+          <Typography variant="body1">{formatNumber(ccd)} ligands in the CCD</Typography>
+          <Typography variant="body1">{formatNumber(pdb)} ligand instances in the PDB</Typography>
+          <Typography variant="body1">{formatNumber(total)} analyzed rings</Typography>
         </CardContent>
       </CardActionArea>
     </SelectableCard>

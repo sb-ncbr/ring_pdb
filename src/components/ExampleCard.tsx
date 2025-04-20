@@ -6,42 +6,39 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 
-
 interface ExampleCardProps {
-    header: string;
-    body: string;
-    image: string;
+  header: string;
+  body: string;
+  image: string;
 }
 
 const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image }) => (
-    <Card
+  <Card
+    sx={{
+      width: 420,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+    }}
+  >
+    <CardActionArea component={Link} to={'/result/example-1'} sx={{ height: '560px' }}>
+      <CardMedia
+        component="img"
+        image={image}
+        alt={header}
         sx={{
-            width: 420,
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
+          height: '240px',
+          width: '100%',
         }}
-    >
-        <CardActionArea component={Link} to={"/result/example-1"} sx={{ height: '560px' }}>
-            <CardMedia
-                component="img"
-                image={image}
-                alt={header}
-                sx={{
-                    height: '240px',
-                    width: '100%',
-                }}
-            />
-            <CardContent sx={{ height: '100%' }}>
-                <Typography gutterBottom variant="h5" component="div">
-                    {header}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {body}
-                </Typography>
-            </CardContent>
-        </CardActionArea>
-    </Card>
+      />
+      <CardContent sx={{ height: '100%' }}>
+        <Typography gutterBottom variant="subtitle1" component="div">
+          {header}
+        </Typography>
+        <Typography variant="body1">{body}</Typography>
+      </CardContent>
+    </CardActionArea>
+  </Card>
 );
 
 export default ExampleCard;
