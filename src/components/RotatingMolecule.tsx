@@ -27,18 +27,17 @@ const Molecule: React.FC<{ modelPath: string }> = ({ modelPath }) => {
 export const RotatingMolecule: React.FC<RotatingMoleculeProps> = ({ modelPath }) => {
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <View style={{ height: '100%', width: '100%' }}>
-        <Common color="white" />
+      <View style={{ height: '100%', width: '100%', background: 'transparent' }}>
+        <Common />
         <Molecule modelPath={modelPath} />
       </View>
     </div>
   );
 };
 
-function Common({ color }: { color: string }) {
+function Common() {
   return (
     <>
-      {color && <color attach="background" args={[color]} />}
       <ambientLight intensity={0.5} />
       <directionalLight position={[0, 5, 5]} />
       <pointLight position={[20, 30, 10]} intensity={1} />
