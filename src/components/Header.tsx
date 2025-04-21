@@ -16,7 +16,9 @@ const Header: React.FC = () => {
         borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
       }}
     >
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
+      <Toolbar
+        sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 }, py: 4 }}
+      >
         {/* Logo */}
         <Box
           component={Link}

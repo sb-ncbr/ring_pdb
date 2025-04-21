@@ -67,14 +67,16 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
   return (
     <Card
       onClick={handleCardClick}
-      sx={{
-        minWidth: 300,
+      sx={(theme) => ({
         width: 300,
         minHeight: 350,
-        display: 'flex',
-        flexDirection: 'column',
         backgroundColor: color,
-      }}
+        // borderRadius: '16px',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          boxShadow: theme.shadows[6],
+        },
+      })}
     >
       <CardActionArea sx={{ height: '100%' }} onClick={url ? () => navigate(url) : undefined}>
         <CardContent

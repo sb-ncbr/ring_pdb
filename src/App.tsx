@@ -13,10 +13,28 @@ import { TablePage } from './pages/TablePage.tsx';
 import RingDetailsWrapper from './pages/RingDetails.tsx';
 import { RingsStepperPage } from './pages/RingsStepperPage.tsx';
 import { MolstarProvider } from './context/MolstarContext.tsx';
+import { GlobalStyles } from '@mui/material';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyles
+        styles={{
+          '*': {
+            margin: 0,
+            padding: 0,
+            boxSizing: 'border-box',
+          },
+          html: {
+            width: '100%',
+            height: '100%',
+          },
+          body: {
+            width: '100%',
+            height: '100%',
+          },
+        }}
+      />
       <MolstarProvider>
         <HashRouter>
           <Routes>
