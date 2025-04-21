@@ -24,7 +24,6 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
   const [inputValue, setInputValue] = useState<string>('');
   const [validatedIds, setValidatedIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const regex = idType == 'pdb' ? /^[0-9][a-zA-Z0-9]{3}$/ : /[a-zA-Z0-9]{3}$/;
 
   const inputRef = useRef(null);
 
@@ -35,15 +34,17 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
     const inputTarget = event.target as HTMLInputElement;
     const value = inputTarget.value;
     setInputValue(value);
-    const ids = value.split(/[\s,;]+/).filter((id: string) => id);
-    // const finished = ids.every((id) => id.length >= 4);
-    const isValid = ids.every((id: string) => regex.test(id));
 
-    if (isValid || inputValue.trim() === '') {
+    const ids = value.split(/[\s,;]+/).filter((id: string) => id);
+    const regex = idType == 'pdb' ? /^[1-9][a-zA-Z0-9]{3}$/ : /^[a-zA-Z0-9]{1,5}$/;
+
+    const invalidIds = ids.filter((id: string) => !regex.test(id));
+
+    if (value.trim() === '' || invalidIds.length === 0) {
       setError(null);
       setValidatedIds(ids);
     } else {
-      setError(`Incorrect entry`);
+      setError(`Invalid IDs: ${invalidIds.join(', ')}`);
     }
   };
   const handleSubmit = (event: React.FormEvent) => {
@@ -71,7 +72,6 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
         width: 300,
         minHeight: 350,
         backgroundColor: color,
-        // borderRadius: '16px',
         transition: 'all 0.3s ease',
         '&:hover': {
           boxShadow: theme.shadows[6],
