@@ -94,6 +94,7 @@ export default function RingsStepper() {
   }, [footerRef]);
   const handleRingSelect = (ring: { name: string; index: number }) => {
     setSelectedRing(ring);
+    setSelectedConfs(new Set());
     setFilterValues({ ring: ring.name, confs: new Set() });
     setIsStepTwoComplete(false);
     setShowStickyButton(false);
