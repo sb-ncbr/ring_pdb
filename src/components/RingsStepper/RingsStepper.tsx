@@ -4,14 +4,15 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { RingCard } from './RingCard.tsx';
+import { RingCard } from '../RingCard.tsx';
 
-import ringCards from '../content/ringCards.json';
-import { ConformationCard } from './ConformationCard.tsx';
+import ringCards from '../../content/ringCards.json';
+import { ConformationCard } from '../ConformationCard.tsx';
 import { StepContent, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { Ring } from './types';
 
 const steps = ['Select a ring type', 'Select conformations'];
 
@@ -99,12 +100,6 @@ export default function RingsStepper() {
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
-  const validRingNames = ['Cyclohexane', 'Cyclopentane', 'Benzene'] as const;
-  type ValidRingNames = (typeof validRingNames)[number];
-
-  const isValidName = (name: string): name is ValidRingNames =>
-    validRingNames.includes(name as ValidRingNames);
-
   const handleBrowseData = () => {
     setIsLoading(true);
     navigate('/data', {
@@ -151,32 +146,20 @@ export default function RingsStepper() {
                 margin: '16px 0',
               }}
             >
-              {ringCards.rings
-                .filter(
-                  (
-                    ring,
-                  ): ring is {
-                    name: ValidRingNames;
-                    ccd: number;
-                    pdb: number;
-                    total: number;
-                    confs: { name: string; count: number; favorable: boolean }[];
-                  } => isValidName(ring.name),
-                )
-                .map((ring, index) => (
-                  <RingCard
-                    key={index}
-                    {...ring}
-                    handleCardSelect={() =>
-                      handleRingSelect({
-                        name: ring.name as 'Cyclohexane' | 'Cyclopentane' | 'Benzene',
-                        index,
-                      })
-                    }
-                    isSelected={selectedRing?.index === index}
-                    disabled={isLoading}
-                  />
-                ))}
+              {ringCards.rings.map((ring: Ring, index: number) => (
+                <RingCard
+                  key={index}
+                  {...ring}
+                  handleCardSelect={() =>
+                    handleRingSelect({
+                      name: ring.name,
+                      index,
+                    })
+                  }
+                  isSelected={selectedRing?.index === index}
+                  disabled={isLoading}
+                />
+              ))}
             </Stack>
           </StepContent>
         </Step>

@@ -1,5 +1,5 @@
 import React from 'react';
-import RingsStepper from '../components/RingsStepper.tsx';
+import RingsStepper from '../components/RingsStepper/RingsStepper.tsx';
 import { Canvas } from '@react-three/fiber';
 import { View } from '@react-three/drei';
 
