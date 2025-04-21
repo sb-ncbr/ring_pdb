@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-const Footer: React.FC = () => {
+const Footer = React.forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <Box sx={{ backgroundColor: '#1e1e1e', color: 'white', py: 6, mt: 6 }}>
+    <Box ref={ref} sx={{ backgroundColor: '#1e1e1e', color: 'white', py: 6, mt: 6 }}>
       {/* Main footer container */}
       <Box
         sx={{
@@ -20,6 +20,6 @@ const Footer: React.FC = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Footer;

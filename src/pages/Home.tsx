@@ -7,7 +7,6 @@ import ExampleCard from '../components/ExampleCard';
 import cards from '../content/cards.json';
 import sections from '../content/main.json';
 import Stack from '@mui/material/Stack';
-import Footer from '../components/Footer.tsx';
 
 interface SectionProps {
   children: React.ReactNode;

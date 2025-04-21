@@ -3,7 +3,7 @@ import RingsStepper from '../components/RingsStepper/RingsStepper.tsx';
 import { Canvas } from '@react-three/fiber';
 import { View } from '@react-three/drei';
 
-export const RingsStepperPage: React.FC = () => {
+export const RingsStepperPage: React.FC = ({ footRef }) => {
   return (
     <>
       <RingsStepper />
