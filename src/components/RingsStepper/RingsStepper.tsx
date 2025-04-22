@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useState } from 'react';
 import type { RefObject } from 'react';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -16,13 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { Ring } from './types';
 
-type LayoutContextType = {
-  footerRef: RefObject<HTMLDivElement>;
-};
-
 const steps = ['Select a ring type', 'Select conformations'];
 
-const StickyButton = styled(Button)(({ theme, bottom }) => ({
+const StickyButton = styled(Button)(({ theme }) => ({
   zIndex: 1,
   padding: '10px 20px',
   fontSize: '16px',
@@ -34,7 +29,7 @@ const StickyButton = styled(Button)(({ theme, bottom }) => ({
   animation: 'colorChange 2s forwards',
   backgroundColor: 'transparent',
   position: 'fixed',
-  bottom: bottom,
+  bottom: '20px',
   right: '20px',
   '@keyframes colorChange': {
     '0%': {
@@ -47,7 +42,6 @@ const StickyButton = styled(Button)(({ theme, bottom }) => ({
 }));
 
 export default function RingsStepper() {
-  const { footerRef } = useOutletContext<LayoutContextType>();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [filterValues, setFilterValues] = useState<{
@@ -69,29 +63,6 @@ export default function RingsStepper() {
   const [isStepTwoComplete, setIsStepTwoComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [bottomDistance, setBottomDistance] = useState(20); // Default is 20px from bottom
-  // Scroll event listener to adjust button's position
-  useEffect(() => {
-    const handleScroll = () => {
-      if (footerRef.current) {
-        const footerRect = footerRef.current.getBoundingClientRect();
-
-        const newDistance =
-          footerRect.top <= window.innerHeight ? window.innerHeight - footerRect.top + 20 : 20;
-
-        setBottomDistance((prev) => {
-          // Only update if difference is significant
-          if (Math.abs(prev - newDistance) > 1) {
-            return newDistance;
-          }
-          return prev;
-        });
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [footerRef]);
   const handleRingSelect = (ring: { name: string; index: number }) => {
     setSelectedRing(ring);
     setSelectedConfs(new Set());
@@ -137,8 +108,6 @@ export default function RingsStepper() {
       state: {
         filters: {
           ring_type: Array(filterValues.ring),
-          // conformation: Array.from(filterValues.confs),
-
           conformation: {
             selectedValues: Array.from(filterValues.confs),
             showFavorable: true,
@@ -224,7 +193,7 @@ export default function RingsStepper() {
               </Box>
             </StepContent>
             {showStickyButton && (
-              <StickyButton bottom={bottomDistance} onClick={handleBrowseData} disabled={isLoading}>
+              <StickyButton onClick={handleBrowseData} disabled={isLoading}>
                 <Typography variant="subtitle1">Browse the data</Typography>
               </StickyButton>
             )}

@@ -17,7 +17,7 @@ const Header: React.FC = () => {
       }}
     >
       <Toolbar
-        sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 }, py: 4 }}
+        sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 }, py: 2 }}
       >
         {/* Logo */}
         <Box
