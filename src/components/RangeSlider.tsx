@@ -163,9 +163,9 @@ export default function RangeSlider({
         </Grid>
         <Grid size={12}>
           <CustomSlider
-            value={typeof value === 'number' ? value : undefined}
-            min={typeof minVal === 'number' ? minVal : undefined}
-            max={typeof maxVal === 'number' ? maxVal : undefined}
+            value={value as number[]}
+            min={Number(minVal)}
+            max={Number(maxVal)}
             step={step}
             color="primary"
             valueLabelDisplay="off"
