@@ -164,8 +164,8 @@ export default function RangeSlider({
         <Grid size={12}>
           <CustomSlider
             value={value as number[]}
-            min={Number(minVal)}
-            max={Number(maxVal)}
+            min={minVal as number}
+            max={maxVal as number}
             step={step}
             color="primary"
             valueLabelDisplay="off"
