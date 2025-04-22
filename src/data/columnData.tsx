@@ -186,7 +186,6 @@ export const columnsData: ColumnDataMRT[] = [
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
             gap: '16px',
           }}
