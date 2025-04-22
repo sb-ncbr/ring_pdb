@@ -60,7 +60,11 @@ export default function FilterAutocomplete({
     onChange(stringValue);
   };
 
-  const url = filterByLabel === 'PDB ID' ? '/api/get_pdb_ids' : '/api/get_ccd_ids';
+  const endpointMap = {
+    'PDB ID': 'get_pdb_ids',
+    'CCD ID': 'get_ccd_ids',
+  };
+  const url = `${import.meta.env.VITE_API_URL}/api/${endpointMap[filterByLabel]}`;
 
   useEffect(() => {
     axios
