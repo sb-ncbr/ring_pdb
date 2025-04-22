@@ -191,10 +191,12 @@ const TableMRT = () => {
       maxSize: 100,
       size: 10,
       muiTableHeadCellProps: {
+        align: 'center',
         sx: {
           fontSize: '0.8rem',
           fontWeight: '300',
           maxWidth: '100px',
+          verticalAlign: 'middle',
         },
       },
       muiFilterTextFieldProps: {

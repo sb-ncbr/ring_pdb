@@ -25,7 +25,6 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    size: 60,
     Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocomplete
@@ -187,6 +186,7 @@ export const columnsData: ColumnDataMRT[] = [
           sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: '16px',
           }}
         >
