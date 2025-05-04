@@ -2,14 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
-  type MRT_Row,
   type MRT_ColumnDef,
   type MRT_SortingState,
   MRT_TableHeadCellFilterContainer,
   MRT_ColumnFiltersState,
 } from 'material-react-table';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
@@ -154,20 +152,24 @@ const TableMRT = () => {
     }
   }, [isCompactView]);
 
-  const csvConfig = mkConfig({
-    fieldSeparator: ',',
-    decimalSeparator: '.',
-    useKeysAsHeaders: true,
-  });
+  const exportAllData = async (filters, sorting) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/export-data`,
+        { filters, sorting },
+        { responseType: 'blob' },
+      );
 
-  // TODO: add this as endpoint to backend instead of generating this on the frontend
-  const handleExportRows = (rows: MRT_Row<RowData>[]) => {
-    const rowData = rows.map(
-      (row) =>
-        row.original as unknown as { [key: string]: string | number | boolean | null | undefined },
-    );
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+      const url = URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'export.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error exporting data:', error);
+    }
   };
 
   // Define a fixed row height and number of rows to show
@@ -415,7 +417,7 @@ const TableMRT = () => {
 
               <Button
                 disabled={table.getPrePaginationRowModel().rows.length === 0}
-                onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
+                onClick={() => exportAllData(columnFilters, sorting)}
                 startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
                 sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
               >

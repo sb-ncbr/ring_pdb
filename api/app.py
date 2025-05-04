@@ -1,13 +1,14 @@
 from pathlib import Path
 
 import numpy as np
-from flask import Flask, jsonify, request, Response, render_template
+from flask import Flask, jsonify, request, Response, render_template, send_file
 import os
 import json
 from dotenv import load_dotenv
 import logging
 import pandas as pd
 from flask_cors import CORS
+import io
 
 from utils import is_favorable, get_range_with_step
 
@@ -170,6 +171,89 @@ def get_row_data():
 
     row_data = data.loc[ring_id].to_json()
     return Response(status=200, mimetype="application/json", response=row_data)
+
+
+@app.route('/api/export-data', methods=['POST'])
+def export_data():
+    # refactor later
+    request_data = request.get_json()
+    filters = request_data.get('filters', [])
+    sorting = request_data.get('sorting', [])
+
+    filtered_data = data
+
+    non_empty_filters = [filter for filter in filters if filter['value']]
+    for filter in non_empty_filters:
+        if filter['id'] == 'ring_type':
+            filtered_data = filtered_data[filtered_data['ring_type'].isin(filter['value'])]
+
+        elif filter['id'] == 'conformation':
+            selected_values = filter['value'].get('selectedValues', [])
+            show_favorable = filter['value'].get('showFavorable', True)
+            show_unfavorable = filter['value'].get('showUnfavorable', True)
+
+            if selected_values:
+                filtered_data = filtered_data[filtered_data['conformation'].isin(selected_values)]
+
+            if not (show_favorable and show_unfavorable):
+                filtered_data = filtered_data[
+                    filtered_data.apply(
+                        lambda row: (is_favorable(row['ring_type'], row['conformation']) and show_favorable) or
+                                    (not is_favorable(row['ring_type'], row['conformation']) and show_unfavorable),
+                        axis=1
+                    )
+                ]
+
+        elif filter['id'] == 'experimental_method':
+            filtered_data = filtered_data[filtered_data['experimental_method'].isin(filter['value'])]
+        elif filter['id'] == 'pdb_id':
+            filtered_data = filtered_data[filtered_data['pdb_id'].isin(filter['value'])]
+        elif filter['id'] == 'ccd_id':
+            filtered_data = filtered_data[filtered_data['ccd_id'].isin(filter['value'])]
+
+
+    for filter in non_empty_filters:
+        if filter['id'] == 'resolution':
+            filtered_data = filtered_data[(filtered_data['resolution'] >= filter['value'][0]) &
+                                          (filtered_data['resolution'] <= filter['value'][1])]
+        elif filter['id'] == 'ring_coverage':
+            filtered_data = filtered_data[(filtered_data['ring_coverage_float'] * 100 >= filter['value'][0]) &
+                                          (filtered_data['ring_coverage_float'] * 100 <= filter['value'][1])]
+        elif filter['id'] == 'rsr':
+            filtered_data = filtered_data[(filtered_data['rsr'] >= filter['value'][0]) &
+                                          (filtered_data['rsr'] <= filter['value'][1])]
+        elif filter['id'] == 'rscc':
+            filtered_data = filtered_data[(filtered_data['rscc'] >= filter['value'][0]) &
+                                          (filtered_data['rscc'] <= filter['value'][1])]
+
+    sorted_data = filtered_data
+
+    if sorting:
+        sort_column = sorting[0].get('id')
+        sort_order_desc = sorting[0].get('desc')
+        try:
+            if sort_column == 'ring_coverage':
+                sorted_data['ring_coverage_float'] = pd.to_numeric(sorted_data['ring_coverage_float'],
+                                                                   errors='coerce').astype('object')
+                sorted_data = sorted_data.sort_values('ring_coverage_float', ascending=(not sort_order_desc))
+                sorted_data['ring_coverage_float'] = sorted_data['ring_coverage_float']
+            else:
+                sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
+        except Exception as e:
+            print('Error occurred while sorting: ', e)
+
+    sorted_data.fillna('N/A')
+
+    csv_string = sorted_data.to_csv(index=False)
+    csv_bytes = io.BytesIO(csv_string.encode('utf-8'))
+    csv_bytes.seek(0)
+
+    return send_file(
+        csv_bytes,
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='export.csv'
+    )
 
 
 print(f"Environment: {app.config['ENV']}")
