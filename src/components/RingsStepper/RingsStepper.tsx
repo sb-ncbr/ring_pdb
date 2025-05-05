@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { RefObject } from 'react';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
@@ -13,7 +12,6 @@ import { StepContent, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import { Ring } from './types';
 
 const steps = ['Select a ring type', 'Select conformations'];
 
@@ -146,7 +144,7 @@ export default function RingsStepper() {
                 margin: '16px 0',
               }}
             >
-              {ringCards.rings.map((ring: Ring, index: number) => (
+              {ringCards.rings.map((ring: any, index: number) => (
                 <RingCard
                   key={index}
                   {...ring}

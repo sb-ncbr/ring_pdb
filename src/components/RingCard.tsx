@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
+import Card, { CardProps } from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -7,9 +7,10 @@ import { formatNumber } from '../helperFunctions/helpers.ts';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { RotatingMolecule } from './RotatingMolecule.tsx';
+import { ValidRingNames } from './RingsStepper/types.ts';
 
 interface RingCardProps {
-  name: 'Cyclohexane' | 'Cyclopentane' | 'Benzene';
+  name: ValidRingNames;
   ccd: number;
   pdb: number;
   total: number;
@@ -19,11 +20,13 @@ interface RingCardProps {
   disabled: boolean;
 }
 
-interface SelectableCardProps {
+interface SelectableCardProps extends CardProps {
   selected?: boolean;
 }
 
-export const SelectableCard = styled(Card)<SelectableCardProps>(({ theme, selected }) => ({
+export const SelectableCard: React.ComponentType<SelectableCardProps> = styled(
+  Card,
+)<SelectableCardProps>(({ theme, selected }) => ({
   transform: selected ? 'translateY(-10px)' : 'none',
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
   border: selected ? `1px solid ${theme.palette.primary.main}` : '0',

@@ -25,7 +25,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
   const [validatedIds, setValidatedIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleCardClick = () => {
     inputRef.current?.focus();

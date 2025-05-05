@@ -192,7 +192,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               PDB ID:
             </Typography>
-            <Typography variant="outline">
+            <Typography variant="caption">
               <Link
                 href={`https://www.ebi.ac.uk/pdbe/entry/pdb/${ringData.pdb_id}`}
                 target="_blank"
@@ -216,7 +216,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               {labels.ccdID}:{' '}
             </Typography>
-            <Typography variant="outline">
+            <Typography variant="caption">
               <Link
                 href={`https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/${ringData.ccd_id}`}
                 target="_blank"
@@ -237,19 +237,19 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Chain ID:
             </Typography>
-            <Typography variant="outline">{getChainID(ringData.ring_id)}</Typography>
+            <Typography variant="caption">{getChainID(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Residue ID:
             </Typography>
-            <Typography variant="outline">{ringData.residue_id}</Typography>
+            <Typography variant="caption">{ringData.residue_id}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Ring coverage:
             </Typography>
-            <Typography variant="outline">
+            <Typography variant="caption">
               {ringData.ring_coverage
                 ? getRingCoverageCounts(ringData.ring_coverage_counts) +
                   ' (' +
@@ -262,20 +262,20 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RMSD with template:
             </Typography>
-            <Typography variant="outline">{ringData.rmsd} Å</Typography>
+            <Typography variant="caption">{ringData.rmsd} Å</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Experimental method:
             </Typography>
-            <Typography variant="outline">{ringData.experimental_method}</Typography>
+            <Typography variant="caption">{ringData.experimental_method}</Typography>
           </Box>
           {ringData.resolution && (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
                 Resolution:
               </Typography>
-              <Typography variant="outline">{ringData.resolution} Å</Typography>
+              <Typography variant="caption">{ringData.resolution} Å</Typography>
             </Box>
           )}
 
@@ -283,26 +283,26 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RSR:
             </Typography>
-            <Typography variant="outline">{ringData.rsr ?? 'N/A'}</Typography>
+            <Typography variant="caption">{ringData.rsr ?? 'N/A'}</Typography>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               RSCC:
             </Typography>
-            <Typography variant="outline">{ringData.rscc ?? 'N/A'}</Typography>
+            <Typography variant="caption">{ringData.rscc ?? 'N/A'}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Atoms:
             </Typography>
-            <Typography variant="outline">{getAtoms(ringData.ring_id)}</Typography>
+            <Typography variant="caption">{getAtoms(ringData.ring_id)}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Assigned conformation:
             </Typography>
-            <Typography variant="outline">{ringData.conformation}</Typography>
+            <Typography variant="caption">{ringData.conformation}</Typography>
             <Chip
               label={
                 <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>

@@ -60,11 +60,11 @@ const theme = createTheme({
       fontWeight: 400,
       fontSize: '0.875rem',
     },
-    outline: {
-      fontFamily: 'EireneSans, sans-serif',
-      fontWeight: 700,
-      fontSize: '1rem',
-    },
+    // outline: {
+    //   fontFamily: 'EireneSans, sans-serif',
+    //   fontWeight: 700,
+    //   fontSize: '1rem',
+    // },
   },
   palette: {
     primary: {

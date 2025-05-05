@@ -152,7 +152,7 @@ const TableMRT = () => {
     }
   }, [isCompactView]);
 
-  const exportAllData = async (filters, sorting) => {
+  const exportAllData = async (filters: MRT_ColumnFiltersState, sorting: MRT_SortingState) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/export-data`,
