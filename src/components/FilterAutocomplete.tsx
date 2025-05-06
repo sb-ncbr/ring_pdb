@@ -140,6 +140,17 @@ export default function FilterAutocomplete({
                 '& .MuiOutlinedInput-input': {
                   fontFamily: 'Lora, sans-serif',
                   fontSize: '14px',
+                  '&::placeholder': {
+                    opacity: 0,
+                    transition: 'opacity 0.5s ease',
+                  },
+                },
+                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input::placeholder': {
+                  opacity: 1,
+                },
+                '& .MuiOutlinedInput-root:not(.Mui-focused) .MuiOutlinedInput-input::placeholder': {
+                  opacity: 0,
+                  transition: 'opacity 0s',
                 },
               }}
               InputProps={{
