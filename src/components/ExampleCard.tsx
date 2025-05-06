@@ -10,6 +10,7 @@ interface ExampleCardProps {
   header: string;
   body: string;
   image: string;
+  url: string;
 }
 
 const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image, url }) => {
