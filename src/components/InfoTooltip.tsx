@@ -31,7 +31,7 @@ export const InfoTooltip = () => {
         }
       >
         <IconButton>
-          <RestartAltIcon fontSize="large" />
+          <RestartAltIcon />
         </IconButton>
       </HtmlTooltip>
     </div>

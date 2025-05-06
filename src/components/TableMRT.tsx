@@ -380,7 +380,7 @@ const TableMRT = () => {
                             {renderFilters([key])}
                           </Box>
                         ))}
-                        <Box sx={{ marginTop: '18px' }}>
+                        <Box sx={{ marginTop: '24px' }}>
                           <InfoTooltip />
                         </Box>
                       </Box>
