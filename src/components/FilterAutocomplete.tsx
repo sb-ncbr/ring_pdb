@@ -130,28 +130,30 @@ export default function FilterAutocomplete({
         renderInput={(params) => {
           const { InputProps, ...restParams } = params;
           const { startAdornment, ...restInputProps } = InputProps;
+
           return (
             <TextField
               {...restParams}
               label={`Filter by ${filterByLabel}`}
               placeholder={!selectedOptions.length ? 'Start typing for autocomplete...' : ''}
               sx={{
-                '& .MuiOutlinedInput-input': {},
-              }}
-              slotProps={{
-                input: {
-                  ...restInputProps,
-                  startAdornment: (
-                    <div
-                      style={{
-                        maxHeight: '75px',
-                        overflowY: 'auto',
-                      }}
-                    >
-                      {startAdornment}
-                    </div>
-                  ),
+                '& .MuiOutlinedInput-input': {
+                  fontFamily: 'Lora, sans-serif',
+                  fontSize: '14px',
                 },
+              }}
+              InputProps={{
+                ...restInputProps,
+                startAdornment: startAdornment ? (
+                  <div
+                    style={{
+                      maxHeight: '75px',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    {startAdornment}
+                  </div>
+                ) : null,
               }}
             />
           );

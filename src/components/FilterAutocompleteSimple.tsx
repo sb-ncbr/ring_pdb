@@ -37,7 +37,36 @@ export const FilterAutocompleteSimple = ({
         onChange={(_e, newValue) => {
           onChange(newValue);
         }}
-        renderInput={(params) => <TextField {...params} label={`Filter by ${filterByLabel}`} />}
+        renderInput={(params) => {
+          const { InputProps, ...restParams } = params;
+          const { startAdornment, ...restInputProps } = InputProps;
+
+          return (
+            <TextField
+              {...restParams}
+              label={`Filter by ${filterByLabel}`}
+              sx={{
+                '& .MuiOutlinedInput-input': {
+                  fontFamily: 'Lora, sans-serif',
+                  fontSize: '14px',
+                },
+              }}
+              InputProps={{
+                ...restInputProps,
+                startAdornment: startAdornment ? (
+                  <div
+                    style={{
+                      maxHeight: '75px',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    {startAdornment}
+                  </div>
+                ) : null,
+              }}
+            />
+          );
+        }}
         renderOption={(props, option, { selected }) => {
           const { key, ...optionProps } = props;
           return (
