@@ -112,6 +112,13 @@ const TableMRT = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
 
+  // clear the filter state on reload
+  useEffect(() => {
+    if (window.history.state) {
+      window.history.replaceState(null, '');
+    }
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
     axios
