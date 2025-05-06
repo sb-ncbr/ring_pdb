@@ -20,6 +20,7 @@ import Divider from '@mui/material/Divider';
 import { useLocation } from 'react-router-dom';
 import RangeSlider from './RangeSlider.tsx';
 import Typography from '@mui/material/Typography';
+import { InfoTooltip } from './InfoTooltip.tsx';
 
 type FilterKey = 'resolution' | 'ring_coverage' | 'rsr' | 'rscc';
 
@@ -379,6 +380,9 @@ const TableMRT = () => {
                             {renderFilters([key])}
                           </Box>
                         ))}
+                        <Box sx={{ marginTop: '18px' }}>
+                          <InfoTooltip />
+                        </Box>
                       </Box>
                     </Box>
                   )}
