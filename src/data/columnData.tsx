@@ -186,7 +186,7 @@ export const columnsData: ColumnDataMRT[] = [
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             gap: '16px',
           }}
         >
