@@ -8,7 +8,6 @@ import { Home } from './pages/Home.tsx';
 import NoPage from './pages/NoPage.tsx';
 import { DataDescription } from './pages/DataDescription.tsx';
 import { UserGuide } from './pages/UserGuide.tsx';
-import Example from './pages/Example.tsx';
 import { TablePage } from './pages/TablePage.tsx';
 import RingDetailsWrapper from './pages/RingDetails.tsx';
 import { RingsStepperPage } from './pages/RingsStepperPage.tsx';
@@ -42,7 +41,6 @@ const App: React.FC = () => {
               <Route index element={<Home />} />
               <Route path="data-description" element={<DataDescription />} />
               <Route path="user-guide" element={<UserGuide />} />
-              <Route path="result/example-1" element={<Example example="example-1" />} />
               <Route path="data" element={<TablePage />} />
               <Route path="browse-conformations" element={<RingsStepperPage />} />
               <Route path="ring-details/:ringID" element={<RingDetailsWrapper />} />

@@ -31,19 +31,22 @@
   ],
   "example-cards": [
     {
-      "header": "Example 1",
-      "body": "Cras rutrum pulvinar mi vitae interdum. Nam quis quam tempus, congue velit sed, lacinia felis. Nulla ultrices rhoncus elit, in fringilla quam feugiat non. Fusce et hendrerit sem. Fusce quis ornare libero, laoreet dictum tortor. Sed nec ultrices lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi id mi elit. Donec malesuada lectus eu suscipit placerat.",
-      "image": "/images/pic1.png"
+      "header": "Flat cyclopentane in ligand 3KT of 4r91 entry",
+      "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that 349 rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
+      "image": "/images/4R91.png",
+      "url": "/ring-details/4r91_A_3KT_502_C16-C21-C22-C26-C27"
     },
     {
-      "header": "Example 2",
-      "body": "Vivamus condimentum diam elementum, malesuada sem eget, commodo sapien. Pellentesque convallis sodales dolor. Phasellus mattis, odio in vulputate laoreet, mi nisi fringilla risus, quis sollicitudin ipsum metus vel erat. Proin congue dapibus varius. Morbi sed vestibulum lacus. Aenean tincidunt quis lacus ut consequat. Curabitur nec est in orci hendrerit finibus vel ac justo. Praesent laoreet, magna et malesuada rutrum, erat arcu vestibulum risus, ac faucibus mi odio sed nibh. Etiam eu luctus lacus, sit amet placerat metus.",
-      "image": "/images/pic2.png"
+      "header": "Flat cyclohexane in ligand OM3 of 4cfb entry",
+      "body": "Upon analysing cases of cyclohexane rings occurring in the flat conformation in detail, we discovered that most of these rings should be present in one of the more energetically stable conformations. An example of such a potential conformation issue is a ligand with CCD ID OM3 in PDB entry 4cfb.",
+      "image": "/images/4CFB.png",
+      "url": "/ring-details/4cfb_A_OM3_1217_C15-C16-C17-C18-C19-C21"
     },
     {
-      "header": "Example 3",
-      "body": "Donec egestas in ipsum nec tincidunt. Vivamus sodales lorem laoreet nibh ultricies lacinia. In sed quam eu neque accumsan scelerisque. Phasellus in massa diam. Nulla et dui nulla. Duis ut blandit odio, ac fermentum nibh. Ut tempor risus sed bibendum bibendum. Cras vestibulum nulla quam, eget porta erat molestie sed. Aliquam egestas leo ut libero malesuada, quis pulvinar erat sollicitudin. Vestibulum consequat gravida augue, ut fermentum justo vehicula quis. Praesent consequat auctor turpis, vel hendrerit ex lacinia non.",
-      "image": "/images/pic3.png"
+      "header": "Chair-like benzene in ligand 53K of 5mtp entry",
+      "body": "We analysed the 5MTP structure, focusing on ligand 53K, which contains three benzene rings. In all chains, one specific benzene consistently adopts a chair-like conformation, which is unusual for planar aromatic systems. This pattern repeats across the entire structure, suggesting a possible refinement artifact or restraint issue.",
+      "image": "/images/5MTP.png",
+      "url": "/ring-details/5mtp_A_53K_302_C15-C17-C20-C19-C18-C16"
     }
   ]
 }
