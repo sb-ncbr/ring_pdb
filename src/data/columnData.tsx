@@ -230,7 +230,6 @@ export const columnsData: ColumnDataMRT[] = [
             'Solution scattering',
             'Neutron diffraction',
             'Powder diffraction',
-            'Hybrid method',
           ]}
           filterByLabel="experimental method"
           selectedValues={(column.getFilterValue() as string[]) || []}
