@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 
 const Input = styled(MuiInput)`
@@ -42,11 +42,23 @@ export default function RangeSlider({
     minVal = 'N/A';
     maxVal = 'N/A';
   }
-
   const currentValue =
     value && value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number'
       ? value
       : [minVal, maxVal];
+
+  const [internalValue, setInternalValue] = useState<[number, number]>(
+    currentValue as [number, number],
+  );
+
+  useEffect(() => {
+    const newCurretnValue =
+      value && value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number'
+        ? value
+        : [minVal, maxVal];
+    // sync internal value when parent changes
+    setInternalValue(newCurretnValue as [number, number]);
+  }, [value]);
 
   const debouncedChange = useMemo(
     () => debounce((newValue: [number, number]) => onChange(newValue), 500),
@@ -60,6 +72,7 @@ export default function RangeSlider({
   }, [debouncedChange]);
 
   const handleSliderChange = (_e: Event, newValue: any) => {
+    setInternalValue(newValue);
     debouncedChange(newValue);
   };
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,7 +171,7 @@ export default function RangeSlider({
         </Grid>
         <Grid size={12}>
           <CustomSlider
-            value={currentValue as [number, number]}
+            value={internalValue as [number, number]}
             min={minVal as number}
             max={maxVal as number}
             step={step}
