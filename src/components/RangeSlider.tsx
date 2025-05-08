@@ -216,17 +216,17 @@ export default function RangeSlider({
             disabled={disabled}
             sx={{
               '& .MuiSlider-thumb': {
-                color: isTouched ? 'primary.main' : 'rgb(189, 189, 189)',
+                color: isTouched && !disabled ? 'primary.main' : 'rgb(189, 189, 189)',
                 '&:hover, &.Mui-focusVisible': {
                   boxShadow: `0px 0px 0px 8px ${theme.palette.action.disabledBackground}`,
                 },
               },
               '& .MuiSlider-track': {
-                color: isTouched ? 'primary.main' : disabledBackground,
-                border: isTouched ? '1px solid' : 'none',
+                color: isTouched && !disabled ? 'primary.main' : disabledBackground,
+                border: isTouched && !disabled ? '1px solid' : 'none',
               },
               '& .MuiSlider-rail': {
-                color: isTouched ? 'primary.main' : disabledBackground,
+                color: isTouched && !disabled ? 'primary.main' : disabledBackground,
               },
             }}
           />
