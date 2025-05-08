@@ -6,6 +6,7 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import React, { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
+import { useTheme } from '@mui/material/styles';
 
 const Input = styled(MuiInput)`
   font-size: 0.9rem;
@@ -29,6 +30,7 @@ export default function RangeSlider({
   disabled,
   value,
   onChange,
+  resetSlider,
 }: {
   filterBy: string;
   minVal: ValueType;
@@ -37,7 +39,11 @@ export default function RangeSlider({
   disabled: boolean;
   value: [number, number];
   onChange: (newValue: any) => void;
+  resetSlider: boolean;
 }) {
+  const [isTouched, setIsTouched] = useState(false);
+  const theme = useTheme();
+
   if (minVal === undefined) {
     minVal = 'N/A';
     maxVal = 'N/A';
@@ -50,6 +56,12 @@ export default function RangeSlider({
   const [internalValue, setInternalValue] = useState<[number, number]>(
     currentValue as [number, number],
   );
+
+  useEffect(() => {
+    if (resetSlider) {
+      setIsTouched(false);
+    }
+  }, [resetSlider]);
 
   useEffect(() => {
     const newCurretnValue =
@@ -74,6 +86,7 @@ export default function RangeSlider({
   const handleSliderChange = (_e: Event, newValue: any) => {
     setInternalValue(newValue);
     debouncedChange(newValue);
+    if (!isTouched) setIsTouched(true);
   };
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value.replace(',', '.');
@@ -150,6 +163,7 @@ export default function RangeSlider({
       debouncedChange(val);
     }
   };
+  const disabledBackground = theme.palette.action.disabledBackground;
 
   return (
     <Box sx={{ width: 'auto' }}>
@@ -200,6 +214,21 @@ export default function RangeSlider({
             aria-labelledby="input-slider"
             disableSwap
             disabled={disabled}
+            sx={{
+              '& .MuiSlider-thumb': {
+                color: isTouched ? 'primary.main' : 'rgb(189, 189, 189)',
+                '&:hover, &.Mui-focusVisible': {
+                  boxShadow: `0px 0px 0px 8px ${theme.palette.action.disabledBackground}`,
+                },
+              },
+              '& .MuiSlider-track': {
+                color: isTouched ? 'primary.main' : disabledBackground,
+                border: isTouched ? '1px solid' : 'none',
+              },
+              '& .MuiSlider-rail': {
+                color: isTouched ? 'primary.main' : disabledBackground,
+              },
+            }}
           />
         </Grid>
       </Grid>

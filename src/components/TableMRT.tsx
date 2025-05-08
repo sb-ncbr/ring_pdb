@@ -32,6 +32,7 @@ const TableMRT = () => {
     rsr: { min: 0.1, max: 10, step: 0.1 },
     rscc: { min: 0, max: 5, step: 0.2 },
   });
+  const [sliderReset, setSliderReset] = useState(false);
 
   const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
     const createFilter =
@@ -47,6 +48,7 @@ const TableMRT = () => {
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
+          resetSlider={sliderReset}
         />
       );
 
@@ -107,6 +109,7 @@ const TableMRT = () => {
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const resetSliderFilters = () => {
+    setSliderReset(true);
     setColumnFilters((prevState) => {
       return prevState.map((filter) =>
         sliderFilterKeys.includes(filter.id) ? { ...filter, value: [] } : filter,
