@@ -80,7 +80,10 @@ export default function RangeSlider({
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       const inputValueNumber = parseFloat(inputValue);
-      if (value) debouncedChange([inputValueNumber, value[1] || (maxVal as number)]);
+      if (value) {
+        setInternalValue([inputValueNumber, value[1] || (maxVal as number)]);
+        debouncedChange([inputValueNumber, value[1] || (maxVal as number)]);
+      }
     }
   };
 
@@ -89,7 +92,10 @@ export default function RangeSlider({
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       const inputValueNumber = parseFloat(inputValue);
-      if (value) debouncedChange([value[0] || (minVal as number), inputValueNumber]);
+      if (value) {
+        setInternalValue([value[0] || (minVal as number), inputValueNumber]);
+        debouncedChange([value[0] || (minVal as number), inputValueNumber]);
+      }
     }
   };
 
@@ -99,9 +105,10 @@ export default function RangeSlider({
         ? value[0]
         : value[0] === 'N/A' || value[0] === undefined
           ? undefined
-          : parseFloat(value[0]);
+          : parseFloat(value[0] as any);
+
     if (
-      parsedValue &&
+      parsedValue !== undefined &&
       typeof minVal === 'number' &&
       typeof value[1] === 'number' &&
       parsedValue >= minVal &&
@@ -110,24 +117,36 @@ export default function RangeSlider({
       const val: [number, number] = [parsedValue, value[1]];
       debouncedChange(val);
     } else {
-      const val: any = [minVal, value[1]];
+      const val: [number, number] = [
+        typeof minVal === 'number' ? minVal : -999,
+        typeof value[1] === 'number' ? value[1] : typeof maxVal === 'number' ? maxVal : 999,
+      ];
       debouncedChange(val);
     }
   };
 
   const handleBlurMax = () => {
-    const parsedValue = parseFloat(String(value[1]));
+    const parsedValue =
+      typeof value[1] === 'number'
+        ? value[1]
+        : value[1] === 'N/A' || value[1] === undefined
+          ? undefined
+          : parseFloat(value[1] as any);
+
     if (
-      !isNaN(parsedValue) &&
+      parsedValue !== undefined &&
       typeof maxVal === 'number' &&
       typeof value[0] === 'number' &&
-      parsedValue <= maxVal &&
-      parsedValue >= value[0]
+      parsedValue >= value[0] &&
+      parsedValue <= maxVal
     ) {
       const val: [number, number] = [value[0], parsedValue];
       debouncedChange(val);
     } else {
-      const val: any = [value[0], maxVal];
+      const val: [number, number] = [
+        typeof value[0] === 'number' ? value[0] : typeof minVal === 'number' ? minVal : -999,
+        typeof maxVal === 'number' ? maxVal : 999,
+      ];
       debouncedChange(val);
     }
   };
@@ -142,7 +161,7 @@ export default function RangeSlider({
       >
         <Grid size={6}>
           <Input
-            value={value[0] || minVal}
+            value={internalValue[0] || minVal}
             size="small"
             onChange={handleMinInputChange}
             onBlur={handleBlurMin}
@@ -156,7 +175,7 @@ export default function RangeSlider({
         </Grid>
         <Grid size={6}>
           <Input
-            value={value[1] || maxVal}
+            value={internalValue[1] || maxVal}
             size="small"
             onChange={handleMaxInputChange}
             onBlur={handleBlurMax}
