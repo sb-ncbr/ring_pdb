@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { debounce } from 'lodash';
 
 const Input = styled(MuiInput)`
@@ -19,19 +19,23 @@ const CustomSlider = styled(Slider)(() => ({
   },
 }));
 
+export type ValueType = number | 'N/A' | undefined;
+
 export default function RangeSlider({
   filterBy,
   minVal,
   maxVal,
   step,
   disabled,
+  value,
   onChange,
 }: {
   filterBy: string;
-  minVal: number | 'N/A' | undefined;
-  maxVal: number | 'N/A' | undefined;
+  minVal: ValueType;
+  maxVal: ValueType;
   step: number;
   disabled: boolean;
+  value: [number, number];
   onChange: (newValue: any) => void;
 }) {
   if (minVal === undefined) {
@@ -39,19 +43,13 @@ export default function RangeSlider({
     maxVal = 'N/A';
   }
 
-  const [value, setValue] = useState([minVal, maxVal]);
-
-  useEffect(() => {
-    setValue([minVal, maxVal]); // Reset to new min/max values
-  }, [minVal, maxVal]);
-
-  const handleSliderChange = (_e: Event, newValue: any) => {
-    setValue(newValue);
-    debouncedChange(newValue);
-  };
+  const currentValue =
+    value && value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number'
+      ? value
+      : [minVal, maxVal];
 
   const debouncedChange = useMemo(
-    () => debounce((newValue: (number | 'N/A' | undefined)[]) => onChange(newValue), 500),
+    () => debounce((newValue: [number, number]) => onChange(newValue), 500),
     [onChange],
   );
 
@@ -61,13 +59,15 @@ export default function RangeSlider({
     };
   }, [debouncedChange]);
 
+  const handleSliderChange = (_e: Event, newValue: any) => {
+    debouncedChange(newValue);
+  };
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value.replace(',', '.');
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       const inputValueNumber = parseFloat(inputValue);
-      setValue([inputValueNumber, value[1]]);
-      debouncedChange([inputValueNumber, value[1]]);
+      if (value) debouncedChange([inputValueNumber, value[1] || (maxVal as number)]);
     }
   };
 
@@ -76,8 +76,7 @@ export default function RangeSlider({
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (isValidInput) {
       const inputValueNumber = parseFloat(inputValue);
-      setValue([value[0], inputValueNumber]);
-      debouncedChange([value[0], inputValueNumber]);
+      if (value) debouncedChange([value[0] || (minVal as number), inputValueNumber]);
     }
   };
 
@@ -95,18 +94,16 @@ export default function RangeSlider({
       parsedValue >= minVal &&
       parsedValue <= value[1]
     ) {
-      const val = [parsedValue, value[1]];
-      setValue(val);
+      const val: [number, number] = [parsedValue, value[1]];
       debouncedChange(val);
     } else {
-      const val = [minVal, value[1]];
-      setValue(val);
+      const val: any = [minVal, value[1]];
       debouncedChange(val);
     }
   };
 
   const handleBlurMax = () => {
-    const parsedValue = parseFloat(value[1] as string);
+    const parsedValue = parseFloat(String(value[1]));
     if (
       !isNaN(parsedValue) &&
       typeof maxVal === 'number' &&
@@ -114,12 +111,10 @@ export default function RangeSlider({
       parsedValue <= maxVal &&
       parsedValue >= value[0]
     ) {
-      const val = [value[0], parsedValue];
-      setValue(val);
+      const val: [number, number] = [value[0], parsedValue];
       debouncedChange(val);
     } else {
-      const val = [value[0], maxVal];
-      setValue(val);
+      const val: any = [value[0], maxVal];
       debouncedChange(val);
     }
   };
@@ -134,7 +129,7 @@ export default function RangeSlider({
       >
         <Grid size={6}>
           <Input
-            value={value[0]}
+            value={value[0] || minVal}
             size="small"
             onChange={handleMinInputChange}
             onBlur={handleBlurMin}
@@ -148,7 +143,7 @@ export default function RangeSlider({
         </Grid>
         <Grid size={6}>
           <Input
-            value={value[1]}
+            value={value[1] || maxVal}
             size="small"
             onChange={handleMaxInputChange}
             onBlur={handleBlurMax}
@@ -163,7 +158,7 @@ export default function RangeSlider({
         </Grid>
         <Grid size={12}>
           <CustomSlider
-            value={value as number[]}
+            value={currentValue as [number, number]}
             min={minVal as number}
             max={maxVal as number}
             step={step}

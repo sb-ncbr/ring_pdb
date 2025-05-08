@@ -43,6 +43,7 @@ const TableMRT = () => {
           maxVal={filterSliderRanges[key]?.max}
           step={filterSliderRanges[key]?.step}
           disabled={filterSliderRanges[key]?.min === undefined}
+          value={column.getFilterValue() as [number, number]}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
@@ -78,6 +79,7 @@ const TableMRT = () => {
     'rsr',
     'rscc',
   ];
+  const sliderFilterKeys = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
   const previousFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
@@ -104,6 +106,13 @@ const TableMRT = () => {
   });
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const resetSliderFilters = () => {
+    setColumnFilters((prevState) => {
+      return prevState.map((filter) =>
+        sliderFilterKeys.includes(filter.id) ? { ...filter, value: [] } : filter,
+      );
+    });
+  };
 
   const handleSortingChange = (newSorting: any) => {
     setSorting(newSorting);
@@ -122,6 +131,7 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log('Sending filters:', columnFilters);
     axios
       .post(`${import.meta.env.VITE_API_URL}/api/data`, {
         pageIndex: pagination.pageIndex + 1,
@@ -381,7 +391,7 @@ const TableMRT = () => {
                           </Box>
                         ))}
                         <Box sx={{ marginTop: '24px' }}>
-                          <InfoTooltip />
+                          <InfoTooltip onResetSlider={resetSliderFilters} />
                         </Box>
                       </Box>
                     </Box>

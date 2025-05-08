@@ -18,7 +18,7 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export const InfoTooltip = () => {
+export const InfoTooltip = ({ onResetSlider }: { onResetSlider: any }) => {
   return (
     <div>
       <HtmlTooltip
@@ -30,7 +30,7 @@ export const InfoTooltip = () => {
           </React.Fragment>
         }
       >
-        <IconButton>
+        <IconButton onClick={onResetSlider}>
           <RestartAltIcon />
         </IconButton>
       </HtmlTooltip>
