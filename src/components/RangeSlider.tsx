@@ -30,7 +30,7 @@ export default function RangeSlider({
   disabled,
   value,
   onChange,
-  resetSlider,
+  sliderResetCounter,
 }: {
   filterBy: string;
   minVal: ValueType;
@@ -39,7 +39,7 @@ export default function RangeSlider({
   disabled: boolean;
   value: [number, number];
   onChange: (newValue: any) => void;
-  resetSlider: boolean;
+  sliderResetCounter: number;
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const theme = useTheme();
@@ -58,10 +58,10 @@ export default function RangeSlider({
   );
 
   useEffect(() => {
-    if (resetSlider) {
+    if (sliderResetCounter) {
       setIsTouched(false);
     }
-  }, [resetSlider]);
+  }, [sliderResetCounter]);
 
   useEffect(() => {
     const newCurretnValue =
