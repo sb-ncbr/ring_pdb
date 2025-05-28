@@ -2,14 +2,14 @@
   "action-cards": [
     {
       "header": "Search for rings in the PDB entries by PDB ID(s)",
-      "body": "Here you can enter PDB IDs separated by comma or space",
+      "body": "Here you can enter PDB IDs separated by comma, semicolon, or space",
       "action": "input",
       "color": "#f3eed9",
       "idType": "pdb"
     },
     {
       "header": "Search for rings in the PDB entries by CCD ID(s)",
-      "body": "Here you can enter CCD IDs separated by comma or space",
+      "body": "Here you can enter CCD IDs separated by comma, semicolon, or space",
       "action": "input",
       "color": "#fff3f0",
       "idType": "ccd"
