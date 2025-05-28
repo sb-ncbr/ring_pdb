@@ -333,7 +333,7 @@ const TableMRT = () => {
           </Box>
         );
       }
-
+      const visibleFilterKeys = table.getVisibleLeafColumns().map((col) => col.id);
       return (
         <>
           <Box
@@ -388,11 +388,14 @@ const TableMRT = () => {
                           gap: '16px',
                         }}
                       >
-                        {advancedFilterKeys.slice(3).map((key) => (
-                          <Box key={key} sx={{ maxWidth: '130px' }}>
-                            {renderFilters([key])}
-                          </Box>
-                        ))}
+                        {advancedFilterKeys
+                          .slice(3)
+                          .filter((key) => visibleFilterKeys.includes(key))
+                          .map((key, index) => (
+                            <Box key={key} sx={{ maxWidth: '130px' }}>
+                              {renderFilters([key], index)}
+                            </Box>
+                          ))}
                         <Box sx={{ marginTop: '24px' }}>
                           <InfoTooltip onResetSlider={resetSliderFilters} />
                         </Box>
