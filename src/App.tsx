@@ -5,7 +5,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { Layout } from './Layout.tsx';
 import { Home } from './pages/Home.tsx';
-import NoPage from './pages/NoPage.tsx';
 import { DataDescription } from './pages/DataDescription.tsx';
 import { UserGuide } from './pages/UserGuide.tsx';
 import { TablePage } from './pages/TablePage.tsx';
@@ -13,6 +12,7 @@ import RingDetailsWrapper from './pages/RingDetails.tsx';
 import { RingsStepperPage } from './pages/RingsStepperPage.tsx';
 import { MolstarProvider } from './context/MolstarContext.tsx';
 import { GlobalStyles } from '@mui/material';
+import NotFoundPage from './pages/NotFoundPage.tsx';
 
 const App: React.FC = () => {
   return (
@@ -44,7 +44,7 @@ const App: React.FC = () => {
               <Route path="data" element={<TablePage />} />
               <Route path="browse-conformations" element={<RingsStepperPage />} />
               <Route path="ring-details/:ringID" element={<RingDetailsWrapper />} />
-              <Route path="*" element={<NoPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </HashRouter>
