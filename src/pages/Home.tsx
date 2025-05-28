@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import ActionCard from '../components/ActionCard';
 import MainSection from '../components/MainSection';
 import ExampleCard from '../components/ExampleCard';
+import Divider from '@mui/material/Divider';
 
 import cards from '../content/cards.json';
 import sections from '../content/main.json';
@@ -51,7 +52,7 @@ export const Home: React.FC = () => (
         })}
       </Stack>
     </Section>
-
+    <Divider sx={{ mt: 6 }} />
     <Section background="#ffffff">
       <MainSection section={sections.second} />
     </Section>
