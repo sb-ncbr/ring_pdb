@@ -193,22 +193,11 @@ const TableMRT = () => {
     }
   };
 
-  // Define a fixed row height and number of rows to show
-  const ROW_HEIGHT = 53; // Adjust this value based on your table's row height
-  const ROWS_PER_PAGE = pagination.pageSize;
-  const TABLE_HEADER_HEIGHT = 56; // Material table header height
-  const PAGINATION_HEIGHT = 52; // Material pagination height
-
-  // Calculate the fixed height for the table body
-  const tableBodyHeight = ROW_HEIGHT * ROWS_PER_PAGE;
-  const totalTableHeight = tableBodyHeight + TABLE_HEADER_HEIGHT + PAGINATION_HEIGHT;
-
   const table = useMaterialReactTable({
     columns: memoizedColumns,
     data,
     columnFilterDisplayMode: 'custom',
     getRowId: (row) => row['ring_id'],
-    // enableFacetedValues: true,
     defaultColumn: {
       minSize: 10,
       maxSize: 100,
@@ -260,8 +249,6 @@ const TableMRT = () => {
     enablePagination: true,
     muiTableContainerProps: {
       sx: {
-        // height: `${totalTableHeight}px`, // Set fixed height
-        maxHeight: '1000px',
         maxWidth: tableContainerMaxWidth,
         margin: '0 auto',
         width: 'auto',
@@ -273,8 +260,6 @@ const TableMRT = () => {
 
     muiTableBodyProps: {
       sx: {
-        // height: `${tableBodyHeight}px`, // Set fixed height for table body
-        // Show loading state while maintaining height
         ...(isLoading && {
           position: 'relative',
           '&::after': {
@@ -467,7 +452,6 @@ const TableMRT = () => {
         },
         // Add a container with relative positioning
         position: 'relative',
-        minHeight: `${totalTableHeight}px`,
       }}
     >
       <MaterialReactTable table={table} />
