@@ -63,7 +63,6 @@ const TableMRT = () => {
     }) as MRT_ColumnDef<RowData>[];
   }, [filterSliderRanges]);
 
-  const tableContainerMaxWidth = '1900px';
   const columnDefaultState = {
     experimental_method: true,
     rsr: true,
@@ -117,6 +116,7 @@ const TableMRT = () => {
     });
   };
 
+  const tableContainerMaxWidth = isCompactView ? '1300px' : '1900px';
   const handleSortingChange = (newSorting: any) => {
     setSorting(newSorting);
   };
