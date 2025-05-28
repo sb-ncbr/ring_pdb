@@ -20,3 +20,7 @@
 .Mui-TableHeadCell-Content-Wrapper.MuiBox-root.css-lapokc {
   white-space: normal;
 }
+
+html {
+  overflow-y: scroll;
+}
