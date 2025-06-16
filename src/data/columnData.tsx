@@ -112,11 +112,32 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column, table }: { column: any }) => {
       const filterValue = column.getFilterValue() || {};
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
+
+      const ringTypeFilter = table
+        .getState()
+        .columnFilters.find((f) => f.id === 'ring_type')?.value;
+      const conformationByRingType = {
+        Cyclohexane: ['Chair', 'Twist boat', 'Boat', 'Half chair', 'Flat'],
+        Benzene: ['Flat', 'Chair', 'Boat', 'Half chair'],
+        Cyclopentane: ['Envelope', 'Half chair', 'Flat'],
+      };
+
+      // Determine selected ring types — could be undefined, single string, or array
+      const selectedRingTypes = Array.isArray(ringTypeFilter)
+        ? ringTypeFilter
+        : ringTypeFilter
+          ? [ringTypeFilter]
+          : [];
+
+      // Collect applicable conformations from selected ring types
+      const options = selectedRingTypes.length
+        ? Array.from(new Set(selectedRingTypes.flatMap((rt) => conformationByRingType[rt] || [])))
+        : [];
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
         column.setFilterValue({
@@ -135,7 +156,7 @@ export const columnsData: ColumnDataMRT[] = [
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <FilterAutocompleteSimple
-            options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
+            options={options}
             filterByLabel="conformation"
             selectedValues={selectedValues}
             onChange={handleAutocompleteChange}
