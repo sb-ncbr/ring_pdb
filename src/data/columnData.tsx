@@ -127,17 +127,13 @@ export const columnsData: ColumnDataMRT[] = [
         Cyclopentane: ['Envelope', 'Half chair', 'Flat'],
       };
 
-      // Determine selected ring types — could be undefined, single string, or array
-      const selectedRingTypes = Array.isArray(ringTypeFilter)
-        ? ringTypeFilter
-        : ringTypeFilter
-          ? [ringTypeFilter]
-          : [];
+      // Determine selected ring types
+      const selectedRingTypes = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
 
-      // Collect applicable conformations from selected ring types
+      // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
       const options = selectedRingTypes.length
         ? Array.from(new Set(selectedRingTypes.flatMap((rt) => conformationByRingType[rt] || [])))
-        : [];
+        : ['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat'];
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
         column.setFilterValue({
