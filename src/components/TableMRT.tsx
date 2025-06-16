@@ -223,6 +223,9 @@ const TableMRT = () => {
         },
       },
     },
+    localization: {
+      noResultsFound: 'No data match the filter you specified.',
+    },
     muiPaginationProps: {
       color: 'primary',
       shape: 'rounded',
