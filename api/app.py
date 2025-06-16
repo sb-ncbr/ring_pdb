@@ -1,16 +1,12 @@
-from pathlib import Path
-
-import numpy as np
 from flask import Flask, jsonify, request, Response, render_template, send_file
 import os
-import json
 from dotenv import load_dotenv
 import logging
 import pandas as pd
 from flask_cors import CORS
 import io
 
-from utils import is_favorable, get_range_with_step
+from utils import is_favorable, get_range_with_step, filter_by_conf
 
 app = Flask(__name__,
             static_folder='dist/static',
@@ -57,7 +53,6 @@ def get_ccd_ids():
     ccd_ids = data['ccd_id'].unique().tolist()
     return jsonify(ccd_ids), 200
 
-
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():
     received_data = request.json
@@ -80,21 +75,7 @@ def get_paginated_data():
             filtered_data = filtered_data[filtered_data['ring_type'].isin(filter['value'])]
 
         elif filter['id'] == 'conformation':
-            selected_values = filter['value'].get('selectedValues', [])
-            show_favorable = filter['value'].get('showFavorable', True)
-            show_unfavorable = filter['value'].get('showUnfavorable', True)
-
-            if selected_values:
-                filtered_data = filtered_data[filtered_data['conformation'].isin(selected_values)]
-
-            if not (show_favorable and show_unfavorable):
-                filtered_data = filtered_data[
-                    filtered_data.apply(
-                        lambda row: (is_favorable(row['ring_type'], row['conformation']) and show_favorable) or
-                                    (not is_favorable(row['ring_type'], row['conformation']) and show_unfavorable),
-                        axis=1
-                    )
-                ]
+            filtered_data = filter_by_conf(filter['value'], filtered_data)
 
         elif filter['id'] == 'experimental_method':
             filtered_data = filtered_data[filtered_data['experimental_method'].isin(filter['value'])]
