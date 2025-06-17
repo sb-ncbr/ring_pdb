@@ -21,6 +21,8 @@ import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane';
+
 export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
@@ -112,15 +114,16 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    Filter: ({ column, table }: { column: any }) => {
+    Filter: ({ column, table }: { column: any; table: any }) => {
       const filterValue = column.getFilterValue() || {};
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
 
-      const ringTypeFilter = table
+      const ringTypeFilter: RingType[] | undefined = table
         .getState()
-        .columnFilters.find((f) => f.id === 'ring_type')?.value;
+        .columnFilters.find((f: any) => f.id === 'ring_type')?.value;
+      console.log('ringTypeFilter: ', ringTypeFilter);
       const conformationByRingType = {
         Cyclohexane: ['Chair', 'Twist boat', 'Boat', 'Half chair', 'Flat'],
         Benzene: ['Flat', 'Chair', 'Boat', 'Half chair'],
@@ -128,11 +131,18 @@ export const columnsData: ColumnDataMRT[] = [
       };
 
       // Determine selected ring types
-      const selectedRingTypes = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
+      const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
 
+      const ringTypes = Object.keys(conformationByRingType) as RingType[];
       // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
       const options = selectedRingTypes.length
-        ? Array.from(new Set(selectedRingTypes.flatMap((rt) => conformationByRingType[rt] || [])))
+        ? Array.from(
+            new Set(
+              selectedRingTypes.flatMap((rt) =>
+                ringTypes.includes(rt) ? conformationByRingType[rt as RingType] : [],
+              ),
+            ),
+          )
         : ['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat'];
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
