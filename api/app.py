@@ -42,15 +42,57 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/api/get_pdb_ids', methods=['GET'])
+@app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
-    pdb_ids = data['pdb_id'].unique().tolist()
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    ring_type = other_filters.get("ring_type")
+    conformation = other_filters.get("conformation")
+    # pdb_id = other_filters.get("pdb_id")
+    ccd_id = other_filters.get("ccd_id")
+    experimental_method = other_filters.get("experimental_method")
+
+    filtered_data = data
+
+    if ring_type:
+        filtered_data = filtered_data[filtered_data['ring_type'].isin(ring_type)]
+    if conformation:
+        filtered_data = filtered_data[filtered_data['conformation'].isin(conformation)]
+    # if pdb_id:
+    #     filtered_data = filtered_data[filtered_data['pdb_id'].isin(pdb_id)]
+    if ccd_id:
+        filtered_data = filtered_data[filtered_data['ccd_id'].isin(ccd_id)]
+    if experimental_method:
+        filtered_data = filtered_data[filtered_data['experimental_method'].isin(experimental_method)]
+
+    pdb_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(pdb_ids), 200
 
 
-@app.route('/api/get_ccd_ids', methods=['GET'])
+@app.route('/api/get_ccd_ids', methods=['POST'])
 def get_ccd_ids():
-    ccd_ids = data['ccd_id'].unique().tolist()
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    ring_type = other_filters.get("ring_type")
+    conformation = other_filters.get("conformation")
+    pdb_id = other_filters.get("pdb_id")
+    # ccd_id = other_filters.get("ccd_id")
+    experimental_method = other_filters.get("experimental_method")
+
+    filtered_data = data
+
+    if ring_type:
+        filtered_data = filtered_data[filtered_data['ring_type'].isin(ring_type)]
+    if conformation:
+        filtered_data = filtered_data[filtered_data['conformation'].isin(conformation)]
+    if pdb_id:
+        filtered_data = filtered_data[filtered_data['pdb_id'].isin(pdb_id)]
+    # if ccd_id:
+    #     filtered_data = filtered_data[filtered_data['ccd_id'].isin(ccd_id)]
+    if experimental_method:
+        filtered_data = filtered_data[filtered_data['experimental_method'].isin(experimental_method)]
+
+    ccd_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(ccd_ids), 200
 
 @app.route('/api/data', methods=['POST'])

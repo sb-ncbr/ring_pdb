@@ -1,4 +1,5 @@
 import ringCards from '../content/ringCards.json';
+import { OtherSelectedFiltersType } from '../components/FilterAutocomplete.tsx';
 
 export const isFavorable = (ringName: string, confName: string) => {
   const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
@@ -21,6 +22,28 @@ export const getChipStyles = (type: string, theme: any) => {
     default:
       return { backgroundColor: theme.palette.background.default };
   }
+};
+
+export const getOtherSelectedFilters = (
+  columnFilters: any[],
+  excludeKey: keyof OtherSelectedFiltersType,
+): OtherSelectedFiltersType => {
+  const filterKeys: (keyof OtherSelectedFiltersType)[] = [
+    'ring_type',
+    'conformation',
+    'ccd_id',
+    'pdb_id',
+    'experimental_method',
+  ];
+
+  return filterKeys.reduce((acc, key) => {
+    const value = columnFilters.find((f: any) => f.id === key)?.value;
+    acc[key] = key === 'conformation' && value?.selectedValues ? value.selectedValues : value;
+    if (key === excludeKey) {
+      acc[key] = [];
+    }
+    return acc;
+  }, {} as OtherSelectedFiltersType);
 };
 
 export function formatNumber(num: number) {

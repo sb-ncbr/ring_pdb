@@ -35,3 +35,4 @@ export interface ColumnDataMRT {
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;
+export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane';

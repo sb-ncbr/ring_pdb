@@ -1,4 +1,5 @@
-import { ColumnDataMRT } from './dataTypes';
+import React, { useState } from 'react';
+import { ColumnDataMRT, RingType } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -16,18 +17,17 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import React, { useState } from 'react';
-import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
+import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
-type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane';
 
 export const columnsData: ColumnDataMRT[] = [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column, table }: { column: any; table: any }) => {
+      const columnFilters = table.getState().columnFilters;
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'pdb_id');
       return (
         <FilterAutocomplete
           filterByLabel="PDB ID"
@@ -35,6 +35,7 @@ export const columnsData: ColumnDataMRT[] = [
             column.setFilterValue(newSelectedValues);
           }}
           selectedValues={(column.getFilterValue() as string[]) || []}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },
@@ -42,7 +43,9 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column, table }: { column: any; table: any }) => {
+      const columnFilters = table.getState().columnFilters;
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'ccd_id');
       return (
         <FilterAutocomplete
           filterByLabel="CCD ID"
@@ -50,6 +53,7 @@ export const columnsData: ColumnDataMRT[] = [
             column.setFilterValue(newSelectedValues);
           }}
           selectedValues={(column.getFilterValue() as string[]) || []}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },
