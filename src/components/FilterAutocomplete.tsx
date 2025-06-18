@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
-import { RingType } from '../data/columnData.tsx';
+import { RingType } from '../data/dataTypes.ts';
 
 export type OtherSelectedFiltersType = {
   ring_type: RingType[];

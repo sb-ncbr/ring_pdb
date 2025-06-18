@@ -76,7 +76,7 @@ export const columnsData: ColumnDataMRT[] = [
     Filter: ({ column }: { column: any }) => {
       return (
         <FilterAutocompleteSimple
-          options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
+          options={ringCards.rings.map((ring) => ring.name)}
           filterByLabel="ring type"
           selectedValues={(column.getFilterValue() as string[]) || []}
           onChange={(newSelectedValues) => {
@@ -252,24 +252,18 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column, table }: { column: any; table: any }) => {
+      const columnFilters = table.getState().columnFilters;
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'experimental_method');
       return (
         <FilterAutocompleteSimple
-          options={[
-            'X-ray diffraction',
-            'Solution NMR',
-            'Electron microscopy',
-            'Electron crystallography',
-            'Solid-state NMR',
-            'Solution scattering',
-            'Neutron diffraction',
-            'Powder diffraction',
-          ]}
+          options={[]}
           filterByLabel="experimental method"
           selectedValues={(column.getFilterValue() as string[]) || []}
           onChange={(newSelectedValues) => {
             column.setFilterValue(newSelectedValues);
           }}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },

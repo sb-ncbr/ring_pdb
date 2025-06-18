@@ -49,7 +49,6 @@ def get_pdb_ids():
     pdb_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(pdb_ids), 200
 
-
 @app.route('/api/get_ccd_ids', methods=['POST'])
 def get_ccd_ids():
     received_data = request.json
@@ -57,6 +56,14 @@ def get_ccd_ids():
     filtered_data = apply_filters(data, other_filters)
     ccd_ids = filtered_data['ccd_id'].unique().tolist()
     return jsonify(ccd_ids), 200
+
+@app.route('/api/get_methods', methods=['POST'])
+def get_methods():
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    filtered_data = apply_filters(data, other_filters)
+    methods = filtered_data['experimental_method'].unique().tolist()
+    return jsonify(methods), 200
 
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():
