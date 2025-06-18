@@ -4,14 +4,14 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   type MRT_SortingState,
-  MRT_TableHeadCellFilterContainer,
   MRT_ColumnFiltersState,
+  MRT_TableHeadCellFilterContainer,
 } from 'material-react-table';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { columnsData } from '../data/columnData.tsx';
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
@@ -21,8 +21,16 @@ import { useLocation } from 'react-router-dom';
 import RangeSlider from './RangeSlider.tsx';
 import Typography from '@mui/material/Typography';
 import { InfoTooltip } from './InfoTooltip.tsx';
-
-type FilterKey = 'resolution' | 'ring_coverage' | 'rsr' | 'rscc';
+import {
+  advancedFilterKeys,
+  columnDefaultState,
+  combinedFilters,
+  defaultFilterKeys,
+  FilterKey,
+  sliderFilterKeys,
+} from '../helperFunctions/filters.tsx';
+import { exportAllData } from '../helperFunctions/helpers.ts';
+import Spinner from './Spinner.tsx';
 
 const TableMRT = () => {
   const location = useLocation();
@@ -63,24 +71,6 @@ const TableMRT = () => {
     }) as MRT_ColumnDef<RowData>[];
   }, [filterSliderRanges]);
 
-  const columnDefaultState = {
-    experimental_method: true,
-    rsr: true,
-    rscc: true,
-    ligand_coverage: false,
-  };
-  const defaultFilterKeys = ['ring_type', 'conformation'];
-  const advancedFilterKeys = [
-    'pdb_id',
-    'ccd_id',
-    'experimental_method',
-    'resolution',
-    'ring_coverage',
-    'ligand_coverage',
-    'rsr',
-    'rscc',
-  ];
-  const sliderFilterKeys = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
   const previousFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
@@ -88,7 +78,6 @@ const TableMRT = () => {
       }))
     : [];
 
-  const combinedFilters = new Map(advancedFilterKeys.map((id) => [id, { id, value: [] }]));
   previousFilters.forEach((filter) => {
     combinedFilters.set(filter.id, filter);
   });
@@ -172,26 +161,6 @@ const TableMRT = () => {
       setColumnVisibility(columnDefaultState);
     }
   }, [isCompactView]);
-
-  const exportAllData = async (filters: MRT_ColumnFiltersState, sorting: MRT_SortingState) => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/export-data`,
-        { filters, sorting },
-        { responseType: 'blob' },
-      );
-
-      const url = URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'export.csv');
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error('Error exporting data:', error);
-    }
-  };
 
   const table = useMaterialReactTable({
     columns: memoizedColumns,
@@ -281,28 +250,7 @@ const TableMRT = () => {
       },
     },
     // Add loading overlay
-    renderEmptyRowsFallback: () => {
-      if (isLoading) {
-        return (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '1rem',
-            }}
-          >
-            <CircularProgress />
-            <span>Loading data...</span>
-          </Box>
-        );
-      }
-      return null;
-    },
+    renderEmptyRowsFallback: () => (isLoading ? <Spinner /> : null),
     // Ensure empty rows are rendered to maintain height
     renderTopToolbar: () => {
       function renderFilters(filterKeys: string[], index?: number) {
