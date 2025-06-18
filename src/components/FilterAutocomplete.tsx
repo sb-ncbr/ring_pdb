@@ -84,13 +84,13 @@ export default function FilterAutocomplete({
       })
       .then((response) => {
         setAllOptions(response.data);
-        console.log('DEBUG PDB IDS', response.data);
+        console.log('DEBUG ', filterByLabel, response.data);
       })
       .catch((error) => {
         console.log('Error fetching data:', error);
         return;
       });
-  }, [otherSelectedFilters, url]);
+  }, [otherSelectedFilters]);
 
   return (
     <Box

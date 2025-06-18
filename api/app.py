@@ -92,7 +92,7 @@ def get_ccd_ids():
     if experimental_method:
         filtered_data = filtered_data[filtered_data['experimental_method'].isin(experimental_method)]
 
-    ccd_ids = filtered_data['pdb_id'].unique().tolist()
+    ccd_ids = filtered_data['ccd_id'].unique().tolist()
     return jsonify(ccd_ids), 200
 
 @app.route('/api/data', methods=['POST'])
