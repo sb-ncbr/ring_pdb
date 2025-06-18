@@ -42,29 +42,18 @@ def home():
     return render_template('index.html')
 
 
+def apply_filters(df, filters):
+    for key in filters:
+        value = filters[key]
+        if value:
+            df = df[df[key].isin(value)]
+    return df
+
 @app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
     received_data = request.json
     other_filters = received_data.get("otherFilters", {})
-    ring_type = other_filters.get("ring_type")
-    conformation = other_filters.get("conformation")
-    # pdb_id = other_filters.get("pdb_id")
-    ccd_id = other_filters.get("ccd_id")
-    experimental_method = other_filters.get("experimental_method")
-
-    filtered_data = data
-
-    if ring_type:
-        filtered_data = filtered_data[filtered_data['ring_type'].isin(ring_type)]
-    if conformation:
-        filtered_data = filtered_data[filtered_data['conformation'].isin(conformation)]
-    # if pdb_id:
-    #     filtered_data = filtered_data[filtered_data['pdb_id'].isin(pdb_id)]
-    if ccd_id:
-        filtered_data = filtered_data[filtered_data['ccd_id'].isin(ccd_id)]
-    if experimental_method:
-        filtered_data = filtered_data[filtered_data['experimental_method'].isin(experimental_method)]
-
+    filtered_data = apply_filters(data, other_filters)
     pdb_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(pdb_ids), 200
 
@@ -73,25 +62,7 @@ def get_pdb_ids():
 def get_ccd_ids():
     received_data = request.json
     other_filters = received_data.get("otherFilters", {})
-    ring_type = other_filters.get("ring_type")
-    conformation = other_filters.get("conformation")
-    pdb_id = other_filters.get("pdb_id")
-    # ccd_id = other_filters.get("ccd_id")
-    experimental_method = other_filters.get("experimental_method")
-
-    filtered_data = data
-
-    if ring_type:
-        filtered_data = filtered_data[filtered_data['ring_type'].isin(ring_type)]
-    if conformation:
-        filtered_data = filtered_data[filtered_data['conformation'].isin(conformation)]
-    if pdb_id:
-        filtered_data = filtered_data[filtered_data['pdb_id'].isin(pdb_id)]
-    # if ccd_id:
-    #     filtered_data = filtered_data[filtered_data['ccd_id'].isin(ccd_id)]
-    if experimental_method:
-        filtered_data = filtered_data[filtered_data['experimental_method'].isin(experimental_method)]
-
+    filtered_data = apply_filters(data, other_filters)
     ccd_ids = filtered_data['ccd_id'].unique().tolist()
     return jsonify(ccd_ids), 200
 
@@ -183,8 +154,8 @@ def get_paginated_data():
 def get_row_data():
     ring_id = request.args.get('ringID')
 
-    print(ring_id)
-    print(data.head())
+    # print(ring_id)
+    # print(data.head())
 
     if not ring_id:
         return jsonify({"error": "ringID parameter is required"}), 400
