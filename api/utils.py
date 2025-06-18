@@ -34,3 +34,11 @@ def filter_by_conf(value: Dict[str, List[str] | bool], filtered_data):
 def is_favorable(ring, conf):
     return ((ring == "Cyclohexane" and conf == "Chair") or (ring == "Benzene" and conf == "Flat") or
             (ring == "Cyclopentane" and conf in ["Envelope", "Half chair"]))
+
+
+def apply_filters(df, filters):
+    for key in filters:
+        value = filters[key]
+        if value:
+            df = df[df[key].isin(value)]
+    return df

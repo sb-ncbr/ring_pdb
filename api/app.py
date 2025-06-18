@@ -6,7 +6,7 @@ import pandas as pd
 from flask_cors import CORS
 import io
 
-from utils import is_favorable, get_range_with_step, filter_by_conf
+from utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
 
 app = Flask(__name__,
             static_folder='dist/static',
@@ -40,14 +40,6 @@ def application(environ, start_response):
 @app.route('/')
 def home():
     return render_template('index.html')
-
-
-def apply_filters(df, filters):
-    for key in filters:
-        value = filters[key]
-        if value:
-            df = df[df[key].isin(value)]
-    return df
 
 @app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
