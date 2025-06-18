@@ -20,6 +20,7 @@ import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple
 import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import ringCards from '../content/ringCards.json';
 
 export const columnsData: ColumnDataMRT[] = [
   {
@@ -127,12 +128,14 @@ export const columnsData: ColumnDataMRT[] = [
       const ringTypeFilter: RingType[] | undefined = table
         .getState()
         .columnFilters.find((f: any) => f.id === 'ring_type')?.value;
-      console.log('ringTypeFilter: ', ringTypeFilter);
-      const conformationByRingType = {
-        Cyclohexane: ['Chair', 'Twist boat', 'Boat', 'Half chair', 'Flat'],
-        Benzene: ['Flat', 'Chair', 'Boat', 'Half chair'],
-        Cyclopentane: ['Envelope', 'Half chair', 'Flat'],
-      };
+
+      const conformationByRingType = ringCards.rings.reduce(
+        (acc, ring) => {
+          acc[ring.name] = ring.confs.map((conf) => conf.name);
+          return acc;
+        },
+        {} as Record<string, string[]>,
+      );
 
       // Determine selected ring types
       const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
@@ -147,7 +150,7 @@ export const columnsData: ColumnDataMRT[] = [
               ),
             ),
           )
-        : ['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat'];
+        : Array.from(new Set(Object.values(conformationByRingType).flat()));
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
         column.setFilterValue({
