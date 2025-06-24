@@ -10,7 +10,7 @@ import {
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
-import { columnsData } from '../data/columnData.tsx';
+import { getColumns } from '../data/columnData.tsx';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
@@ -27,6 +27,9 @@ import {
   combinedFilters,
   defaultFilterKeys,
   FilterKey,
+  level1Filters,
+  level2Filters,
+  level3Filters,
   sliderFilterKeys,
 } from '../helperFunctions/filters.tsx';
 import { exportAllData } from '../helperFunctions/helpers.ts';
@@ -39,38 +42,9 @@ const TableMRT = () => {
     ring_coverage: { min: 0, max: 50, step: 0.5 },
     rsr: { min: 0.1, max: 10, step: 0.1 },
     rscc: { min: 0, max: 5, step: 0.2 },
+    ligand_coverage: { min: 0, max: 100, step: 5 },
   });
   const [sliderResetCounter, setSliderResetCounter] = useState(0);
-
-  const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
-    const createFilter =
-      (key: FilterKey) =>
-      ({ column }: { column: any }) => (
-        <RangeSlider
-          filterBy={column.columnDef.header}
-          minVal={filterSliderRanges[key]?.min}
-          maxVal={filterSliderRanges[key]?.max}
-          step={filterSliderRanges[key]?.step}
-          disabled={filterSliderRanges[key]?.min === undefined}
-          value={column.getFilterValue() as [number, number]}
-          onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
-          }}
-          sliderResetCounter={sliderResetCounter}
-        />
-      );
-
-    return columnsData.map((column) => {
-      if (['resolution', 'ring_coverage', 'rsr', 'rscc'].includes(column.accessorKey)) {
-        return {
-          ...column,
-          Filter: createFilter(column.accessorKey as FilterKey),
-        };
-      }
-      return column;
-    }) as MRT_ColumnDef<RowData>[];
-  }, [filterSliderRanges]);
-
   const previousFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
         id, // columnKey
@@ -96,6 +70,35 @@ const TableMRT = () => {
   });
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
+    const createFilter =
+      (key: FilterKey) =>
+      ({ column }: { column: any }) => (
+        <RangeSlider
+          filterBy={column.columnDef.header}
+          minVal={filterSliderRanges[key]?.min}
+          maxVal={filterSliderRanges[key]?.max}
+          step={filterSliderRanges[key]?.step}
+          disabled={filterSliderRanges[key]?.min === undefined}
+          value={column.getFilterValue() as [number, number]}
+          onChange={(newSelectedValues) => {
+            column.setFilterValue(newSelectedValues);
+          }}
+          sliderResetCounter={sliderResetCounter}
+        />
+      );
+
+    return getColumns(columnFilters, setColumnFilters).map((column) => {
+      if (['resolution', 'ring_coverage', 'rsr', 'rscc'].includes(column.accessorKey)) {
+        return {
+          ...column,
+          Filter: createFilter(column.accessorKey as FilterKey),
+        };
+      }
+      return column;
+    }) as MRT_ColumnDef<RowData>[];
+  }, [columnFilters, filterSliderRanges]);
   const resetSliderFilters = () => {
     setSliderResetCounter((prev) => prev + 1);
     setColumnFilters((prevState) => {
@@ -123,7 +126,7 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log('Sending filters:', columnFilters);
+    // console.log('Sending filters:', columnFilters);
     axios
       .post(`${import.meta.env.VITE_API_URL}/api/data`, {
         pageIndex: pagination.pageIndex + 1,
@@ -161,6 +164,43 @@ const TableMRT = () => {
       setColumnVisibility(columnDefaultState);
     }
   }, [isCompactView]);
+
+  const handleColumnFiltersChange = (updater: any) => {
+    const newFilters = typeof updater === 'function' ? updater(columnFilters) : updater;
+
+    // Find what was changed
+    const changedFilterIds = newFilters
+      .filter(
+        (nf: any) =>
+          !columnFilters.some(
+            (oldFilters) => oldFilters.id === nf.id && oldFilters.value === nf.value,
+          ),
+      )
+      .map((f: any) => f.id);
+
+    // If any Level 1 filter changed → remove Level 2 + 3 filters
+    if (changedFilterIds.some((id: any) => level1Filters.includes(id))) {
+      const updatedFilters = newFilters.filter(
+        (f: any) => !level2Filters.includes(f.id) && !level3Filters.includes(f.id),
+      );
+      console.log('New filters:', newFilters);
+      console.log('Old filters:', columnFilters);
+      console.log('Changed Filter IDs:', changedFilterIds);
+      console.log('Updated filters with removed ones: ', updatedFilters);
+      setColumnFilters(updatedFilters);
+      return;
+    }
+
+    // If any Level 2 filter changed → remove Level 3 filters
+    if (changedFilterIds.some((id: any) => level2Filters.includes(id))) {
+      const updatedFilters = newFilters.filter((f: any) => !level3Filters.includes(f.id));
+      setColumnFilters(updatedFilters);
+      return;
+    }
+
+    // Otherwise just update normally
+    setColumnFilters(newFilters);
+  };
 
   const table = useMaterialReactTable({
     columns: memoizedColumns,
@@ -206,7 +246,7 @@ const TableMRT = () => {
     manualPagination: true,
     rowCount: totalRows,
     onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: handleColumnFiltersChange,
     paginationDisplayMode: 'default',
     initialState: {
       density: 'compact',

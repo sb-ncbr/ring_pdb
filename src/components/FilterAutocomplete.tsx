@@ -84,13 +84,18 @@ export default function FilterAutocomplete({
       })
       .then((response) => {
         setAllOptions(response.data);
-        console.log('DEBUG ', filterByLabel, response.data);
+        // console.log('DEBUG ', filterByLabel, response.data);
       })
       .catch((error) => {
         console.log('Error fetching data:', error);
         return;
       });
   }, [otherSelectedFilters]);
+
+  if (filterByLabel === 'PDB ID') {
+    console.log('DEBUG: ', selectedOptions);
+    console.log('DEBUG: ', selectedValues);
+  }
 
   return (
     <Box
@@ -105,7 +110,7 @@ export default function FilterAutocomplete({
         // limitTags={10}
         filterSelectedOptions
         filterOptions={filterOptionsMUI}
-        value={selectedOptions}
+        value={selectedValues}
         onChange={handleChange}
         options={allOptions}
         // getOptionLabel={(option) => option}

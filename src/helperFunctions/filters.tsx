@@ -1,6 +1,3 @@
-import { Box } from '@mui/material';
-import { MRT_TableHeadCellFilterContainer } from 'material-react-table';
-
 export type FilterKey = 'resolution' | 'ring_coverage' | 'ligand_coverage' | 'rsr' | 'rscc';
 export const columnDefaultState = {
   experimental_method: true,
@@ -21,3 +18,13 @@ export const advancedFilterKeys = [
 ];
 export const sliderFilterKeys = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
 export const combinedFilters = new Map(advancedFilterKeys.map((id) => [id, { id, value: [] }]));
+
+export const level1Filters = ['ring_type', 'conformation'];
+export const level2Filters = ['pdb_id', 'ccd_id', 'experimental_method'];
+export const level3Filters = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
+
+export interface ConformationValue {
+  selectedValues: string[];
+  showFavorable: boolean;
+  showUnfavorable: boolean;
+}

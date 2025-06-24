@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ColumnDataMRT, RingType } from './dataTypes';
+import { RingType, RowData } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
+import { MRT_Cell, MRT_Column, MRT_Row } from 'material-react-table';
 import {
   Chip,
   Dialog,
@@ -21,21 +22,25 @@ import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFu
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
+import { ConformationValue } from '../helperFunctions/filters.tsx';
 
-export const columnsData: ColumnDataMRT[] = [
+export const getColumns = (columnFilters: any, setColumnFilters: any) => [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    Filter: ({ column, table }: { column: any; table: any }) => {
-      const columnFilters = table.getState().columnFilters;
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
       const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'pdb_id');
       return (
         <FilterAutocomplete
           filterByLabel="PDB ID"
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            setColumnFilters(newFilters);
           }}
-          selectedValues={(column.getFilterValue() as string[]) || []}
           otherSelectedFilters={otherSelectedFilters}
         />
       );
@@ -44,7 +49,7 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: ({ column, table }: { column: any; table: any }) => {
+    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
       const columnFilters = table.getState().columnFilters;
       const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'ccd_id');
       return (
@@ -63,7 +68,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
     enableColumnFilter: false,
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -73,7 +78,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
       return (
         <FilterAutocompleteSimple
           options={ringCards.rings.map((ring) => ring.name)}
@@ -85,7 +90,7 @@ export const columnsData: ColumnDataMRT[] = [
         />
       );
     },
-    Cell: ({ cell }) => {
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
       return (
@@ -99,7 +104,7 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -109,7 +114,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING COVERAGE [%]',
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -119,8 +124,8 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    Filter: ({ column, table }: { column: any; table: any }) => {
-      const filterValue = column.getFilterValue() || {};
+    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
+      const filterValue = (column.getFilterValue() ?? {}) as Partial<ConformationValue>;
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
@@ -197,19 +202,7 @@ export const columnsData: ColumnDataMRT[] = [
         </Box>
       );
     },
-
-    filterFn: (row: any, columnId: any, filterValue: any) => {
-      const conf = row.original[columnId];
-      const ring = row.original.ring_type;
-      const favorable = isFavorable(ring, conf);
-
-      const { selectedValues = [], showFavorable = true, showUnfavorable = true } = filterValue;
-      const matchesAutocomplete = selectedValues.length === 0 || selectedValues.includes(conf);
-      const matchesSwitches = (favorable && showFavorable) || (!favorable && showUnfavorable);
-      return matchesAutocomplete && matchesSwitches;
-    },
-
-    Cell: ({ row }) => {
+    Cell: ({ row }: { row: MRT_Row<RowData> }) => {
       const conf = row.original.conformation;
       const ring = row.original.ring_type;
       const favorable = isFavorable(ring, conf);
@@ -242,7 +235,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RMSD [Å]',
     accessorKey: 'rmsd',
     enableColumnFilter: false,
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -252,7 +245,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: ({ column, table }: { column: any; table: any }) => {
+    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
       const columnFilters = table.getState().columnFilters;
       const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'experimental_method');
       return (
@@ -267,7 +260,7 @@ export const columnsData: ColumnDataMRT[] = [
         />
       );
     },
-    Cell: ({ cell }) => {
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => {
       const text = cell.getValue<string>();
       return (
         <Box
@@ -295,7 +288,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RSR',
     accessorKey: 'rsr',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -305,7 +298,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RSCC',
     accessorKey: 'rscc',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -315,7 +308,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'LIGAND COVERAGE [%]',
     accessorKey: 'ligand_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -326,7 +319,7 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'img_url',
     enableSorting: false,
     enableColumnFilter: false,
-    Cell: ({ cell, row }) => {
+    Cell: ({ cell, row }: { cell: MRT_Cell<RowData>; row: any }) => {
       const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(
         null,
       );
