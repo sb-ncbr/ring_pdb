@@ -30,7 +30,7 @@ export default function FilterAutocomplete({
   const [allOptions, setAllOptions] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []); // check this later, selectedOption now not used in values!!!
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   // Function to filter options based on the input value
@@ -91,11 +91,6 @@ export default function FilterAutocomplete({
         return;
       });
   }, [otherSelectedFilters]);
-
-  if (filterByLabel === 'PDB ID') {
-    console.log('DEBUG: ', selectedOptions);
-    console.log('DEBUG: ', selectedValues);
-  }
 
   return (
     <Box

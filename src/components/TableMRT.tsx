@@ -81,9 +81,18 @@ const TableMRT = () => {
           maxVal={filterSliderRanges[key]?.max}
           step={filterSliderRanges[key]?.step}
           disabled={filterSliderRanges[key]?.min === undefined}
-          value={column.getFilterValue() as [number, number]}
+          value={
+            columnFilters.find((f: any) => f.id === key)?.value || [
+              filterSliderRanges[key]?.min ?? 0,
+              filterSliderRanges[key]?.max ?? 0,
+            ]
+          }
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = columnFilters.filter((f) => f.id !== key);
+            if (newSelectedValues && newSelectedValues.length) {
+              newFilters.push({ id: key, value: newSelectedValues });
+            }
+            setColumnFilters(newFilters);
           }}
           sliderResetCounter={sliderResetCounter}
         />
@@ -173,33 +182,41 @@ const TableMRT = () => {
       .filter(
         (nf: any) =>
           !columnFilters.some(
-            (oldFilters) => oldFilters.id === nf.id && oldFilters.value === nf.value,
+            (oldFilters) =>
+              oldFilters.id === nf.id &&
+              JSON.stringify(oldFilters.value) === JSON.stringify(nf.value),
           ),
       )
       .map((f: any) => f.id);
+    console.log('Changed Filter IDs:', changedFilterIds);
 
     // If any Level 1 filter changed → remove Level 2 + 3 filters
     if (changedFilterIds.some((id: any) => level1Filters.includes(id))) {
       const updatedFilters = newFilters.filter(
         (f: any) => !level2Filters.includes(f.id) && !level3Filters.includes(f.id),
       );
-      console.log('New filters:', newFilters);
-      console.log('Old filters:', columnFilters);
-      console.log('Changed Filter IDs:', changedFilterIds);
-      console.log('Updated filters with removed ones: ', updatedFilters);
       setColumnFilters(updatedFilters);
+      setSliderResetCounter((prev) => prev + 1);
+      console.log('HERE');
       return;
     }
 
     // If any Level 2 filter changed → remove Level 3 filters
     if (changedFilterIds.some((id: any) => level2Filters.includes(id))) {
       const updatedFilters = newFilters.filter((f: any) => !level3Filters.includes(f.id));
+      console.log('New filters:', newFilters);
+      console.log('Old filters:', columnFilters);
+
+      console.log('Updated filters with removed ones: ', updatedFilters);
       setColumnFilters(updatedFilters);
+      setSliderResetCounter((prev) => prev + 1);
+      console.log('HERE 2');
       return;
     }
 
     // Otherwise just update normally
     setColumnFilters(newFilters);
+    console.log('HERE 3');
   };
 
   const table = useMaterialReactTable({

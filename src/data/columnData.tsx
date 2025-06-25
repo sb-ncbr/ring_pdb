@@ -49,16 +49,19 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
-      const columnFilters = table.getState().columnFilters;
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
       const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'ccd_id');
       return (
         <FilterAutocomplete
           filterByLabel="CCD ID"
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            setColumnFilters(newFilters);
           }}
-          selectedValues={(column.getFilterValue() as string[]) || []}
           otherSelectedFilters={otherSelectedFilters}
         />
       );
@@ -245,16 +248,19 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
-      const columnFilters = table.getState().columnFilters;
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
       const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'experimental_method');
       return (
         <FilterAutocompleteSimple
           options={[]}
           filterByLabel="experimental method"
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            setColumnFilters(newFilters);
           }}
           otherSelectedFilters={otherSelectedFilters}
         />
