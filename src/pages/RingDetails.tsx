@@ -421,7 +421,6 @@ function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel })
         />
       }
       label="Show electron density"
-      title={disableElectronDensity ? 'PDB entry has many models' : ''}
       sx={{
         '& .MuiTypography-root': {
           whiteSpace: 'nowrap',
