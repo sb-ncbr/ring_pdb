@@ -1,4 +1,4 @@
-import { Model, QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
+import { QueryContext, StructureSelection } from 'molstar/lib/commonjs/mol-model/structure';
 import { StructureSelectionQuery } from 'molstar/lib/commonjs/mol-plugin-state/helpers/structure-selection-query';
 import { PluginUIContext } from 'molstar/lib/commonjs/mol-plugin-ui/context';
 import { DefaultPluginUISpec, PluginUISpec } from 'molstar/lib/commonjs/mol-plugin-ui/spec';
@@ -34,6 +34,7 @@ interface CellRefs {
 export default class MolstarViewerModel {
   private readonly _plugin: PluginUIContext;
   private readonly _volumeStreamingTag = 'volume-streaming';
+  private readonly _volumeServer = 'https://www.ebi.ac.uk/pdbe/volume-server';
   private _cellRefs: CellRefs = {};
   private _subscriptions: Subscription[] = [];
 
@@ -43,7 +44,7 @@ export default class MolstarViewerModel {
     isInitialized: new BehaviorSubject<boolean>(false),
     isLoading: new BehaviorSubject<boolean>(false),
     showElectronDensity: new BehaviorSubject<boolean>(false),
-    disableElectronDensity: new BehaviorSubject<boolean>(false),
+    disableElectronDensity: new BehaviorSubject<boolean>(true),
     showBallAndStick: new BehaviorSubject<boolean>(false),
   };
 
@@ -154,10 +155,8 @@ export default class MolstarViewerModel {
       return;
     }
 
-    // check if trajectory has more models
-    const count = Model.TrajectoryInfo.get(model?.cell?.obj?.data).size;
-    const disable = count > 1 || !this._canCreateDensity();
-    this.state.disableElectronDensity.next(disable);
+    const fetchable = await this._canFetchDensity(pdbId);
+    this.state.disableElectronDensity.next(!fetchable);
 
     // create components
     const polymer = await this._plugin.builders.structure.tryCreateComponentStatic(
@@ -285,7 +284,7 @@ export default class MolstarViewerModel {
       if (!this._wasDensityCreated()) {
         PluginCommands.Toast.Show(this.plugin, {
           title: 'Error',
-          message: 'No density data available',
+          message: 'Failed to create density',
           key: 'toast-custom',
         });
 
@@ -314,7 +313,7 @@ export default class MolstarViewerModel {
     const params = InitVolumeStreaming.createDefaultParams(asm, this._plugin);
     params.defaultView = 'auto';
     params.options.behaviorRef = this._volumeStreamingTag;
-    params.options.serverUrl = 'https://www.ebi.ac.uk/pdbe/volume-server/';
+    params.options.serverUrl = this._volumeServer;
 
     await this._plugin.runTask(
       this._plugin.state.data.applyAction(
@@ -330,12 +329,14 @@ export default class MolstarViewerModel {
     this.state.isLoading.next(false);
   }
 
-  private _canCreateDensity() {
-    const { selection } = this.plugin.managers.structure.hierarchy;
-    if (selection.structures.length !== 1) return false;
-    const pivot = this.plugin.managers.structure.hierarchy.selection.structures[0].cell;
-    if (!pivot.obj) return false;
-    return !!InitVolumeStreaming.definition.isApplicable?.(pivot.obj, pivot.transform, this.plugin);
+  private async _canFetchDensity(pdbId: string) {
+    const url = `${this._volumeServer}/x-ray/${pdbId}`;
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
   }
 
   private _wasDensityCreated() {
