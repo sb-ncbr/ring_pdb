@@ -22,9 +22,8 @@ import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFu
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
-import { ConformationValue } from '../helperFunctions/filters.tsx';
 
-export const getColumns = (columnFilters: any, setColumnFilters: any) => [
+export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) => [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
@@ -39,7 +38,7 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
               ...columnFilters.filter((f: any) => f.id !== column.id),
               { id: column.id, value: newSelectedValues },
             ];
-            setColumnFilters(newFilters);
+            handleColumnFiltersChange(newFilters);
           }}
           otherSelectedFilters={otherSelectedFilters}
         />
@@ -60,7 +59,7 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
               ...columnFilters.filter((f: any) => f.id !== column.id),
               { id: column.id, value: newSelectedValues },
             ];
-            setColumnFilters(newFilters);
+            handleColumnFiltersChange(newFilters);
           }}
           otherSelectedFilters={otherSelectedFilters}
         />
@@ -82,13 +81,18 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
     accessorKey: 'ring_type',
     enableSorting: false,
     Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+      const selectedValues = columnFilters.find((f: any) => f.id === column.id)?.value || [];
       return (
         <FilterAutocompleteSimple
           options={ringCards.rings.map((ring) => ring.name)}
           filterByLabel="ring type"
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          selectedValues={selectedValues}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            handleColumnFiltersChange(newFilters);
           }}
         />
       );
@@ -128,7 +132,12 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
     accessorKey: 'conformation',
     enableSorting: false,
     Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
-      const filterValue = (column.getFilterValue() ?? {}) as Partial<ConformationValue>;
+      const filterValue =
+        columnFilters.find((f: any) => {
+          console.log(f.id);
+          return f.id === column.id;
+        })?.value || [];
+      console.log('filterValue: ', filterValue);
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
@@ -161,17 +170,19 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
         : Array.from(new Set(Object.values(conformationByRingType).flat()));
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
-        column.setFilterValue({
-          ...filterValue,
-          [key]: value,
-        });
-      };
+        const currentFilterValue = columnFilters.find((f: any) => f.id === column.id)?.value || {};
 
-      const handleAutocompleteChange = (newSelectedValues: string[]) => {
-        column.setFilterValue({
-          ...filterValue,
-          selectedValues: newSelectedValues,
-        });
+        const newFilterValue = {
+          ...currentFilterValue,
+          [key]: value,
+        };
+
+        const newFilters = [
+          ...columnFilters.filter((f: any) => f.id !== column.id),
+          { id: column.id, value: newFilterValue },
+        ];
+
+        handleColumnFiltersChange(newFilters);
       };
 
       return (
@@ -180,7 +191,19 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
             options={options}
             filterByLabel="conformation"
             selectedValues={selectedValues}
-            onChange={handleAutocompleteChange}
+            onChange={(newSelectedValues) => {
+              const newFilters = [
+                ...columnFilters.filter((f: any) => f.id !== column.id),
+                {
+                  id: column.id,
+                  value: {
+                    ...filterValue,
+                    selectedValues: newSelectedValues,
+                  },
+                },
+              ];
+              handleColumnFiltersChange(newFilters);
+            }}
           />
           <FormGroup row>
             <FormControlLabel
@@ -260,7 +283,7 @@ export const getColumns = (columnFilters: any, setColumnFilters: any) => [
               ...columnFilters.filter((f: any) => f.id !== column.id),
               { id: column.id, value: newSelectedValues },
             ];
-            setColumnFilters(newFilters);
+            handleColumnFiltersChange(newFilters);
           }}
           otherSelectedFilters={otherSelectedFilters}
         />

@@ -64,12 +64,12 @@ export default function RangeSlider({
   }, [sliderResetCounter]);
 
   useEffect(() => {
-    const newCurretnValue =
+    const newCurrentValue =
       value && value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number'
         ? value
         : [minVal, maxVal];
     // sync internal value when parent changes
-    setInternalValue(newCurretnValue as [number, number]);
+    setInternalValue(newCurrentValue as [number, number]);
   }, [value]);
 
   const debouncedChange = useMemo(
