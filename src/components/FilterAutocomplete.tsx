@@ -6,20 +6,31 @@ import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import { RingType } from '../data/dataTypes.ts';
+
+export type OtherSelectedFiltersType = {
+  ring_type: RingType[];
+  conformation: string[];
+  pdb_id: string[];
+  ccd_id: string[];
+  experimental_method: string[];
+};
 
 export default function FilterAutocomplete({
   filterByLabel,
   onChange,
   selectedValues,
+  otherSelectedFilters,
 }: {
   filterByLabel: string;
   onChange: (newValue: any) => void;
   selectedValues: string[];
+  otherSelectedFilters: OtherSelectedFiltersType;
 }) {
   const [allOptions, setAllOptions] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []); // check this later, selectedOption now not used in values!!!
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   // Function to filter options based on the input value
@@ -68,15 +79,18 @@ export default function FilterAutocomplete({
 
   useEffect(() => {
     axios
-      .get(url)
+      .post(url, {
+        otherFilters: otherSelectedFilters,
+      })
       .then((response) => {
         setAllOptions(response.data);
+        // console.log('DEBUG ', filterByLabel, response.data);
       })
       .catch((error) => {
         console.log('Error fetching data:', error);
         return;
       });
-  }, []);
+  }, [otherSelectedFilters]);
 
   return (
     <Box
@@ -91,7 +105,7 @@ export default function FilterAutocomplete({
         // limitTags={10}
         filterSelectedOptions
         filterOptions={filterOptionsMUI}
-        value={selectedOptions}
+        value={selectedValues}
         onChange={handleChange}
         options={allOptions}
         // getOptionLabel={(option) => option}

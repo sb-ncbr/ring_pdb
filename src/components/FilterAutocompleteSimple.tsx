@@ -6,21 +6,45 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useTheme } from '@mui/material/styles';
 import { getChipStyles } from '../helperFunctions/helpers.ts';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { OtherSelectedFiltersType } from './FilterAutocomplete.tsx';
 
 export const FilterAutocompleteSimple = ({
   options,
   filterByLabel,
   selectedValues,
   onChange,
+  otherSelectedFilters,
 }: {
   options: string[];
   filterByLabel: string;
   selectedValues: string[];
   onChange: (newValue: any) => void;
+  otherSelectedFilters?: OtherSelectedFiltersType;
 }) => {
+  // only for experimental method
+  const [allOptions, setAllOptions] = useState([]);
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const theme = useTheme();
+
+  useEffect(() => {
+    if (filterByLabel === 'experimental method') {
+      axios
+        .post(`${import.meta.env.VITE_API_URL}/api/get_methods`, {
+          otherFilters: otherSelectedFilters,
+        })
+        .then((response) => {
+          setAllOptions(response.data);
+        })
+        .catch((error) => {
+          console.log('Error fetching data:', error);
+          return;
+        });
+    }
+  }, [otherSelectedFilters]);
+
   return (
     <Box
       sx={{
@@ -31,7 +55,7 @@ export const FilterAutocompleteSimple = ({
       <Autocomplete<string, true, false, false>
         multiple
         disableCloseOnSelect
-        options={options}
+        options={filterByLabel === 'experimental method' ? allOptions : options}
         value={selectedValues}
         // getOptionLabel={(option) => option as string}
         onChange={(_e, newValue) => {

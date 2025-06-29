@@ -6,7 +6,7 @@ import pandas as pd
 from flask_cors import CORS
 import io
 
-from utils import is_favorable, get_range_with_step, filter_by_conf
+from utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
 
 app = Flask(__name__,
             static_folder='dist/static',
@@ -41,17 +41,29 @@ def application(environ, start_response):
 def home():
     return render_template('index.html')
 
-
-@app.route('/api/get_pdb_ids', methods=['GET'])
+@app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
-    pdb_ids = data['pdb_id'].unique().tolist()
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    filtered_data = apply_filters(data, other_filters)
+    pdb_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(pdb_ids), 200
 
-
-@app.route('/api/get_ccd_ids', methods=['GET'])
+@app.route('/api/get_ccd_ids', methods=['POST'])
 def get_ccd_ids():
-    ccd_ids = data['ccd_id'].unique().tolist()
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    filtered_data = apply_filters(data, other_filters)
+    ccd_ids = filtered_data['ccd_id'].unique().tolist()
     return jsonify(ccd_ids), 200
+
+@app.route('/api/get_methods', methods=['POST'])
+def get_methods():
+    received_data = request.json
+    other_filters = received_data.get("otherFilters", {})
+    filtered_data = apply_filters(data, other_filters)
+    methods = filtered_data['experimental_method'].unique().tolist()
+    return jsonify(methods), 200
 
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():
@@ -141,8 +153,8 @@ def get_paginated_data():
 def get_row_data():
     ring_id = request.args.get('ringID')
 
-    print(ring_id)
-    print(data.head())
+    # print(ring_id)
+    # print(data.head())
 
     if not ring_id:
         return jsonify({"error": "ringID parameter is required"}), 400

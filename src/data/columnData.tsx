@@ -1,6 +1,8 @@
-import { ColumnDataMRT } from './dataTypes';
+import React, { useState } from 'react';
+import { RingType, RowData } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
+import { MRT_Cell, MRT_Column, MRT_Row } from 'material-react-table';
 import {
   Chip,
   Dialog,
@@ -16,23 +18,29 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import React, { useState } from 'react';
-import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
+import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import ringCards from '../content/ringCards.json';
 
-export const columnsData: ColumnDataMRT[] = [
+export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) => [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'pdb_id');
       return (
         <FilterAutocomplete
           filterByLabel="PDB ID"
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            handleColumnFiltersChange(newFilters);
           }}
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },
@@ -40,14 +48,20 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'ccd_id');
       return (
         <FilterAutocomplete
           filterByLabel="CCD ID"
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            handleColumnFiltersChange(newFilters);
           }}
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },
@@ -56,7 +70,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
     enableColumnFilter: false,
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -66,19 +80,24 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+      const selectedValues = columnFilters.find((f: any) => f.id === column.id)?.value || [];
       return (
         <FilterAutocompleteSimple
-          options={['Cyclohexane', 'Cyclopentane', 'Benzene']}
+          options={ringCards.rings.map((ring) => ring.name)}
           filterByLabel="ring type"
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          selectedValues={selectedValues}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            handleColumnFiltersChange(newFilters);
           }}
         />
       );
     },
-    Cell: ({ cell }) => {
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => {
       const ringType = cell.getValue<string>();
       const theme = useTheme();
       return (
@@ -92,7 +111,7 @@ export const columnsData: ColumnDataMRT[] = [
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -102,7 +121,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RING COVERAGE [%]',
     accessorKey: 'ring_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -112,33 +131,77 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'CONFORMATION',
     accessorKey: 'conformation',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
-      const filterValue = column.getFilterValue() || {};
+    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
+      const filterValue =
+        columnFilters.find((f: any) => {
+          return f.id === column.id;
+        })?.value || [];
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
 
-      const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
-        column.setFilterValue({
-          ...filterValue,
-          [key]: value,
-        });
-      };
+      const ringTypeFilter: RingType[] | undefined = table
+        .getState()
+        .columnFilters.find((f: any) => f.id === 'ring_type')?.value;
 
-      const handleAutocompleteChange = (newSelectedValues: string[]) => {
-        column.setFilterValue({
-          ...filterValue,
-          selectedValues: newSelectedValues,
-        });
+      const conformationByRingType = ringCards.rings.reduce(
+        (acc, ring) => {
+          acc[ring.name] = ring.confs.map((conf) => conf.name);
+          return acc;
+        },
+        {} as Record<string, string[]>,
+      );
+
+      // Determine selected ring types
+      const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
+
+      const ringTypes = Object.keys(conformationByRingType) as RingType[];
+      // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
+      const options = selectedRingTypes.length
+        ? Array.from(
+            new Set(
+              selectedRingTypes.flatMap((rt) =>
+                ringTypes.includes(rt) ? conformationByRingType[rt as RingType] : [],
+              ),
+            ),
+          )
+        : Array.from(new Set(Object.values(conformationByRingType).flat()));
+
+      const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
+        const currentFilterValue = columnFilters.find((f: any) => f.id === column.id)?.value || {};
+
+        const newFilterValue = {
+          ...currentFilterValue,
+          [key]: value,
+        };
+
+        const newFilters = [
+          ...columnFilters.filter((f: any) => f.id !== column.id),
+          { id: column.id, value: newFilterValue },
+        ];
+
+        handleColumnFiltersChange(newFilters);
       };
 
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <FilterAutocompleteSimple
-            options={['Boat', 'Envelope', 'Chair', 'Half chair', 'Flat', 'Twist boat']}
+            options={options}
             filterByLabel="conformation"
             selectedValues={selectedValues}
-            onChange={handleAutocompleteChange}
+            onChange={(newSelectedValues) => {
+              const newFilters = [
+                ...columnFilters.filter((f: any) => f.id !== column.id),
+                {
+                  id: column.id,
+                  value: {
+                    ...filterValue,
+                    selectedValues: newSelectedValues,
+                  },
+                },
+              ];
+              handleColumnFiltersChange(newFilters);
+            }}
           />
           <FormGroup row>
             <FormControlLabel
@@ -163,19 +226,7 @@ export const columnsData: ColumnDataMRT[] = [
         </Box>
       );
     },
-
-    filterFn: (row: any, columnId: any, filterValue: any) => {
-      const conf = row.original[columnId];
-      const ring = row.original.ring_type;
-      const favorable = isFavorable(ring, conf);
-
-      const { selectedValues = [], showFavorable = true, showUnfavorable = true } = filterValue;
-      const matchesAutocomplete = selectedValues.length === 0 || selectedValues.includes(conf);
-      const matchesSwitches = (favorable && showFavorable) || (!favorable && showUnfavorable);
-      return matchesAutocomplete && matchesSwitches;
-    },
-
-    Cell: ({ row }) => {
+    Cell: ({ row }: { row: MRT_Row<RowData> }) => {
       const conf = row.original.conformation;
       const ring = row.original.ring_type;
       const favorable = isFavorable(ring, conf);
@@ -208,7 +259,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RMSD [Å]',
     accessorKey: 'rmsd',
     enableColumnFilter: false,
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -218,28 +269,25 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
     enableSorting: false,
-    Filter: ({ column }: { column: any }) => {
+    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+      const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'experimental_method');
       return (
         <FilterAutocompleteSimple
-          options={[
-            'X-ray diffraction',
-            'Solution NMR',
-            'Electron microscopy',
-            'Electron crystallography',
-            'Solid-state NMR',
-            'Solution scattering',
-            'Neutron diffraction',
-            'Powder diffraction',
-          ]}
+          options={[]}
           filterByLabel="experimental method"
-          selectedValues={(column.getFilterValue() as string[]) || []}
+          selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
           onChange={(newSelectedValues) => {
-            column.setFilterValue(newSelectedValues);
+            const newFilters = [
+              ...columnFilters.filter((f: any) => f.id !== column.id),
+              { id: column.id, value: newSelectedValues },
+            ];
+            handleColumnFiltersChange(newFilters);
           }}
+          otherSelectedFilters={otherSelectedFilters}
         />
       );
     },
-    Cell: ({ cell }) => {
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => {
       const text = cell.getValue<string>();
       return (
         <Box
@@ -267,7 +315,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RSR',
     accessorKey: 'rsr',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -277,7 +325,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'RSCC',
     accessorKey: 'rscc',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -287,7 +335,7 @@ export const columnsData: ColumnDataMRT[] = [
     header: 'LIGAND COVERAGE [%]',
     accessorKey: 'ligand_coverage',
     filterVariant: 'text',
-    Cell: ({ cell }) => (
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
       </Box>
@@ -298,7 +346,7 @@ export const columnsData: ColumnDataMRT[] = [
     accessorKey: 'img_url',
     enableSorting: false,
     enableColumnFilter: false,
-    Cell: ({ cell, row }) => {
+    Cell: ({ cell, row }: { cell: MRT_Cell<RowData>; row: any }) => {
       const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(
         null,
       );
