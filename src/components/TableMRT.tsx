@@ -115,7 +115,11 @@ const TableMRT = () => {
       );
 
     return getColumns(columnFilters, handleColumnFiltersChange).map((column) => {
-      if (['resolution', 'ring_coverage', 'rsr', 'rscc'].includes(column.accessorKey)) {
+      if (
+        ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'].includes(
+          column.accessorKey,
+        )
+      ) {
         return {
           ...column,
           Filter: createFilter(column.accessorKey as FilterKey),

@@ -134,10 +134,8 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
     Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
       const filterValue =
         columnFilters.find((f: any) => {
-          console.log(f.id);
           return f.id === column.id;
         })?.value || [];
-      console.log('filterValue: ', filterValue);
       const selectedValues = filterValue.selectedValues || [];
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
