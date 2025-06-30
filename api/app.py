@@ -133,8 +133,7 @@ def get_paginated_data():
 
     filters_value_range = {
         'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
-        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_float']*100),
-        # 'ring_coverage': get_range_with_step(sorted_data['ring_coverage'].str.replace('%', '').astype(float)),
+        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_float'] * 100, 'ring_coverage_float'),
         # 'ligand_coverage': {},
         'rsr': get_range_with_step(data_for_calc_ranges['rsr']),
         'rscc': get_range_with_step(data_for_calc_ranges['rscc']),
@@ -236,8 +235,9 @@ def export_data():
             print('Error occurred while sorting: ', e)
 
     sorted_data.fillna('N/A')
+    export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_counts'], axis=1)
 
-    csv_string = sorted_data.to_csv(index=False)
+    csv_string = export_data.to_csv(index=False)
     csv_bytes = io.BytesIO(csv_string.encode('utf-8'))
     csv_bytes.seek(0)
 

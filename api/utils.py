@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Dict, List
 
-def get_range_with_step(data_series):
+def get_range_with_step(data_series, column_name=None):
     """Calculate min, max, and step while handling NaN values."""
     min_value = data_series.min()
     max_value = data_series.max()
@@ -10,6 +10,12 @@ def get_range_with_step(data_series):
         return {}
     else:
         step = 0.01
+
+        if column_name == 'ring_coverage_float':
+            min_value = round(min_value, 0)
+            max_value = round(max_value, 0)
+            step = 1
+
         return {'min': min_value, 'max': max_value, 'step': step}
 
 
