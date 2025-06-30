@@ -24,19 +24,20 @@ def filter_by_conf(value: Dict[str, List[str] | bool], filtered_data):
     show_favorable = value.get('showFavorable', True)
     show_unfavorable = value.get('showUnfavorable', True)
 
-    if selected_values:
-        return filtered_data[filtered_data['conformation'].isin(selected_values)]
+    if not (show_favorable or show_unfavorable):
+        return filtered_data.iloc[0:0]
 
-    favorability_mask = filtered_data.apply(
-        lambda row: is_favorable(row['ring_type'], row['conformation']), axis=1
-    )
+    if selected_values:
+        filtered_data = filtered_data[filtered_data['conformation'].isin(selected_values)]
+
     if not (show_favorable and show_unfavorable):
+        favorability_mask = filtered_data.apply(
+            lambda row: is_favorable(row['ring_type'], row['conformation']), axis=1
+        )
         if show_favorable:
             filtered_data = filtered_data[favorability_mask]
         elif show_unfavorable:
             filtered_data = filtered_data[~favorability_mask]
-        else:
-            filtered_data = filtered_data.iloc[0:0]
 
     return filtered_data
 
