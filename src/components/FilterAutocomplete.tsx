@@ -7,10 +7,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import { RingType } from '../data/dataTypes.ts';
+import { ConformationValue } from '../helperFunctions/filters.tsx';
 
 export type OtherSelectedFiltersType = {
   ring_type: RingType[];
-  conformation: string[];
+  conformation: ConformationValue;
   pdb_id: string[];
   ccd_id: string[];
   experimental_method: string[];

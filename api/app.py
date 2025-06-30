@@ -45,6 +45,7 @@ def home():
 def get_pdb_ids():
     received_data = request.json
     other_filters = received_data.get("otherFilters", {})
+    print(other_filters)
     filtered_data = apply_filters(data, other_filters)
     pdb_ids = filtered_data['pdb_id'].unique().tolist()
     return jsonify(pdb_ids), 200

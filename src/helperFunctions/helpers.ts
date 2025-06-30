@@ -38,14 +38,35 @@ export const getOtherSelectedFilters = (
     'experimental_method',
   ];
 
-  return filterKeys.reduce((acc, key) => {
+  const result = {} as OtherSelectedFiltersType;
+
+  filterKeys.forEach((key) => {
     const value = columnFilters.find((f: any) => f.id === key)?.value;
-    acc[key] = key === 'conformation' && value?.selectedValues ? value.selectedValues : value;
+
     if (key === excludeKey) {
-      acc[key] = [];
+      if (key === 'conformation') {
+        result[key] = {
+          selectedValues: [],
+          showFavorable: true,
+          showUnfavorable: true,
+        };
+      } else {
+        result[key] = [];
+      }
+    } else {
+      result[key] =
+        value ??
+        (key === 'conformation'
+          ? {
+              selectedValues: [],
+              showFavorable: true,
+              showUnfavorable: true,
+            }
+          : []);
     }
-    return acc;
-  }, {} as OtherSelectedFiltersType);
+  });
+
+  return result;
 };
 
 export function formatNumber(num: number) {

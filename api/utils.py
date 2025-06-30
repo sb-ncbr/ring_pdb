@@ -48,8 +48,36 @@ def is_favorable(ring, conf):
 
 
 def apply_filters(df, filters):
-    for key in filters:
-        value = filters[key]
-        if value:
-            df = df[df[key].isin(value)]
+    for key, value in filters.items():
+        if not value:
+            continue
+
+        if key == 'conformation':
+            selected_values = value.get('selectedValues', [])
+            show_favorable = value.get('showFavorable', True)
+            show_unfavorable = value.get('showUnfavorable', True)
+
+            # Apply selectedValues filter if any
+            if selected_values:
+                df = df[df['conformation'].isin(selected_values)]
+
+            # Then apply favorable/unfavorable toggles if not both True
+            if not (show_favorable and show_unfavorable):
+                favorability_mask = df.apply(
+                    lambda row: is_favorable(row['ring_type'], row['conformation']), axis=1
+                )
+                if show_favorable and not show_unfavorable:
+                    df = df[favorability_mask]
+                elif show_unfavorable and not show_favorable:
+                    df = df[~favorability_mask]
+                else:
+                    df = df.iloc[0:0]
+
+        else:
+            # Regular list-like filter check
+            if isinstance(value, (list, tuple, set)):
+                df = df[df[key].isin(value)]
+            else:
+                print(f"Warning: unexpected filter format for {key}, skipping.")
+
     return df
