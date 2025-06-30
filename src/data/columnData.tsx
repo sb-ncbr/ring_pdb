@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RingType, RowData } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
@@ -140,6 +140,26 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
       const showFavorable = filterValue.showFavorable ?? true;
       const showUnfavorable = filterValue.showUnfavorable ?? true;
 
+      const [isFavorableDisabled, setIsFavorableDisabled] = useState(false);
+      const [isUnfavorableDisabled, setIsUnfavorableDisabled] = useState(false);
+
+      function isFavorable(ring: string, conf: string): boolean {
+        const ringEntry = ringCards.rings.find((item) => item.name === ring);
+        if (!ringEntry) return false;
+        const confEntry = ringEntry.confs.find((c) => c.name === conf);
+        return confEntry?.favorable ?? false;
+      }
+
+      function hasFavorableCombination(rings: string[], conformations: string[]): boolean {
+        if (conformations.length === 0) return true;
+        return rings.some((ring) => conformations.some((conf) => isFavorable(ring, conf)));
+      }
+
+      function hasUnfavorableCombination(rings: string[], conformations: string[]): boolean {
+        if (conformations.length === 0) return true;
+        return rings.some((ring) => conformations.some((conf) => !isFavorable(ring, conf)));
+      }
+
       const ringTypeFilter: RingType[] | undefined = table
         .getState()
         .columnFilters.find((f: any) => f.id === 'ring_type')?.value;
@@ -166,6 +186,14 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
             ),
           )
         : Array.from(new Set(Object.values(conformationByRingType).flat()));
+
+      useEffect(() => {
+        const noFavorable = !hasFavorableCombination(selectedRingTypes, selectedValues);
+        const noUnfavorable = !hasUnfavorableCombination(selectedRingTypes, selectedValues);
+
+        setIsFavorableDisabled(noFavorable);
+        setIsUnfavorableDisabled(noUnfavorable);
+      }, [columnFilters, selectedRingTypes]);
 
       const handleSwitchChange = (key: 'showFavorable' | 'showUnfavorable', value: boolean) => {
         const currentFilterValue = columnFilters.find((f: any) => f.id === column.id)?.value || {};
@@ -207,6 +235,7 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
             <FormControlLabel
               control={
                 <Switch
+                  disabled={isFavorableDisabled}
                   checked={showFavorable}
                   onChange={(e) => handleSwitchChange('showFavorable', e.target.checked)}
                 />
@@ -217,6 +246,7 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
               control={
                 <Switch
                   checked={showUnfavorable}
+                  disabled={isUnfavorableDisabled}
                   onChange={(e) => handleSwitchChange('showUnfavorable', e.target.checked)}
                 />
               }
