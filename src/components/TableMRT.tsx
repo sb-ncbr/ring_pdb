@@ -47,17 +47,12 @@ const TableMRT = () => {
     ligand_coverage: { min: 0, max: 100, step: 5 },
   });
   const [sliderResetCounter, setSliderResetCounter] = useState(0);
-  const previousFilters: { id: string; value: any }[] = location.state?.filters
+  const initialFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
-        id, // columnKey
+        id,
         value,
       }))
-    : [];
-
-  previousFilters.forEach((filter) => {
-    combinedFilters.set(filter.id, filter);
-  });
-  const initialFilters = Array.from(combinedFilters.values());
+    : Array.from(combinedFilters.values());
 
   const [data, setData] = useState<APIData[]>([]);
   const [isError, setIsError] = useState(false);
