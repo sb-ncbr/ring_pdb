@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RingType, RowData } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { MRT_Cell, MRT_Column, MRT_Row } from 'material-react-table';
+import { MRT_Cell, MRT_Column, MRT_Row, MRT_ColumnDef } from 'material-react-table';
 import {
   Chip,
   Dialog,
@@ -22,8 +22,9 @@ import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFu
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
+import { TableCellProps } from '@mui/material';
 
-export const commonHeadCellProps = {
+export const commonHeadCellProps: TableCellProps = {
   align: 'center',
   sx: {
     fontSize: '0.8rem',
@@ -40,7 +41,10 @@ export const commonBodyCellProps = {
   },
 };
 
-export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) => [
+export const getColumns = (
+  columnFilters: any,
+  handleColumnFiltersChange: any,
+): MRT_ColumnDef<RowData>[] => [
   {
     header: 'PDB ID',
     accessorKey: 'pdb_id',
