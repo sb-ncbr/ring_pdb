@@ -10,7 +10,7 @@ import {
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
-import { getColumns } from '../data/columnData.tsx';
+import { commonBodyCellProps, commonHeadCellProps, getColumns } from '../data/columnData.tsx';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
@@ -199,13 +199,10 @@ const TableMRT = () => {
       maxSize: 100,
       size: 10,
       muiTableHeadCellProps: {
-        align: 'center',
-        sx: {
-          fontSize: '0.8rem',
-          fontWeight: '300',
-          maxWidth: '100px',
-          verticalAlign: 'middle',
-        },
+        ...commonHeadCellProps,
+      },
+      muiTableBodyCellProps: {
+        ...commonBodyCellProps,
       },
       muiFilterTextFieldProps: {
         sx: {

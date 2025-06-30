@@ -23,6 +23,23 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
 
+export const commonHeadCellProps = {
+  align: 'center',
+  sx: {
+    fontSize: '0.8rem',
+    fontWeight: '300',
+    maxWidth: '100px',
+    verticalAlign: 'middle',
+  },
+};
+
+export const commonBodyCellProps = {
+  sx: {
+    paddingLeft: '42px',
+    paddingRight: '42px',
+  },
+};
+
 export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) => [
   {
     header: 'PDB ID',
@@ -80,6 +97,20 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
     header: 'RING TYPE',
     accessorKey: 'ring_type',
     enableSorting: false,
+    muiTableHeadCellProps: {
+      ...commonHeadCellProps,
+      sx: {
+        ...commonHeadCellProps.sx,
+        width: '160px',
+      },
+    },
+    muiTableBodyCellProps: {
+      ...commonBodyCellProps,
+      align: 'center',
+      sx: {
+        width: '160px',
+      },
+    },
     Filter: ({ column }: { column: MRT_Column<RowData> }) => {
       const selectedValues = columnFilters.find((f: any) => f.id === column.id)?.value || [];
       return (
@@ -111,6 +142,20 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
   {
     header: 'RESOLUTION [Å]',
     accessorKey: 'resolution',
+    muiTableHeadCellProps: {
+      ...commonHeadCellProps,
+      sx: {
+        ...commonHeadCellProps.sx,
+        width: '160px',
+      },
+    },
+    muiTableBodyCellProps: {
+      ...commonBodyCellProps,
+      sx: {
+        ...commonBodyCellProps.sx,
+        width: '160px',
+      },
+    },
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
@@ -376,6 +421,12 @@ export const getColumns = (columnFilters: any, handleColumnFiltersChange: any) =
     accessorKey: 'img_url',
     enableSorting: false,
     enableColumnFilter: false,
+    muiTableBodyCellProps: {
+      sx: {
+        paddingLeft: '8px',
+        paddingRight: '8px',
+      },
+    },
     Cell: ({ cell, row }: { cell: MRT_Cell<RowData>; row: any }) => {
       const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(
         null,
