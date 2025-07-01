@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { parseStructureString } from '../lib/utils.ts';
-import { useMolstar } from '../context/MolstarContext.tsx';
+import { MolstarProvider, useMolstar } from '../context/MolstarContext.tsx';
 import { useBehavior } from '../lib/hooks/use-behavior.ts';
 import MolstarViewer from '../components/molstar/MolstarViewer.tsx';
 import MolstarViewerModel from '../models/MolstarViewerModel.tsx';
@@ -131,7 +131,11 @@ const RingDetailsWrapper: React.FC = () => {
     );
   }
 
-  return <RingDetails ringData={ringData} />;
+  return (
+    <MolstarProvider>
+      <RingDetails ringData={ringData} />
+    </MolstarProvider>
+  );
 };
 
 interface RingDetailsProps {

@@ -10,7 +10,6 @@ import { UserGuide } from './pages/UserGuide.tsx';
 import { TablePage } from './pages/TablePage.tsx';
 import RingDetailsWrapper from './pages/RingDetails.tsx';
 import { RingsStepperPage } from './pages/RingsStepperPage.tsx';
-import { MolstarProvider } from './context/MolstarContext.tsx';
 import { GlobalStyles } from '@mui/material';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 
@@ -34,7 +33,6 @@ const App: React.FC = () => {
           },
         }}
       />
-      <MolstarProvider>
         <HashRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -48,7 +46,6 @@ const App: React.FC = () => {
             </Route>
           </Routes>
         </HashRouter>
-      </MolstarProvider>
     </ThemeProvider>
   );
 };
