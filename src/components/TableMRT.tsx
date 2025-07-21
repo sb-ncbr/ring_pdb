@@ -66,7 +66,7 @@ const TableMRT = () => {
     pageSize: 10,
   });
   const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(!!location.state?.filters);
 
   const handleColumnFiltersChange = (newFilters: ColumnFilter[]) => {
     const result = getUpdatedFilters({
