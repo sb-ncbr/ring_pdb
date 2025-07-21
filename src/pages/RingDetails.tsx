@@ -22,7 +22,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 const getRingCoverageCounts = (rowValue: string | null) => {
   if (!rowValue) return;
   const [covered, total] = rowValue.split(';');
-  return covered + '/' + total + ' rings';
+  return covered + '/' + total + ' atoms';
 };
 
 const getChainID = (ringId: string) => {
