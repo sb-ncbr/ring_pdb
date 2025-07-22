@@ -10,12 +10,9 @@ import {
   DialogContent,
   FormGroup,
   IconButton,
-  Menu,
-  MenuItem,
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link } from 'react-router-dom';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
@@ -456,11 +453,11 @@ export const getColumns = (
     },
     Cell: ({ cell, row }: { cell: MRT_Cell<RowData>; row: any }) => {
       const [openOverlay, setOpenOverlay] = useState(false);
-      const handleShowImage = (event) => {
+      const handleShowImage = (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
         event.stopPropagation();
         setOpenOverlay(true);
       };
-      const handleCloseOverlay = (event) => {
+      const handleCloseOverlay = (event: React.SyntheticEvent) => {
         event.stopPropagation();
         setOpenOverlay(false);
       };
