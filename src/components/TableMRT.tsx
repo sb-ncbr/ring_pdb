@@ -17,7 +17,7 @@ import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import RangeSlider from './RangeSlider.tsx';
 import Typography from '@mui/material/Typography';
 import { InfoTooltip } from './InfoTooltip.tsx';
@@ -36,9 +36,11 @@ import {
 import { exportAllData } from '../helperFunctions/helpers.ts';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
+import { getAtoms } from '../pages/RingDetails.tsx';
 
 const TableMRT = () => {
   const location = useLocation();
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
   const [filterSliderRanges, setFilterSliderRanges] = useState({
     resolution: { min: 1, max: 100, step: 1 },
     ring_coverage: { min: 0, max: 50, step: 0.5 },
@@ -193,6 +195,16 @@ const TableMRT = () => {
   const table = useMaterialReactTable({
     columns: memoizedColumns,
     data,
+    muiTableBodyRowProps: ({ row }) => ({
+      // title: `Ring Atoms: ${getAtoms(row.original.ring_id)}`,
+      onClick: () => {
+        const url = `/#/ring-details/${row.original.ring_id}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+      },
+      sx: {
+        cursor: 'pointer',
+      },
+    }),
     columnFilterDisplayMode: 'custom',
     getRowId: (row) => row['ring_id'],
     defaultColumn: {

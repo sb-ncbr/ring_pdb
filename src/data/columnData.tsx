@@ -455,61 +455,31 @@ export const getColumns = (
       },
     },
     Cell: ({ cell, row }: { cell: MRT_Cell<RowData>; row: any }) => {
-      const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(
-        null,
-      );
       const [openOverlay, setOpenOverlay] = useState(false);
-
-      const handleContextMenu: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
-        event.preventDefault();
-        setContextMenu({
-          mouseX: event.clientX + 2,
-          mouseY: event.clientY - 6,
-        });
-      };
-      const handleCloseContextMenu = () => {
-        setContextMenu(null);
-      };
-      const handleShowImage = () => {
+      const handleShowImage = (event) => {
+        event.stopPropagation();
         setOpenOverlay(true);
-        handleCloseContextMenu();
       };
-      const handleCloseOverlay = () => {
+      const handleCloseOverlay = (event) => {
+        event.stopPropagation();
         setOpenOverlay(false);
       };
 
       return (
         <>
-          <Link
-            to={`/ring-details/${row.original.ring_id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            // underline="none"
+          <img
+            src={cell.getValue<string>()}
+            alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
             style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              maxHeight: 50,
+              margin: -10,
             }}
-            onContextMenu={handleContextMenu}
-          >
-            <img
-              src={cell.getValue<string>()}
-              alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
-              style={{ maxHeight: 50, margin: -10 }}
-            />
-          </Link>
-          <Menu
-            open={contextMenu !== null}
-            onClose={handleCloseContextMenu}
-            anchorReference="anchorPosition"
-            anchorPosition={
-              contextMenu !== null
-                ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                : undefined
-            }
-          >
-            <MenuItem onClick={handleShowImage}>Show Image</MenuItem>
-          </Menu>
+            onClick={handleShowImage}
+          />
+
           {/* Overlay Modal */}
           <Dialog open={openOverlay} onClose={handleCloseOverlay} fullWidth maxWidth="lg">
             <DialogActions>

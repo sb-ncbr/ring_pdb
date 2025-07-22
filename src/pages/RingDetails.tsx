@@ -30,7 +30,7 @@ const getChainID = (ringId: string) => {
   return chainId;
 };
 
-const getAtoms = (ringId: string) => {
+export const getAtoms = (ringId: string) => {
   const { atomIds } = parseStructureString(ringId);
   return atomIds.join(' ');
 };
