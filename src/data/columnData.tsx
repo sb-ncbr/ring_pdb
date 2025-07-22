@@ -115,11 +115,34 @@ export const getColumns = (
         width: '160px',
       },
     },
-    Filter: ({ column }: { column: MRT_Column<RowData> }) => {
+    Filter: ({ column, table }: { column: MRT_Column<RowData>; table: any }) => {
       const selectedValues = columnFilters.find((f: any) => f.id === column.id)?.value || [];
+
+      const confTypeFilter: string[] | undefined = table
+        .getState()
+        .columnFilters.find((f: any) => f.id === 'conformation')?.value.selectedValues;
+
+      const ringsByConformation: Record<string, string[]> = {};
+
+      for (const ring of ringCards.rings) {
+        for (const conf of ring.confs) {
+          if (!ringsByConformation[conf.name]) {
+            ringsByConformation[conf.name] = [];
+          }
+          ringsByConformation[conf.name].push(ring.name);
+        }
+      }
+
+      const ringOptions: string[] =
+        confTypeFilter && confTypeFilter.length > 0
+          ? Array.from(new Set(confTypeFilter.flatMap((conf) => ringsByConformation[conf] || [])))
+          : ringCards.rings.map((ring) => ring.name);
+
+
+
       return (
         <FilterAutocompleteSimple
-          options={ringCards.rings.map((ring) => ring.name)}
+          options={ringOptions}
           filterByLabel="ring type"
           selectedValues={selectedValues}
           onChange={(newSelectedValues) => {
@@ -201,11 +224,13 @@ export const getColumns = (
 
       function hasFavorableCombination(rings: string[], conformations: string[]): boolean {
         if (conformations.length === 0) return true;
+        if (rings.length === 0) return true;
         return rings.some((ring) => conformations.some((conf) => isFavorable(ring, conf)));
       }
 
       function hasUnfavorableCombination(rings: string[], conformations: string[]): boolean {
         if (conformations.length === 0) return true;
+        if (rings.length === 0) return true;
         return rings.some((ring) => conformations.some((conf) => !isFavorable(ring, conf)));
       }
 
