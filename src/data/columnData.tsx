@@ -138,8 +138,6 @@ export const getColumns = (
           ? Array.from(new Set(confTypeFilter.flatMap((conf) => ringsByConformation[conf] || [])))
           : ringCards.rings.map((ring) => ring.name);
 
-
-
       return (
         <FilterAutocompleteSimple
           options={ringOptions}
@@ -309,7 +307,7 @@ export const getColumns = (
             <FormControlLabel
               control={
                 <Switch
-                  disabled={isFavorableDisabled}
+                  disabled={isFavorableDisabled || table.getState().isLoading}
                   checked={showFavorable}
                   onChange={(e) => handleSwitchChange('showFavorable', e.target.checked)}
                 />
@@ -319,8 +317,8 @@ export const getColumns = (
             <FormControlLabel
               control={
                 <Switch
+                  disabled={isUnfavorableDisabled || table.getState().isLoading}
                   checked={showUnfavorable}
-                  disabled={isUnfavorableDisabled}
                   onChange={(e) => handleSwitchChange('showUnfavorable', e.target.checked)}
                 />
               }
