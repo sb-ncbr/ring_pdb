@@ -1,7 +1,7 @@
-# Application User Guide
+# RingWeb Application User Guide
 
-Welcome to the user guide for **RingWeb**.  
-This guide will help you navigate and use the main features of the application.
+Welcome to the user guide for **RingWeb**, a web-based platform for exploring ring conformations in biomolecular structures.
+This guide will walk you through the main features of the application and help you get started efficiently.
 
 ---
 
@@ -9,14 +9,23 @@ This guide will help you navigate and use the main features of the application.
 
 ### Overview
 
-On the Main page you can choose where to start. There are four main options, each of which will bring you to the Table page, where you can browse rings and access its visualization. No option will limit your search, so you can start basically anywhere.
+The Main Page serves as the starting point of the application. From here, you can choose among four primary modes of exploration. Each option will lead you to the Table Page, where you can browse ring data and access visualizations. Your choice here does not limit your ability to explore the full dataset later.
+The available options are:
 
-1. searching for rings in the chosen structure(s) from PDB. Multiple PDB IDs must be separated by comma, semicolon, or space. PDB ID can be lowercase or uppercase.
-2. searching for rings in the chosen ligand(s) from PDB strucutres. Multiple CCD (ligand) IDs must be separated by comma, semicolon, or space. CCD ID can be lowercase or uppercase.
-3. browsing available rings and their conformations. The application will guide you through simple stepper, where you can see how each conformation look like and then you can browse the data for selected combination of ring and conformation(s).
-4. browsing the whole dataset directly, you will get to the Table Page, where are many options for data filtering and access to visualization for individual rings.
+1. **Search by PDB ID**:
 
-From the Main page you can also directly access the Visualization page of example rings.
+    Enter one or more Protein Data Bank (PDB) structure IDs to search for rings within those structures. Multiple IDs can be separated by commas, semicolons, or spaces. Both lowercase and uppercase formats are accepted.
+2. **Search by CCD ID (Ligand ID)**:  
+
+    Enter one or more Chemical Component Dictionary (CCD) IDs to find rings in specific ligands. Use the same format and separators as for PDB IDs.
+3. **Browse available rings and conformations**:  
+
+    Use a two-step interface to explore available ring types and their conformations. You can preview conformations visually before browsing detailed data for selected combinations.
+4. **Browse the whole dataset**: 
+
+     Jump directly to the **Table Page**, where the full dataset is displayed and where you can apply advanced filters and access individual ring visualizations.
+
+You can also access example ring visualizations directly from the Main Page.
 ![Main Page Screenshot](./ringweb_flow.svg)
 
 ---
@@ -25,34 +34,47 @@ From the Main page you can also directly access the Visualization page of exampl
 
 ### Overview
 
-The Table Page displays structured data in an interactive table format. You can:
+The **Table Page** presents ring data in a structured, interactive format. Key features include:
 
-- Apply basic and advanced filters
-- Sort columns
-- Download data in CSV format
-- Access the Visualization page
+- Advanced filtering options  
+- Column sorting  
+- CSV data export  
+- Navigation to detailed visualization pages  
 
-### How to Use
+### Usage Instructions
 
-- You can start filter the dataset by selecting ring type or/and conforamtion.The same result can be achieved through entering the page via interactive stepper form the main page (Browse rings and conformations).
-- On the top right toolbar of the table you can:
-  - turn on the advanced filters mode to see two more levels of filters.
-  - turn on the table compact view if you are not interested in viewing Experimental method, RSR and RSCC values.
-  - download the selected data in CSV format.
-- The total number of selected rings can be seen on the bottom toolbar of the table where you can also set your preferred rows per page count.
-- With advanced filters mode on you can continue filtering by PDB IDs, CCD IDs and experimantal method. First two filters function as autocomplete after typing two characters. If you want to enter multiple PDB or CCD IDS, it is possible via direct input field from the Main page.
-- At this stage if you want to make changes in the filter level above (ring type and conformation), the whole second row of filters will be reset. If you set filters in the last row and then make changes in filters above, everything below will be reset.
-- Third level of filters allows you to set min and max values for individual values. You can also reset these slider values only.
-- Click on a table row to view detailed information.
-- Click on the action button (Details column) on each row to navigate to Visualization page and get more detailed information about selected ring.Preview the 2D structure of the ligand by right-click on the same button.
+- Begin by selecting a **ring type** and/or **conformation** to filter the dataset. This can also be done through the interactive stepper on the Main Page.
+  
+- In the **top-right toolbar**, you can:
+  - Enable **Advanced Filters** to access two additional filtering levels
+  - Switch to **Compact View** to hide columns like Experimental Method, RSR, and RSCC
+  - Download the currently selected data in **CSV** format
+
+- The **bottom toolbar** shows the total number of matching entries and allows you to adjust the number of rows displayed per page.
+
+- When **Advanced Filters** are enabled, you can further narrow your results by:
+  - **PDB ID** or **CCD ID**: These fields support autocomplete after entering at least two characters
+  - **Experimental Method**
+> **Note:** In the Table Page filters, **PDB and CCD fields support only one entry at a time via autocomplete**.  
+> To search using **multiple PDB or CCD IDs simultaneously**, please use the **direct input field on the Main Page**, where you can enter several IDs separated by commas, semicolons, or spaces. Both uppercase and lowercase formats are accepted.
+
+> **Note:** Changing filters at higher levels (e.g., Ring Type or Conformation) will reset filters set at lower levels.
+- The **third filter level** allows you to define **minimum and maximum** values for numerical fields using sliders.
+- Use the reset button near the sliders to clear all numerical filter settings at once.
+- **Click on a table row** to navigate to the **Visualization Page** for the selected ring.  
+-  **Click on the image** in the "Details" column to preview the 2D structure of the ligand.
 
 ---
 
 ## Visualization Page
 
-### How to Use
+### Overview
 
-- Access the Ring Details Page via the table or via example cards from the homepage.
-- Interact with the ring using the Mol* 3D Viewer.
-- Toggle electron density maps to evaluate model fit.
-- Download the structure in CIF format.
+The **Visualization Page** provides in-depth structural insights for a selected ring.
+
+### Features
+
+- Access the page via **Table Page** or via **example cards** on the Main Page
+- Interact with the ring structure using the Mol* 3D viewer.
+- Toggle **electron density maps** to evaluate model fit.
+- Download the 3D structure in CIF format.
