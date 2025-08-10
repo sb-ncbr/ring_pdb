@@ -6,11 +6,11 @@ import { VolumeStreaming } from 'molstar/lib/commonjs/mol-plugin/behavior/dynami
 import { InitVolumeStreaming } from 'molstar/lib/commonjs/mol-plugin/behavior/dynamic/volume-streaming/transformers';
 import { setSubtreeVisibility } from 'molstar/lib/commonjs/mol-plugin/behavior/static/state';
 import { PluginCommands } from 'molstar/lib/commonjs/mol-plugin/commands';
+import { MolScriptBuilder as MS } from 'molstar/lib/commonjs/mol-script/language/builder';
 import { Expression } from 'molstar/lib/commonjs/mol-script/language/expression';
 import { compile } from 'molstar/lib/commonjs/mol-script/runtime/query/base';
 import { StateObjectCell, StateSelection } from 'molstar/lib/commonjs/mol-state';
 import { Color } from 'molstar/lib/commonjs/mol-util/color';
-import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 interface RingSelection {
@@ -99,6 +99,11 @@ export default class MolstarViewerModel {
     await this._plugin.clear();
     await this._load(pdbId, selection);
     this.focusRing(selection);
+    if (!this.state.disableElectronDensity.value) {
+      await this._createDensity();
+      await this._handleShowDensityToggle(false);
+      this.focusRing(selection);
+    }
 
     this.state.isLoading.next(false);
   }
@@ -278,23 +283,6 @@ export default class MolstarViewerModel {
   }
 
   private async _handleShowDensityToggle(showElectronDensity: boolean) {
-    if (showElectronDensity && !this._cellRefs.volumeStreaming) {
-      await this._createDensity();
-
-      if (!this._wasDensityCreated()) {
-        PluginCommands.Toast.Show(this.plugin, {
-          title: 'Error',
-          message: 'Failed to create density',
-          key: 'toast-custom',
-        });
-
-        this.state.disableElectronDensity.next(true);
-        this.state.showElectronDensity.next(false);
-
-        return;
-      }
-    }
-
     if (!this._cellRefs.volumeStreaming) return;
 
     setSubtreeVisibility(
@@ -305,8 +293,6 @@ export default class MolstarViewerModel {
   }
 
   private async _createDensity() {
-    this.state.isLoading.next(true);
-
     const asm = this._cellRefs.assembly?.obj;
     if (!asm) return;
 
@@ -326,7 +312,16 @@ export default class MolstarViewerModel {
     // save node ref
     this._cellRefs.volumeStreaming = this._volumeStreamingTag;
 
-    this.state.isLoading.next(false);
+    if (!this._wasDensityCreated()) {
+      PluginCommands.Toast.Show(this.plugin, {
+        title: 'Error',
+        message: 'Failed to create density',
+        key: 'toast-custom',
+      });
+
+      this.state.disableElectronDensity.next(true);
+      this.state.showElectronDensity.next(false);
+    }
   }
 
   private async _canFetchDensity(pdbId: string) {
