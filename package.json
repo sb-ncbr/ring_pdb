@@ -42,7 +42,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "sass": "^1.80.4",
     "typescript": "^5.2.2",
     "vite": "^6.2.6"
