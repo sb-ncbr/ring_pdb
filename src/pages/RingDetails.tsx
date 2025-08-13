@@ -398,7 +398,7 @@ function ToggleBallAndStickButton({ viewer }: { viewer: MolstarViewerModel }) {
           disabled={isLoading}
         />
       }
-      label={<Typography>Show ball and stick</Typography>}
+      label={<Typography>Show residues as ball and stick</Typography>}
       sx={{
         '& .MuiTypography-root': {
           whiteSpace: 'nowrap',
