@@ -26,7 +26,7 @@ CORS(app)
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
-path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'Rings.xlsx')
+path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'newRings.xlsx')
 data = pd.read_excel(path, engine="openpyxl", index_col=0)
 
 data['ring_id'] = data.index
