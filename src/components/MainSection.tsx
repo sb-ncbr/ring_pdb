@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, List, ListItem, Typography } from '@mui/material';
 import Heading from './Heading.tsx';
 
