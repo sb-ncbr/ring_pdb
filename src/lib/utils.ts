@@ -6,6 +6,11 @@ interface StructureComponents {
   atomIds: string[];
 }
 
+export function formatNumber(value: number, decimals: number) {
+  return value.toFixed(decimals);
+}
+
+
 export function parseStructureString(input: string): StructureComponents {
   // Validate input
   if (!input || typeof input !== 'string') {

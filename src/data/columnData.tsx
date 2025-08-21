@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
 import { TableCellProps } from '@mui/material';
 import { useSmartSwitch } from '../hooks/useSmartSwitch.ts';
+import { formatNumber } from '../lib/utils.ts';
 
 export const commonHeadCellProps: TableCellProps = {
   align: 'center',
@@ -181,7 +182,7 @@ export const getColumns = (
     },
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+        <Typography variant="body2">{formatNumber(cell.getValue<number>(), 2)}</Typography>
       </Box>
     ),
   },
@@ -360,7 +361,7 @@ export const getColumns = (
     enableColumnFilter: false,
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+        <Typography variant="body2">{formatNumber(cell.getValue<number>(), 3)}</Typography>
       </Box>
     ),
   },
@@ -416,7 +417,7 @@ export const getColumns = (
     filterVariant: 'text',
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+        <Typography variant="body2">{formatNumber(cell.getValue<number>(), 2)}</Typography>
       </Box>
     ),
   },
@@ -426,7 +427,7 @@ export const getColumns = (
     filterVariant: 'text',
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{cell.getValue<number>()}</Typography>
+        <Typography variant="body2">{formatNumber(cell.getValue<number>(), 3)}</Typography>
       </Box>
     ),
   },
