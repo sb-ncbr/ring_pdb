@@ -442,7 +442,7 @@ export const getColumns = (
     ),
   },
   {
-    header: 'DETAILS',
+    header: '2D STRUCTURE',
     accessorKey: 'img_url',
     enableSorting: false,
     enableColumnFilter: false,

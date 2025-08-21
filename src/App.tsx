@@ -5,7 +5,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { Layout } from './Layout.tsx';
 import { Home } from './pages/Home.tsx';
-import { DataDescription } from './pages/DataDescription.tsx';
 import { UserGuide } from './pages/UserGuide.tsx';
 import { TablePage } from './pages/TablePage.tsx';
 import RingDetailsWrapper from './pages/RingDetails.tsx';
@@ -37,7 +36,6 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="data-description" element={<DataDescription />} />
               <Route path="user-guide" element={<UserGuide />} />
               <Route path="data" element={<TablePage />} />
               <Route path="browse-conformations" element={<RingsStepperPage />} />

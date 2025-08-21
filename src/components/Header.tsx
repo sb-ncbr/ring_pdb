@@ -33,9 +33,6 @@ const Header: React.FC = () => {
           <Button component={Link} to="/" color="inherit">
             <Typography variant="subtitle2">Home</Typography>
           </Button>
-          <Button component={Link} to="/data-description" color="inherit">
-            <Typography variant="subtitle2">Data description</Typography>
-          </Button>
           <Button component={Link} to="/user-guide" color="inherit">
             <Typography variant="subtitle2">User guide</Typography>
           </Button>
