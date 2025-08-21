@@ -16,7 +16,7 @@ const Footer = () => {
         }}
       >
         <Box component="img" src={elixirLogo} alt="Logo" sx={{ m: 3 }} />
-        <Typography variant="body2" align="center">
+        <Typography variant="body2" align="center" sx={{ color: 'gray'}}>
           RingWeb tool is a part of services provided by ELIXIR – European research infrastructure
           for biological information. For other services provided by ELIXIR's Czech Republic Node
           visit{' '}
