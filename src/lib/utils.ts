@@ -6,8 +6,11 @@ interface StructureComponents {
   atomIds: string[];
 }
 
-export function formatNumber(value: number, decimals: number) {
-  return value.toFixed(decimals);
+export function formatNumber(value: number | null | undefined, decimals: number) {
+  if (value === null || value === undefined || isNaN(value as number)) {
+    return "N/A";
+  }
+  return (value as number).toFixed(decimals);
 }
 
 
