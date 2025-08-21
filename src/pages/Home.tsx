@@ -1,13 +1,12 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import ActionCard from '../components/ActionCard';
-import MainSection from '../components/MainSection';
 import ExampleCard from '../components/ExampleCard';
 import Divider from '@mui/material/Divider';
-
 import cards from '../content/cards.json';
-import sections from '../content/main.json';
 import Stack from '@mui/material/Stack';
+import { MainSection } from '../components/MainSection.tsx';
+import Heading from '../components/Heading.tsx';
 
 interface SectionProps {
   children: React.ReactNode;
@@ -36,7 +35,7 @@ const isValidId = (id: unknown): id is 'pdb' | 'ccd' | undefined => {
 export const Home: React.FC = () => (
   <Box>
     <Section background="#ffffff">
-      <MainSection section={sections.first} />
+      <MainSection />
     </Section>
 
     <Section background="#ffffff" blur>
@@ -54,7 +53,7 @@ export const Home: React.FC = () => (
     </Section>
     <Divider sx={{ mt: 6 }} />
     <Section background="#ffffff">
-      <MainSection section={sections.second} />
+      <Heading text="Examples"/>
     </Section>
 
     <Section background="#ffffff" blur>

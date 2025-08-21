@@ -1,42 +1,67 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Link, List, ListItem, Typography } from '@mui/material';
+import Heading from './Heading.tsx';
 
-export const MainSection: React.FC<{ section: { header: string; body?: any[] } }> = ({
-  section,
-}) => {
-  const { header, body } = section;
+export const MainSection = () => {
   return (
     <>
+      <Heading text="Welcome"/>
+
       <Typography
-        variant="h3"
+        variant="body1"
         component="div"
         sx={{
-          width: '100%',
-          margin: '16px 0',
-          textAlign: 'left',
+          width: "100%",
+          margin: "16px 0",
+          textAlign: "left",
         }}
       >
-        {header}
+        Discover, analyze, and explore molecular ring structures like never
+        before. RingWeb is a powerful web-based platform designed to help
+        researchers efficiently navigate the vast dataset of ligand rings in the{" "}
+        <Link
+          href="https://www.ebi.ac.uk/pdbe/"
+          target="_blank"
+          rel="noopener noreferrer"
+          underline="hover"
+        >
+          Protein Data Bank (PDB)
+        </Link>
+        . Start your journey today and uncover new perspectives in ligand
+        research with ease and precision!
       </Typography>
 
       <Typography
         variant="body1"
         component="div"
         sx={{
-          width: '100%',
-          margin: '16px 0',
-          textAlign: 'left',
+          width: "100%",
+          margin: "16px 0",
+          textAlign: "left",
         }}
       >
-        {body?.map((item: any, index: number) => (
-          <div key={index}>
-            {item.para && <p>{item.para}</p>}
-            {item.listItem && <li>{item.listItem}</li>}
-          </div>
-        ))}
+        Whether you’re investigating structural irregularities, validating
+        ring conformations, or gaining insights into molecular interactions,
+        RingWeb provides the tools you need:
       </Typography>
+
+      <List sx={{ listStyleType: "disc", pl: 4 }}>
+        <ListItem sx={{ display: "list-item", p: 0 }}>
+          <Typography variant="body1">
+            Instantly identify unfavorable conformations.
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ display: "list-item", p: 0 }}>
+          <Typography variant="body1">
+            Filter and search by ring type or conformation.
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ display: "list-item", p: 0 }}>
+          <Typography variant="body1">
+            Dive deep into 3D visualizations powered by Mol*.
+          </Typography>
+        </ListItem>
+      </List>
     </>
   );
 };
-
-export default MainSection;
