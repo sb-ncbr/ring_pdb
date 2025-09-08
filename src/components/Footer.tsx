@@ -1,4 +1,5 @@
 import { Box, Link, Typography } from '@mui/material';
+import logo from '/elixirlogo.png';
 
 const Footer = () => {
   return (
@@ -14,7 +15,7 @@ const Footer = () => {
           justifyContent: 'center',
         }}
       >
-        <img src= "/elixirlogo.png"  alt="elixir_logo" />
+        <img src={logo} alt="Elixir Logo" />
         <Typography variant="body2" align="center" sx={{ color: 'gray', my: 2}}>
           RingWeb tool is a part of services provided by ELIXIR – European research infrastructure
           for biological information. For other services provided by ELIXIR's Czech Republic Node
