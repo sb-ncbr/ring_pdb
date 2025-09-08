@@ -1,9 +1,8 @@
 import { Box, Link, Typography } from '@mui/material';
-import elixirLogo from '/elixirlogo.png';
 
 const Footer = () => {
   return (
-    <Box sx={{ backgroundColor: '#1e1e1e', color: 'white', py: 6, mt: 6 }}>
+    <Box sx={{ backgroundColor: '#ffffff', color: 'white', py: 6, mt: 6 }}>
       {/* Main footer container */}
       <Box
         sx={{
@@ -15,8 +14,8 @@ const Footer = () => {
           justifyContent: 'center',
         }}
       >
-        <Box component="img" src={elixirLogo} alt="Logo" sx={{ m: 3 }} />
-        <Typography variant="body2" align="center" sx={{ color: 'gray'}}>
+        <img src= "/elixirlogo.png"  alt="elixir_logo" />
+        <Typography variant="body2" align="center" sx={{ color: 'gray', my: 2}}>
           RingWeb tool is a part of services provided by ELIXIR – European research infrastructure
           for biological information. For other services provided by ELIXIR's Czech Republic Node
           visit{' '}

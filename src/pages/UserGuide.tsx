@@ -192,6 +192,7 @@ export const UserGuide: React.FC = () => {
           <Typography variant="body1" sx={{ mb: 3 }}>
             On the left side of the page you can find even more information about the current ring, including its coverage, atom names, chain ID, and residue ID.
           </Typography>
+          {/*<img src= "/images/user_guide_screenshot.png" alt="screenshot_ring_page"/>*/}
           <Typography component="div" variant="body1">
             <ul style={{ paddingLeft: '1.2em', marginTop: 0, marginBottom: 0 }}>
               <li>
