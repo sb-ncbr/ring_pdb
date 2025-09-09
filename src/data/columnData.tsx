@@ -430,16 +430,14 @@ export const getColumns = (
       };
 
       return (
-        <>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <img
             src={cell.getValue<string>()}
             alt={`'Vector graphics of ligand' ${row.original.ccd_id}`}
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
               maxHeight: 50,
               margin: -10,
+              cursor: 'pointer',
             }}
             onClick={handleShowImage}
           />
@@ -481,7 +479,7 @@ export const getColumns = (
               {/*</Typography>*/}
             </DialogContent>
           </Dialog>
-        </>
+        </div>
       );
     },
   },

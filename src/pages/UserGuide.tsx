@@ -13,7 +13,7 @@ import { Callout } from '../components/Callout.tsx';
 
 export const UserGuide: React.FC = () => {
   return (
-    <Box sx={{ maxWidth: '900px', mx: 'auto', p: 4 }}>
+    <Box sx={{ maxWidth: '1200px', mx: 'auto', p: 4 }}>
       <Box display="flex" alignItems="center" gap={1} mb={3}>
         <AutoStoriesOutlinedIcon fontSize="large" />
         <Typography variant="h3">User Guide</Typography>
@@ -40,8 +40,8 @@ export const UserGuide: React.FC = () => {
             to the <strong>Table Page</strong>, where you can browse ring data and access
             visualisations. Only in case of <strong>Browsing Rings and Conformations</strong> you
             will reach <strong>Table Page</strong> by proceeding through interactive stepper first.
-            However, your choice here, on the <strong>Main Page</strong>, does not limit your ability to explore the full dataset
-            later. The available options are:{' '}
+            However, your choice here, on the <strong>Main Page</strong>, does not limit your
+            ability to explore the full dataset later. The available options are:{' '}
           </Typography>
           <Typography component="div" variant="body1">
             <ul style={{ paddingLeft: '1.2em', marginTop: 0, marginBottom: 0 }}>
@@ -83,6 +83,32 @@ export const UserGuide: React.FC = () => {
         </AccordionDetails>
       </Accordion>
 
+      {/* Section: Browse Rings and Conformations */}
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="subtitle2">Browse Rings and Conformations Page</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            Using this two-step interface you can browse available rings and their conformations.
+            The selectable cards provide some basic counts for rings/conformations.
+            <ol style={{ paddingLeft: '1.2em', marginTop: 0, marginBottom: 0 }}>
+              <li>Start with selecting a ring.</li>
+              <li>Then you can select multiple conformations of your interest for that ring.</li>
+              <li>
+                Click "Browse the data" button appeared at the bottom to continue to the Table page,
+                where you can browse individual ring entries for your selected combination.
+              </li>
+            </ol>
+          </Typography>
+          <img
+            src="/images/browse_screenshot.png"
+            alt="Screenshot of Browse Rings and Conformations Page"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </AccordionDetails>
+      </Accordion>
+
       {/* Section: Table Page */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -99,6 +125,11 @@ export const UserGuide: React.FC = () => {
             </Typography>
             <ul style={{ paddingLeft: '1.2em' }}>
               <li>Advanced filtering options</li>
+              <img
+                src="/images/table_left_toolbar_screenshot.png"
+                alt="Screenshot of Visualisation Page (Ring Details)"
+                style={{ width: '70%', height: 'auto', display: 'block' }}
+              />
               <li>Column sorting</li>
               <li>CSV data export</li>
               <li>Navigation to detailed visualisation pages</li>
@@ -186,13 +217,18 @@ export const UserGuide: React.FC = () => {
       {/* Section: Ring Details Page */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="subtitle2">️Visualisation Page</Typography>
+          <Typography variant="subtitle2">Visualisation Page (Ring Details)</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body1" sx={{ mb: 3 }}>
-            On the left side of the page you can find even more information about the current ring, including its coverage, atom names, chain ID, and residue ID.
+            On the left side of the page you can find even more information about the current ring,
+            including its coverage, atom names, chain ID, and residue ID.
           </Typography>
-          {/*<img src= "/images/user_guide_screenshot.png" alt="screenshot_ring_page"/>*/}
+          <img
+            src="/images/ring_details_screenshot.png"
+            alt="Screenshot of Visualisation Page (Ring Details)"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
           <Typography component="div" variant="body1">
             <ul style={{ paddingLeft: '1.2em', marginTop: 0, marginBottom: 0 }}>
               <li>
