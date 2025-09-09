@@ -1,6 +1,5 @@
 import { Box, Link, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import React from 'react';
 
 const Footer = () => {
   return (

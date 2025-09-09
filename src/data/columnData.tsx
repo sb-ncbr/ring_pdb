@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RingType, RowData } from './dataTypes';
+import { RingCards, RingType, RowData } from './dataTypes';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { MRT_Cell, MRT_Column, MRT_Row, MRT_ColumnDef } from 'material-react-table';
@@ -22,6 +22,10 @@ import ringCards from '../content/ringCards.json';
 import { TableCellProps } from '@mui/material';
 import { useSmartSwitch } from '../hooks/useSmartSwitch.ts';
 import { formatNumber } from '../lib/utils.ts';
+import {
+  getFavorabilityFlags,
+  getOptions,
+} from '../helperFunctions/ringUtils.ts';
 
 export const commonHeadCellProps: TableCellProps = {
   align: 'center',
@@ -207,54 +211,16 @@ export const getColumns = (
         })?.value || [];
       const selectedValues = filterValue.selectedValues || [];
 
-      function isFavorable(ring: string, conf: string): boolean {
-        const ringEntry = ringCards.rings.find((item) => item.name === ring);
-        if (!ringEntry) return false;
-        const confEntry = ringEntry.confs.find((c) => c.name === conf);
-        return confEntry?.favorable ?? false;
-      }
-
-      function hasFavorableCombination(rings: string[], conformations: string[]): boolean {
-        if (conformations.length === 0) return true;
-        if (rings.length === 0) return true;
-        return rings.some((ring) => conformations.some((conf) => isFavorable(ring, conf)));
-      }
-
-      function hasUnfavorableCombination(rings: string[], conformations: string[]): boolean {
-        if (conformations.length === 0) return true;
-        if (rings.length === 0) return true;
-        return rings.some((ring) => conformations.some((conf) => !isFavorable(ring, conf)));
-      }
-
       const ringTypeFilter: RingType[] | undefined = table
         .getState()
         .columnFilters.find((f: any) => f.id === 'ring_type')?.value;
 
-      const conformationByRingType = ringCards.rings.reduce(
-        (acc, ring) => {
-          acc[ring.name] = ring.confs.map((conf) => conf.name);
-          return acc;
-        },
-        {} as Record<string, string[]>,
-      );
-
       // Determine selected ring types
       const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
 
-      const ringTypes = Object.keys(conformationByRingType) as RingType[];
       // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
-      const options = selectedRingTypes.length
-        ? Array.from(
-            new Set(
-              selectedRingTypes.flatMap((rt) =>
-                ringTypes.includes(rt) ? conformationByRingType[rt as RingType] : [],
-              ),
-            ),
-          )
-        : Array.from(new Set(Object.values(conformationByRingType).flat()));
-
-      const hasFav = hasFavorableCombination(selectedRingTypes, selectedValues);
-      const hasUnfav = hasUnfavorableCombination(selectedRingTypes, selectedValues);
+      const options = getOptions(ringCards as RingCards, selectedRingTypes)
+      const [hasFav, hasUnfav] = getFavorabilityFlags(selectedValues, selectedRingTypes)
 
       const favorableSwitch = useSmartSwitch(hasFav);
       const unfavorableSwitch = useSmartSwitch(hasUnfav);
