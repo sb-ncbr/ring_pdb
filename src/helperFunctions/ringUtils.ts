@@ -2,9 +2,9 @@ import ringCards from '../content/ringCards.json';
 import { Ring, RingCards, RingConf, RingType } from '../data/dataTypes.ts';
 
 export function getFavorabilityFlags(confs: string[], ringNames: string[]): [boolean, boolean] {
-  if (!confs.length && !ringNames.length) {
-    return [true, true];
-  }
+  if (!confs.length) {
+  return [true, true];
+}
 
   const ringsToLoopThrough = ringNames.length
   ? ringNames
