@@ -2,23 +2,23 @@
   "rings": [
     {
       "name": "Benzene",
-      "ccd": 22910,
-      "pdb": 40469,
-      "total": 115884,
+      "ccd": 23401,
+      "pdb": 42186,
+      "total": 123689,
       "confs": [
         {
           "name": "Flat",
-          "count": 115826,
+          "count": 123626,
           "favorable": true
         },
         {
           "name": "Half chair",
-          "count": 31,
+          "count": 35,
           "favorable": false
         },
         {
           "name": "Chair",
-          "count": 22,
+          "count": 23,
           "favorable": false
         },
         {
@@ -35,56 +35,56 @@
     },
     {
       "name": "Cyclohexane",
-      "ccd": 1695,
-      "pdb": 3503,
-      "total": 7571,
+      "ccd": 1760,
+      "pdb": 4089,
+      "total": 12425,
       "confs": [
         {
           "name": "Chair",
-          "count": 5890,
+          "count": 8080,
           "favorable": true
         },
         {
           "name": "Half chair",
-          "count": 550,
-          "favorable": false
-        },
-        {
-          "name": "Boat",
-          "count": 543,
+          "count": 2365,
           "favorable": false
         },
         {
           "name": "Twist boat",
-          "count": 515,
+          "count": 996,
+          "favorable": false
+        },
+        {
+          "name": "Boat",
+          "count": 905,
           "favorable": false
         },
         {
           "name": "Flat",
-          "count": 73,
+          "count": 79,
           "favorable": false
         }
       ]
     },
     {
       "name": "Cyclopentane",
-      "ccd": 882,
-      "pdb": 2272,
-      "total": 5160,
+      "ccd": 907,
+      "pdb": 3367,
+      "total": 10202,
       "confs": [
         {
           "name": "Half chair",
-          "count": 2958,
+          "count": 6380,
           "favorable": true
         },
         {
           "name": "Envelope",
-          "count": 1938,
+          "count": 3549,
           "favorable": true
         },
         {
           "name": "Flat",
-          "count": 264,
+          "count": 273,
           "favorable": false
         }
       ]
