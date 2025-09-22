@@ -32,7 +32,7 @@
   "example-cards": [
     {
       "header": "Flat cyclopentane in ligand 3KT of 4r91 entry",
-      "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that 349 rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
+      "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that a number of rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
       "image": "/images/4R91.png",
       "url": "/ring-details/4r91_A_3KT_502_C16-C21-C22-C26-C27"
     },
