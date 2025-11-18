@@ -2,6 +2,7 @@
 import React from 'react';
 import { Routes, Route, HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
+import { NotificationProvider } from './context/NotificationContext.tsx';
 import theme from './theme';
 import { Layout } from './Layout.tsx';
 import { Home } from './pages/Home.tsx';
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           },
         }}
       />
+      <NotificationProvider>
         <HashRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -44,6 +46,7 @@ const App: React.FC = () => {
             </Route>
           </Routes>
         </HashRouter>
+        </NotificationProvider>
     </ThemeProvider>
   );
 };

@@ -36,6 +36,7 @@ import {
 import { exportAllData } from '../helperFunctions/helpers.ts';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
+import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
 // import { getAtoms } from '../pages/RingDetails.tsx';
 
 const TableMRT = () => {
@@ -143,6 +144,8 @@ const TableMRT = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
 
+  const { handleApiError } = useApiErrorHandler();
+
   // clear the filter state on reload
   useEffect(() => {
     if (window.history.state) {
@@ -152,7 +155,7 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log('Sending filters:', columnFilters);
+    // console.log('Sending filters:', columnFilters);
     axios
       .post(`${import.meta.env.VITE_API_URL}/api/data`, {
         pageIndex: pagination.pageIndex + 1,
@@ -171,6 +174,7 @@ const TableMRT = () => {
         setIsLoading(false);
       })
       .catch((error) => {
+        handleApiError(error)
         console.error('Error fetching data:', error);
         setIsError(true);
         console.log(isError);

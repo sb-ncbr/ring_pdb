@@ -9,6 +9,7 @@ import { getChipStyles } from '../helperFunctions/helpers.ts';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { OtherSelectedFiltersType } from './FilterAutocomplete.tsx';
+import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
 
 export const FilterAutocompleteSimple = ({
   options,
@@ -25,9 +26,13 @@ export const FilterAutocompleteSimple = ({
 }) => {
   // only for experimental method
   const [allOptions, setAllOptions] = useState([]);
+
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const theme = useTheme();
+  const { handleApiError } = useApiErrorHandler();
+
+
 
   useEffect(() => {
     if (filterByLabel === 'experimental method') {
@@ -36,9 +41,14 @@ export const FilterAutocompleteSimple = ({
           otherFilters: otherSelectedFilters,
         })
         .then((response) => {
-          setAllOptions(response.data);
+          if (response.data?.error.code === "MISSING_VALUE") {
+            console.error(`${response.data.error.message}`);
+            handleApiError(`${response.data.error.message}`);
+          }
+          setAllOptions(response.data.payload);
         })
         .catch((error) => {
+          handleApiError(error)
           console.log('Error fetching data:', error);
           return;
         });

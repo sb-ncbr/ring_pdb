@@ -25,8 +25,9 @@ app.config.from_object(environment_configuration)
 CORS(app)
 
 # Setup logging
-logging.basicConfig(level=logging.DEBUG)
-path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'newRings0309.xlsx')
+logging.basicConfig(filename='missing_data.log', encoding='utf-8', level=logging.DEBUG)
+
+path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'newRings2209.xlsx')
 data = pd.read_excel(path, engine="openpyxl", index_col=0)
 
 data['ring_id'] = data.index
@@ -37,34 +38,79 @@ def application(environ, start_response):
     return app(environ, start_response)
 
 
+def detect_missing_values(df, field: str):
+    """
+    Detect missing values for a specific field in the DataFrame.
+    Returns a tuple: (clean_values, error_info or None)
+    """
+    missing_mask = df[field].isna()
+    missing_count = missing_mask.sum()
+
+    valid_values = df.loc[~missing_mask, field].unique().tolist()
+    error_info = None
+
+    if missing_count > 0:
+        debug_cols = ['pdb_id', 'ccd_id', 'chain_id'] 
+        missing_rows = df.loc[missing_mask, debug_cols]
+
+        csv_preview = missing_rows.to_csv(index=False)
+        logging.error(f"Missing experimental_method values:\n{csv_preview}")
+
+        error_message = f"{missing_count} record(s) missing {field} value."
+        logging.error(error_message)
+
+        error_info = {
+            "code": "MISSING_VALUE",
+            "field": field,
+            "message": error_message
+        }
+
+    return valid_values, error_info
+
+
+def build_response(payload: dict, error: dict | None = None):
+    """
+    Builds a consistent API response structure.
+    """
+    response = payload
+    if error:
+        response["error"] = error
+    return jsonify(response), 200
+
+
+def get_filtered_field(field_name: str):
+    """
+    Generic handler for routes that return a filtered field.
+    """
+    received_data = request.get_json()
+    other_filters = received_data.get("otherFilters", {})
+
+    filtered_data = apply_filters(data, other_filters)
+
+    field_data, error_info = detect_missing_values(filtered_data, field_name)
+
+    return build_response({'payload': field_data}, error_info)
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
 @app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
-    received_data = request.json
-    other_filters = received_data.get("otherFilters", {})
-    print(other_filters)
-    filtered_data = apply_filters(data, other_filters)
-    pdb_ids = filtered_data['pdb_id'].unique().tolist()
-    return jsonify(pdb_ids), 200
+    return get_filtered_field('pdb_id')
+
 
 @app.route('/api/get_ccd_ids', methods=['POST'])
 def get_ccd_ids():
-    received_data = request.json
-    other_filters = received_data.get("otherFilters", {})
-    filtered_data = apply_filters(data, other_filters)
-    ccd_ids = filtered_data['ccd_id'].unique().tolist()
-    return jsonify(ccd_ids), 200
+    return get_filtered_field('ccd_id')
+
 
 @app.route('/api/get_methods', methods=['POST'])
 def get_methods():
-    received_data = request.json
-    other_filters = received_data.get("otherFilters", {})
-    filtered_data = apply_filters(data, other_filters)
-    methods = filtered_data['experimental_method'].unique().tolist()
-    return jsonify(methods), 200
+    return get_filtered_field('experimental_method')
+
 
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():

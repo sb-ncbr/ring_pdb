@@ -84,8 +84,7 @@ export default function FilterAutocomplete({
         otherFilters: otherSelectedFilters,
       })
       .then((response) => {
-        setAllOptions(response.data);
-        // console.log('DEBUG ', filterByLabel, response.data);
+        setAllOptions(response.data.payload);
       })
       .catch((error) => {
         console.log('Error fetching data:', error);
