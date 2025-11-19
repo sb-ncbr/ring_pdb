@@ -65,7 +65,7 @@ class DataManager:
     def excel_path(self):
         """Get Excel path from current Flask context"""
         with current_app.app_context():
-            return Path(current_app.config['WORKFLOW_OUTPUT_DATA']) / "Rings.xlsx"
+            return current_app.config['PATH_TO_DATA']
         
     @property
     def data(self):

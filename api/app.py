@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request, Response, render_template, send_file
 import os
-from dotenv import load_dotenv
+from flask.cli import load_dotenv
 import logging
 import pandas as pd
 from flask_cors import CORS
+from data_manager import DataManager
 import io
 
 from utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
@@ -14,7 +15,6 @@ app = Flask(__name__,
 
 load_dotenv()
 
-# environment_configuration = os.environ['CONFIGURATION_SETUP']
 print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
 environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv instead of os.environ.get
 if not environment_configuration:
@@ -24,15 +24,15 @@ app.config.from_object(environment_configuration)
 
 CORS(app)
 
+path = os.path.join(os.path.dirname(__file__), app.config['PATH_TO_DATA'])
+data = pd.read_parquet(path)
+
 # Setup logging
-logging.basicConfig(filename='missing_data.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='LOGFILE.log', encoding='utf-8', level=logging.DEBUG)
 
-path = os.path.join(os.path.dirname(__file__), app.config['WORKFLOW_OUTPUT_DATA'], 'newRings2209.xlsx')
-data = pd.read_excel(path, engine="openpyxl", index_col=0)
-
-data['ring_id'] = data.index
-print(data['experimental_method'].value_counts())
-
+# Initialize the DataManager
+with app.app_context():
+    data_manager = DataManager()
 
 def application(environ, start_response):
     return app(environ, start_response)
@@ -53,8 +53,8 @@ def detect_missing_values(df, field: str):
         debug_cols = ['pdb_id', 'ccd_id', 'chain_id'] 
         missing_rows = df.loc[missing_mask, debug_cols]
 
-        csv_preview = missing_rows.to_csv(index=False)
-        logging.error(f"Missing experimental_method values:\n{csv_preview}")
+        # csv_preview = missing_rows.to_csv(index=False)
+        # logging.error(f"Missing experimental_method values:\n{csv_preview}")
 
         error_message = f"{missing_count} record(s) missing {field} value."
         logging.error(error_message)
@@ -85,7 +85,7 @@ def get_filtered_field(field_name: str):
     received_data = request.get_json()
     other_filters = received_data.get("otherFilters", {})
 
-    filtered_data = apply_filters(data, other_filters)
+    filtered_data = apply_filters(data_manager.data, other_filters)
 
     field_data, error_info = detect_missing_values(filtered_data, field_name)
 
@@ -115,18 +115,16 @@ def get_methods():
 @app.route('/api/data', methods=['POST'])
 def get_paginated_data():
     received_data = request.json
+    current_data = data_manager.data
 
-    page_index = received_data.get('pageIndex', 1)
-    page_size = received_data.get('pageSize', 10)
-
-    page_index = int(page_index)
-    page_size = int(page_size)
+    page_index = int(received_data.get('pageIndex', 1))
+    page_size = int(received_data.get('pageSize', 10))
 
     start_idx = (page_index - 1) * page_size
     end_idx = start_idx + page_size
 
     filters = received_data.get('filters', [])
-    filtered_data = data
+    filtered_data = current_data
 
     non_empty_filters = [filter for filter in filters if filter['value']]
     for filter in non_empty_filters:
@@ -173,10 +171,9 @@ def get_paginated_data():
             else:
                 sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
         except Exception as e:
-            print('Error occurred while sorting: ', e)
+            logging.error(f'Error occurred while sorting: {e}')
 
     paginated_data = sorted_data.iloc[start_idx:end_idx].fillna('N/A')
-    print(paginated_data)
 
     filters_value_range = {
         'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
@@ -198,17 +195,15 @@ def get_paginated_data():
 @app.route('/api/get_row_data', methods=['GET'])
 def get_row_data():
     ring_id = request.args.get('ringID')
-
-    # print(ring_id)
-    # print(data.head())
+    current_data = data_manager.data
 
     if not ring_id:
         return jsonify({"error": "ringID parameter is required"}), 400
 
-    if ring_id not in data.index:
+    if ring_id not in current_data.index:
         return jsonify({"error": "Ring ID not found"}), 404
 
-    row_data = data.loc[ring_id].to_json()
+    row_data = current_data.loc[ring_id].to_json()
     return Response(status=200, mimetype="application/json", response=row_data)
 
 
@@ -219,7 +214,7 @@ def export_data():
     filters = request_data.get('filters', [])
     sorting = request_data.get('sorting', [])
 
-    filtered_data = data
+    filtered_data = current_data.data
 
     non_empty_filters = [filter for filter in filters if filter['value']]
     for filter in non_empty_filters:
@@ -279,7 +274,7 @@ def export_data():
             else:
                 sorted_data = sorted_data.sort_values(sort_column, ascending=(not sort_order_desc))
         except Exception as e:
-            print('Error occurred while sorting: ', e)
+            logging.error(f'Error occurred while sorting: {e}')
 
     sorted_data.fillna('N/A')
     export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_counts'], axis=1)

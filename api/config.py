@@ -1,5 +1,6 @@
+
 class Config:
-    WORKFLOW_OUTPUT_DATA = "data"
+    PATH_TO_DATA = 'data/newRings2209.parquet'
 
 
 class DevelopmentConfig(Config):
