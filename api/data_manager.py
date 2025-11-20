@@ -31,7 +31,7 @@ class DataManager:
                 current_mtime > self.last_modified_time)
     
     def _load_from_excel(self):
-        self._data = pd.read_excel(self.excel_path, index_col=0)
+        self._data = pd.read_parquet(self.excel_path)
         self._data['ring_id'] = self._data.index
         self.last_modified_time = os.path.getmtime(self.excel_path)
         self._save_to_cache(self._data)

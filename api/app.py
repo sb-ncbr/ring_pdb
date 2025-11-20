@@ -24,9 +24,6 @@ app.config.from_object(environment_configuration)
 
 CORS(app)
 
-path = os.path.join(os.path.dirname(__file__), app.config['PATH_TO_DATA'])
-data = pd.read_parquet(path)
-
 # Setup logging
 logging.basicConfig(filename='LOGFILE.log', encoding='utf-8', level=logging.DEBUG)
 
@@ -52,9 +49,6 @@ def detect_missing_values(df, field: str):
     if missing_count > 0:
         debug_cols = ['pdb_id', 'ccd_id', 'chain_id'] 
         missing_rows = df.loc[missing_mask, debug_cols]
-
-        # csv_preview = missing_rows.to_csv(index=False)
-        # logging.error(f"Missing experimental_method values:\n{csv_preview}")
 
         error_message = f"{missing_count} record(s) missing {field} value."
         logging.error(error_message)
