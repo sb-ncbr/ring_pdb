@@ -41,10 +41,6 @@ export const FilterAutocompleteSimple = ({
           otherFilters: otherSelectedFilters,
         })
         .then((response) => {
-          if (response.data?.error.code === "MISSING_VALUE") {
-            console.error(`${response.data.error.message}`);
-            handleApiError(`${response.data.error.message}`);
-          }
           setAllOptions(response.data.payload);
         })
         .catch((error) => {

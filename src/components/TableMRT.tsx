@@ -36,8 +36,8 @@ import {
 import { exportAllData } from '../helperFunctions/helpers.ts';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
-import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
-// import { getAtoms } from '../pages/RingDetails.tsx';
+// import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
+
 
 const TableMRT = () => {
   const location = useLocation();
@@ -57,7 +57,6 @@ const TableMRT = () => {
     : Array.from(combinedFilters.values());
 
   const [data, setData] = useState<APIData[]>([]);
-  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isCompactView, setIsCompactView] = useState(false);
@@ -144,7 +143,7 @@ const TableMRT = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
 
-  const { handleApiError } = useApiErrorHandler();
+  // const { handleApiError } = useApiErrorHandler();
 
   // clear the filter state on reload
   useEffect(() => {
@@ -174,10 +173,8 @@ const TableMRT = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        handleApiError(error)
+        // handleApiError(error)
         console.error('Error fetching data:', error);
-        setIsError(true);
-        console.log(isError);
         return;
       });
   }, [pagination.pageIndex, pagination.pageSize, columnFilters, sorting]);
@@ -199,7 +196,6 @@ const TableMRT = () => {
     columns: memoizedColumns,
     data,
     muiTableBodyRowProps: ({ row }) => ({
-      // title: `Ring Atoms: ${getAtoms(row.original.ring_id)}`,
       onClick: () => {
         const url = `/#/ring-details/${row.original.ring_id}`;
         window.open(url, '_blank', 'noopener,noreferrer');
