@@ -1,8 +1,7 @@
 
 class Config:
-    PATH_TO_DATA = 'data/newRings2209.parquet'
+    PATH_TO_DATA = '/var/www/html/RingWeb/newRings2209.parquet'
     PATH_TO_LOGS = './'
-
 
 class DevelopmentConfig(Config):
     DEBUG = True
