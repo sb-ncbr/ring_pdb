@@ -25,7 +25,8 @@ app.config.from_object(environment_configuration)
 CORS(app)
 
 # Setup logging
-logging.basicConfig(filename='LOGFILE.log', encoding='utf-8', level=logging.DEBUG)
+filenm = os.path.join(os.path.dirname(__file__), app.config['PATH_TO_LOGS'], 'LOGFILE.log')
+logging.basicConfig(filename=filenm, encoding='utf-8', level=logging.DEBUG)
 
 # Initialize the DataManager
 with app.app_context():

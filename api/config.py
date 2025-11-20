@@ -1,6 +1,7 @@
 
 class Config:
     PATH_TO_DATA = 'data/newRings2209.parquet'
+    PATH_TO_LOGS = './'
 
 
 class DevelopmentConfig(Config):
