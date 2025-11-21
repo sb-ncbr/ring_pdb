@@ -172,10 +172,16 @@ export default class MolstarViewerModel {
       structure,
       'polymer',
     );
-    const ligand = await this._plugin.builders.structure.tryCreateComponentStatic(
+    let ligand = await this._plugin.builders.structure.tryCreateComponentStatic(
       structure,
       'ligand',
     );
+    if (!ligand) {
+      ligand = await this._plugin.builders.structure.tryCreateComponentStatic(
+        structure,
+        'non-standard',
+      );
+    }
     const ring = await this._plugin.builders.structure.tryCreateComponentFromSelection(
       structure,
       ringSelectionQuery,
