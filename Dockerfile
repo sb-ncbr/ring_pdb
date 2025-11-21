@@ -3,12 +3,11 @@ FROM node:22-alpine
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
-COPY package*.json ./
+
+COPY --chown=appuser:appgroup package*.json ./
 RUN npm ci
 
-COPY . .
-
-RUN chown -R appuser:appgroup /app
+COPY --chown=appuser:appgroup . .
 
 USER appuser
 
