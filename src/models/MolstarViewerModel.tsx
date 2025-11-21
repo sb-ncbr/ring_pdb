@@ -53,7 +53,9 @@ export default class MolstarViewerModel {
     const spec: PluginUISpec = {
       ...defaultSpec,
       layout: {
+        ...defaultSpec.layout,
         initial: {
+          ...defaultSpec.layout?.initial,
           isExpanded: this.state.isExpanded.value,
           showControls: this.state.showControls.value,
         },
@@ -96,16 +98,20 @@ export default class MolstarViewerModel {
 
     this.state.isLoading.next(true);
 
-    await this._plugin.clear();
-    await this._load(pdbId, selection);
-    this.focusRing(selection);
-    if (!this.state.disableElectronDensity.value) {
-      await this._createDensity();
-      await this._handleShowDensityToggle(false);
+    try {
+      await this._plugin.clear();
+      await this._load(pdbId, selection);
       this.focusRing(selection);
+      if (!this.state.disableElectronDensity.value) {
+        await this._createDensity();
+        await this._handleShowDensityToggle(false);
+        this.focusRing(selection);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.state.isLoading.next(false);
     }
-
-    this.state.isLoading.next(false);
   }
 
   focusRing(selection: RingSelection) {
@@ -178,46 +184,51 @@ export default class MolstarViewerModel {
       'ring-selection',
     );
 
-    // check successful build
-    if (!polymer || !ligand || !ring) {
-      console.error('Failed to create component');
-      console.error('polymer: ', polymer, '\nligand: ', ligand, '\nring: ', ring);
-      return;
-    }
+    let polymerCartoonVisual = undefined;
+    let polymerBasVisual = undefined;
+    let ligandVisual = undefined;
+    let ringVisual = undefined;
 
     // create visual representations
-    const polymerCartoonVisual =
-      await this._plugin.builders.structure.representation.addRepresentation(polymer, {
-        type: 'cartoon',
-        typeParams: {
-          alpha: 0.4,
+    if (polymer) {
+      polymerCartoonVisual = await this._plugin.builders.structure.representation.addRepresentation(
+        polymer,
+        {
+          type: 'cartoon',
+          typeParams: {
+            alpha: 0.4,
+          },
+          color: 'element-symbol',
+          colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
         },
-        color: 'element-symbol',
-        colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
-      });
-    const polymerBasVisual = await this._plugin.builders.structure.representation.addRepresentation(
-      polymer,
-      {
-        type: 'ball-and-stick',
-        typeParams: {
-          alpha: 0.4,
+      );
+      polymerBasVisual = await this._plugin.builders.structure.representation.addRepresentation(
+        polymer,
+        {
+          type: 'ball-and-stick',
+          typeParams: {
+            alpha: 0.4,
+          },
+          color: 'element-symbol',
+          colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
         },
-        color: 'element-symbol',
-        colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
-      },
-      { initialState: { isHidden: true } },
-    );
-    const ligandVisual = await this._plugin.builders.structure.representation.addRepresentation(
-      ligand,
-      {
-        type: 'ball-and-stick',
-        color: 'element-symbol',
-        colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
-      },
-    );
-    const ringVisual = await this._plugin.builders.structure.representation.addRepresentation(
-      ring,
-      {
+        { initialState: { isHidden: true } },
+      );
+    }
+
+    if (ligand) {
+      ligandVisual = await this._plugin.builders.structure.representation.addRepresentation(
+        ligand,
+        {
+          type: 'ball-and-stick',
+          color: 'element-symbol',
+          colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
+        },
+      );
+    }
+
+    if (ring) {
+      ringVisual = await this._plugin.builders.structure.representation.addRepresentation(ring, {
         type: 'ball-and-stick',
         typeParams: {
           sizeFactor: 0.16,
@@ -232,18 +243,18 @@ export default class MolstarViewerModel {
         sizeParams: {
           scale: 1.1,
         },
-      },
-    );
+      });
+    }
 
     // save node refs
     this._cellRefs = {
       assembly: structure.cell,
       polymer: {
-        cartoon: polymerCartoonVisual.cell,
-        bas: polymerBasVisual.cell,
+        cartoon: polymerCartoonVisual?.cell,
+        bas: polymerBasVisual?.cell,
       },
-      ligand: ligandVisual.cell,
-      ring: ringVisual.cell,
+      ligand: ligandVisual?.cell,
+      ring: ringVisual?.cell,
     };
   }
 
