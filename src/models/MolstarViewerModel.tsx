@@ -42,7 +42,7 @@ export default class MolstarViewerModel {
     showControls: new BehaviorSubject<boolean>(false),
     isExpanded: new BehaviorSubject<boolean>(false),
     isInitialized: new BehaviorSubject<boolean>(false),
-    isLoading: new BehaviorSubject<boolean>(false),
+    isLoading: new BehaviorSubject<boolean>(true),
     showElectronDensity: new BehaviorSubject<boolean>(false),
     disableElectronDensity: new BehaviorSubject<boolean>(true),
     showBallAndStick: new BehaviorSubject<boolean>(false),
@@ -94,8 +94,6 @@ export default class MolstarViewerModel {
   }
 
   async load(pdbId: string, selection: RingSelection) {
-    if (this.state.isLoading.value) return;
-
     this.state.isLoading.next(true);
 
     try {
