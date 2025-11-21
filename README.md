@@ -35,8 +35,20 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
+Create config file
+
+```bash
+cat config_example.py > config.py
+```
+
 Run server
 
 ```bash
 python app.py
+```
+
+### Docker
+
+```bash
+docker-compose up --build --watch
 ```
