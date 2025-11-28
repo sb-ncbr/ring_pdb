@@ -20,7 +20,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ringCards from '../content/ringCards.json';
 import { TableCellProps } from '@mui/material';
-import { useSmartSwitch } from '../hooks/useSmartSwitch.ts';
+import { useSmartSwitch } from '../lib/hooks/use-smart-switch.ts';
 import { formatNumber } from '../lib/utils.ts';
 import {
   getFavorabilityFlags,

@@ -9,7 +9,7 @@ import { getChipStyles } from '../helperFunctions/helpers.ts';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { OtherSelectedFiltersType } from './FilterAutocomplete.tsx';
-import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
+import { useApiErrorHandler } from '../lib/hooks/use-api-error-handler.ts';
 
 export const FilterAutocompleteSimple = ({
   options,
