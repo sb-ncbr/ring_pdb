@@ -27,7 +27,7 @@ const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image, url }) =
       <CardActionArea onClick={() => navigate(url)} sx={{ height: '560px' }}>
         <CardMedia
           component="img"
-          image={image}
+          src={image}
           alt={header}
           sx={{
             height: '240px',

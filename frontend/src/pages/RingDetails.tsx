@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
-import { labels } from '../constants';
 import { Chip, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Loader from '../components/Spinner.tsx';
@@ -218,7 +217,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
-              {labels.ccdID}:{' '}
+              CCD ID:
             </Typography>
             <Typography variant="caption">
               <Link

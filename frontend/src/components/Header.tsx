@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Button, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import logo from '../assets/Logo.svg';
+import logo from '../../assets/Logo.svg';
 import Box from '@mui/material/Box';
 
 const Header: React.FC = () => {
