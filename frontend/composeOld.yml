@@ -33,4 +33,4 @@ services:
 
 networks:
   ring-web-network:
-    driver: bridge
+    driver: bridge 

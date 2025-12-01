@@ -1,8 +1,8 @@
 <div align="center">
   <br>
   <br>
-  <a href="https://github.com/sb-ncbr/AlphaCharges">
-    <img src="public/Logo.svg" alt="AlphaCharges" width="220">
+  <a href="https://github.com/victoria-dos/ring_web">
+    <img src="frontend/assets/Logo.svg" alt="RingWeb" width="220">
   </a>
   <br>
   <br>
