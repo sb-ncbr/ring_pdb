@@ -57,7 +57,7 @@ export const RingCard: React.FC<RingCardProps> = ({
       <CardActionArea onClick={handleCardSelect} disabled={disabled || isSelected}>
         <CardContent>
           <Box sx={{ height: 300 }}>
-            <RotatingMolecule modelPath={`/geometry/${name}.glb`} />
+            <RotatingMolecule modelPath={`assets/geometry/${name}.glb`} />
           </Box>
           <Typography gutterBottom variant="subtitle1" component="div">
             {name}

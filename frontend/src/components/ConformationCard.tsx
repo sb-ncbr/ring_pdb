@@ -42,7 +42,7 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           />
         </Box>
         <Box sx={{ height: 260 }}>
-          <RotatingMolecule modelPath={`/geometry/${ring}/${ring}-${name}.glb`} />
+          <RotatingMolecule modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
         </Box>
         <CardContent>
           <Typography gutterBottom variant="subtitle1" component="div">

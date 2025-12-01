@@ -208,8 +208,9 @@ def export_data():
     request_data = request.get_json()
     filters = request_data.get('filters', [])
     sorting = request_data.get('sorting', [])
+    current_data = data_manager.data
 
-    filtered_data = current_data.data
+    filtered_data = current_data
 
     non_empty_filters = [filter for filter in filters if filter['value']]
     for filter in non_empty_filters:
