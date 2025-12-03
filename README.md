@@ -10,45 +10,8 @@
 
 ## How to run
 
-### Web app
-
-Dev
+### Development
 
 ```bash
-npm run dev
-```
-
-Prod
-
-```bash
-npx vite build --mode production
-npm run preview
-```
-
-### API
-
-Install deps
-
-```bash
-python -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
-```
-
-Create config file
-
-```bash
-cat config_example.py > config.py
-```
-
-Run server
-
-```bash
-python app.py
-```
-
-### Docker
-
-```bash
-docker-compose up --build --watch
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose.yml up --build --watch
 ```

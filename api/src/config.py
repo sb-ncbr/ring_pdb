@@ -1,7 +1,7 @@
+import os
 
 class Config:
-    PATH_TO_DATA = './data/newRings2209.parquet'
-    PATH_TO_LOGS = './'
+    PATH_TO_DATA = os.getenv("PATH_TO_DATA")
 
 class DevelopmentConfig(Config):
     DEBUG = True

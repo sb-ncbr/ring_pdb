@@ -8,25 +8,29 @@ from data_manager import DataManager
 import io
 
 from utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
+from config import DevelopmentConfig, ProductionConfig
 
 app = Flask(__name__,
             static_folder='dist/static',
-            template_folder='dist')
+            template_folder=os.path.join(os.path.dirname(__file__), "templates"))
 
-load_dotenv()
+config_map = {
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+}
 
-print("Loaded CONFIGURATION_SETUP:", os.getenv("CONFIGURATION_SETUP"))  # Debugging
-environment_configuration = os.getenv('CONFIGURATION_SETUP')  # Use os.getenv instead of os.environ.get
-if not environment_configuration:
-    raise RuntimeError("CONFIGURATION_SETUP is not set!")
+flask_env = os.getenv("FLASK_ENV")
+config_class = config_map.get(flask_env)
 
-app.config.from_object(environment_configuration)
+app.config.from_object(config_class)
 
 CORS(app)
 
 # Setup logging
-filenm = os.path.join(os.path.dirname(__file__), app.config['PATH_TO_LOGS'], 'LOGFILE.log')
-logging.basicConfig(filename=filenm, encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 # Initialize the DataManager
 with app.app_context():

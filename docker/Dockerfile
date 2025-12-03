@@ -1,21 +1,12 @@
-FROM node:20-slim as frontend
+FROM node:22-alpine
 
-WORKDIR /build
+WORKDIR /app
 
-COPY ./frontend/package.json ./frontend/package-lock.json /build/
+COPY ../frontend/package*.json ./
+RUN npm ci
 
-RUN npm install
+COPY ../frontend ./
 
-COPY ./frontend /build
+EXPOSE 5173
 
-RUN ./node_modules/.bin/tsc
-
-RUN npm run build
-
-FROM nginx:1.26-alpine-slim
-
-COPY --from=frontend /build/assets /var/www/assets
-
-COPY --from=frontend /build/*.html /var/www/
- 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
