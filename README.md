@@ -15,3 +15,9 @@
 ```bash
 RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose.yml up --build --watch
 ```
+
+### Production on local machine
+```bash
+echo "VITE_API_URL=/api" > frontend/.env.production.local
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml up --build
+```

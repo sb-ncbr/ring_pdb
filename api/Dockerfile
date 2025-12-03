@@ -8,7 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY api/src /app/src
 
 ENV FLASK_APP=/app/src/app.py
-ENV FLASK_RUN_HOST=0.0.0.0
 ENV PYTHONUNBUFFERED=1
 
 CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
