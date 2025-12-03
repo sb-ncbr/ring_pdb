@@ -69,14 +69,14 @@ export const UserGuide: React.FC = () => {
                 visualisations.
               </li>
             </ul>
-          </Typography>
+          </Typography> 
 
           <Typography variant="body1" sx={{ mt: 3 }}>
             From the <strong>Main page</strong> you can also directly access the{' '}
             <strong>Visualisation page</strong> of <strong>example rings</strong>.
           </Typography>
           <img
-            src="/images/ringweb_flow.svg"
+            src="assets/images/ringweb_flow.svg"
             alt="Flow of the RingWeb application"
             style={{ width: '100%', marginTop: 16, borderRadius: 4 }}
           />
@@ -102,7 +102,7 @@ export const UserGuide: React.FC = () => {
             </ol>
           </Typography>
           <img
-            src="/images/browse_screenshot.png"
+            src="assets/images/browse_screenshot.png"
             alt="Screenshot of Browse Rings and Conformations Page"
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
@@ -126,7 +126,7 @@ export const UserGuide: React.FC = () => {
             <ul style={{ paddingLeft: '1.2em' }}>
               <li>Advanced filtering options</li>
               <img
-                src="/images/table_left_toolbar_screenshot.png"
+                src="assets/images/table_left_toolbar_screenshot.png"
                 alt="Screenshot of Visualisation Page (Ring Details)"
                 style={{ width: '70%', height: 'auto', display: 'block' }}
               />
@@ -225,7 +225,7 @@ export const UserGuide: React.FC = () => {
             including its coverage, atom names, chain ID, and residue ID.
           </Typography>
           <img
-            src="/images/ring_details_screenshot.png"
+            src="assets/images/ring_details_screenshot.png"
             alt="Screenshot of Visualisation Page (Ring Details)"
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />

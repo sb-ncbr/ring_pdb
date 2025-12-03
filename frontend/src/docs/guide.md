@@ -26,7 +26,6 @@ The available options are:
      Jump directly to the **Table Page**, where the full dataset is displayed and where you can apply advanced filters and access individual ring visualizations.
 
 You can also access example ring visualizations directly from the Main Page.
-![Main Page Screenshot](./ringweb_flow.svg)
 
 ---
 
