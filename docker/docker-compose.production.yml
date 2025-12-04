@@ -9,8 +9,8 @@ services:
   web:
     volumes:
       - ./nginx.production.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt/live/ringweb.ceitec.muni.cz/fullchain.pem:/etc/fullchain.pem:ro
-      - /etc/letsencrypt/live/ringweb.ceitec.muni.cz/privkey.pem:/etc/privkey.pem:ro
+      - /etc/letsencrypt/live/ringweb.biodata.ceitec.muni.cz/fullchain.pem:/etc/fullchain.pem:ro
+      - /etc/letsencrypt/live/ringweb.biodata.ceitec.muni.cz/privkey.pem:/etc/privkey.pem:ro
     ports:
       - "80:80"
       - "443:443"

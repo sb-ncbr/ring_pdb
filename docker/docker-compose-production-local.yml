@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: ..
-      dockerfile: api/Dockerfile.production.local
+      dockerfile: api/Dockerfile.production
     container_name: api
     environment:
       PATH_TO_DATA: "/data/rings.parquet"
@@ -19,7 +19,7 @@ services:
     container_name: web
     build:
       context: ..
-      dockerfile: docker/Dockerfile.production.local
+      dockerfile: docker/Dockerfile.production
     volumes:
       - ./nginx.devel.conf:/etc/nginx/nginx.conf:ro
     depends_on:
