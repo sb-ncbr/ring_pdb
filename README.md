@@ -1,8 +1,8 @@
 <div align="center">
   <br>
   <br>
-  <a href="https://github.com/sb-ncbr/AlphaCharges">
-    <img src="public/Logo.svg" alt="AlphaCharges" width="220">
+  <a href="https://github.com/victoria-dos/ring_web">
+    <img src="frontend/assets/Logo.svg" alt="RingWeb" width="220">
   </a>
   <br>
   <br>
@@ -10,45 +10,14 @@
 
 ## How to run
 
-### Web app
-
-Dev
+### Development
 
 ```bash
-npm run dev
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose.yml up --build --watch
 ```
 
-Prod
-
+### Production on local machine
 ```bash
-npx vite build --mode production
-npm run preview
-```
-
-### API
-
-Install deps
-
-```bash
-python -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
-```
-
-Create config file
-
-```bash
-cat config_example.py > config.py
-```
-
-Run server
-
-```bash
-python app.py
-```
-
-### Docker
-
-```bash
-docker-compose up --build --watch
+echo "VITE_API_URL=/api" > frontend/.env.production.local
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml up --build
 ```
