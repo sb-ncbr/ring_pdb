@@ -24,6 +24,6 @@ RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-produ
 
 ### Production 
 ```bash
-RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml -f ./docker/docker-compose.production.yml up --build
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml -f ./docker/docker-compose.production.yml up -d --build
 
 ```
