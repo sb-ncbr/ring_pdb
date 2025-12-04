@@ -21,3 +21,9 @@ RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose.yml u
 echo "VITE_API_URL=/api" > frontend/.env.production.local
 RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml up --build
 ```
+
+### Production 
+```bash
+RINGWEB_DATA=$(pwd)/api/src/data docker compose -f ./docker/docker-compose-production-local.yml -f ./docker/docker-compose.production.yml up --build
+
+```
