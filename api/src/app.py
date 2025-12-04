@@ -4,25 +4,14 @@ from flask.cli import load_dotenv
 import logging
 import pandas as pd
 from flask_cors import CORS
-from data_manager import DataManager
+from src.data_manager import DataManager
 import io
 
-from utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
-from config import DevelopmentConfig, ProductionConfig
+from src.utils import is_favorable, get_range_with_step, filter_by_conf, apply_filters
 
 app = Flask(__name__,
             static_folder='dist/static',
             template_folder=os.path.join(os.path.dirname(__file__), "templates"))
-
-config_map = {
-    "development": DevelopmentConfig,
-    "production": ProductionConfig,
-}
-
-flask_env = os.getenv("FLASK_ENV")
-config_class = config_map.get(flask_env)
-
-app.config.from_object(config_class)
 
 CORS(app)
 
@@ -290,9 +279,6 @@ def export_data():
         download_name='export.csv'
     )
 
-
-print(f"Environment: {app.config['ENV']}")
-print(f"Debug: {app.config['DEBUG']}")
 
 if __name__ == "__main__":
     app.run()

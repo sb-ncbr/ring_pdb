@@ -4,7 +4,6 @@ import pandas as pd
 import pickle
 
 from pathlib import Path
-from flask import current_app
 
 class DataManager:
     _instance = None
@@ -24,16 +23,15 @@ class DataManager:
         self.initialized = True    
         
     def _should_reload_data(self):
-        """Check if the source Excel file has been modified since last load"""
-        return False # todo: remove in prod
-        current_mtime = os.path.getmtime(self.excel_path)
+        """Check if the source Datafile file has been modified since last load"""
+        current_mtime = os.path.getmtime(self.datafile_path)
         return (self.last_modified_time is None or 
                 current_mtime > self.last_modified_time)
     
-    def _load_from_excel(self):
-        self._data = pd.read_parquet(self.excel_path)
+    def _load_from_datafile(self):
+        self._data = pd.read_parquet(self.datafile_path)
         self._data['ring_id'] = self._data.index
-        self.last_modified_time = os.path.getmtime(self.excel_path)
+        self.last_modified_time = os.path.getmtime(self.datafile_path)
         self._save_to_cache(self._data)
 
     def _load_from_cache(self):
@@ -59,25 +57,24 @@ class DataManager:
     
     def preload_data(self):
         logging.info("Preloading data to cache")
-        self._load_from_excel()
+        self._load_from_datafile()
     
     @property
-    def excel_path(self):
-        """Get Excel path from current Flask context"""
-        with current_app.app_context():
-            return current_app.config['PATH_TO_DATA']
+    def datafile_path(self):
+        """Get Datafile path from env variable"""
+        return os.getenv("PATH_TO_DATA")
         
     @property
     def data(self):
         """Get data with caching mechanism"""
         if self._should_reload_data():
-            logging.info("Loading fresh data from Excel")
-            self._load_from_excel()
+            logging.info("Loading fresh data from Datafile")
+            self._load_from_datafile()
         elif self._data is None:
             logging.info("Attempting to load from cache")
             self._data = self._load_from_cache()
             if self._data is None:
-                logging.info("Cache miss - loading from Excel")
-                self._load_from_excel()
+                logging.info("Cache miss - loading from Datafile")
+                self._load_from_datafile()
         
         return self._data

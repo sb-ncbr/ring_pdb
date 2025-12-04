@@ -4,10 +4,9 @@ services:
   api:
     build:
       context: ..
-      dockerfile: api/Dockerfile
+      dockerfile: api/Dockerfile.production.local
     container_name: api
     environment:
-      FLASK_ENV: production
       PATH_TO_DATA: "/data/rings.parquet"
     volumes:
       - ${RINGWEB_DATA:-/data}:/data:ro

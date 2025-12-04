@@ -7,7 +7,6 @@ services:
       dockerfile: api/Dockerfile
     container_name: api
     environment:
-      FLASK_ENV: development
       FLASK_DEBUG: 1
       PATH_TO_DATA: "/data/rings.parquet"
     volumes:
