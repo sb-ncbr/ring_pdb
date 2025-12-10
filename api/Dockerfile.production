@@ -6,5 +6,6 @@ COPY api/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY api/src /app/src
+COPY api/data /data
 
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "src.app:app"]

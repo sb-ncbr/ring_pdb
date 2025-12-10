@@ -8,8 +8,6 @@ services:
     container_name: api
     environment:
       PATH_TO_DATA: "/data/rings.parquet"
-    volumes:
-      - ${RINGWEB_DATA:-/data}:/data:ro
     ports:
       - "5000:5000"
     networks:

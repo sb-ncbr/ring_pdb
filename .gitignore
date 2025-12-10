@@ -2,6 +2,7 @@
 node_modules
 __pycache__
 .idea
+.vscode
 yarn.lock
 
 # Pip environment

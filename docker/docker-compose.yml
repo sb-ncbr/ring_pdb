@@ -9,8 +9,6 @@ services:
     environment:
       FLASK_DEBUG: 1
       PATH_TO_DATA: "/data/rings.parquet"
-    volumes:
-      - ${RINGWEB_DATA:-/data}:/data:ro
     ports:
       - "5000:5000"
     networks:
