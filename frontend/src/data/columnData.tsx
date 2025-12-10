@@ -92,7 +92,7 @@ export const getColumns = (
   },
   {
     header: 'RESIDUE ID',
-    accessorKey: 'residue_id',
+    accessorKey: 'residues',
     enableColumnFilter: false,
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
