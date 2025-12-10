@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
 import { SelectableCard } from './RingCard.tsx';
-import { RotatingMolecule } from './RotatingMolecule.tsx';
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
+import MoleculeWithFallback from './MoleculeWithFallback.tsx';
 
 interface ConfCardProps {
   name: string;
@@ -42,7 +42,7 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           />
         </Box>
         <Box sx={{ height: 260 }}>
-          <RotatingMolecule modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
+          <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
         </Box>
         <CardContent>
           <Typography gutterBottom variant="subtitle1" component="div">

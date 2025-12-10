@@ -35,7 +35,7 @@ export interface ColumnDataMRT {
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;
-export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane';
+export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane' | 'Oxane';
 
 export interface RingConf {
   name: string;

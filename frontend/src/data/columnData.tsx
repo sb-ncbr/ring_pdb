@@ -69,6 +69,16 @@ export const getColumns = (
       );
     },
   },
+    {
+    header: 'CHAIN ID',
+    accessorKey: 'chain_id',
+    enableColumnFilter: false,
+    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
+      <Box>
+        <Typography variant="body2">{cell.getValue<string>()}</Typography>
+      </Box>
+    ),
+  },
   {
     header: 'CCD ID',
     accessorKey: 'ccd_id',
@@ -92,7 +102,7 @@ export const getColumns = (
   },
   {
     header: 'RESIDUE ID',
-    accessorKey: 'residues',
+    accessorKey: 'residue_id',
     enableColumnFilter: false,
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>

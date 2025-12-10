@@ -6,6 +6,7 @@ declare module '@mui/material/styles' {
       paleViolet: string;
       paleOrange: string;
       paleGreen: string;
+      paleBlue: string;  
     };
   }
 
@@ -14,6 +15,7 @@ declare module '@mui/material/styles' {
       paleViolet?: string;
       paleOrange?: string;
       paleGreen?: string;
+      paleBlue?: string;  
     };
   }
 }
@@ -80,6 +82,7 @@ const theme = createTheme({
       paleViolet: '#EBE4FF',
       paleOrange: '#F6E8D8',
       paleGreen: '#E2EFEF',
+      paleBlue: '#D8EBFF',  
     },
     background: {
       default: '#FFFFFF',

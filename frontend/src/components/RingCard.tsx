@@ -6,11 +6,11 @@ import CardActionArea from '@mui/material/CardActionArea';
 import { formatNumber } from '../helperFunctions/helpers.ts';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { RotatingMolecule } from './RotatingMolecule.tsx';
-import { ValidRingNames } from './RingsStepper/types.ts';
+import { RingType } from '../data/dataTypes.ts';
+import MoleculeWithFallback from './MoleculeWithFallback.tsx';
 
 interface RingCardProps {
-  name: ValidRingNames;
+  name: RingType;
   ccd: number;
   pdb: number;
   total: number;
@@ -57,7 +57,7 @@ export const RingCard: React.FC<RingCardProps> = ({
       <CardActionArea onClick={handleCardSelect} disabled={disabled || isSelected}>
         <CardContent>
           <Box sx={{ height: 300 }}>
-            <RotatingMolecule modelPath={`assets/geometry/${name}.glb`} />
+            <MoleculeWithFallback modelPath={`assets/geometry/${name}.glb`} />
           </Box>
           <Typography gutterBottom variant="subtitle1" component="div">
             {name}

@@ -21,6 +21,8 @@ export const getChipStyles = (type: string, theme: any) => {
       return { backgroundColor: theme.palette.custom.paleOrange };
     case 'Benzene':
       return { backgroundColor: theme.palette.custom.paleViolet };
+    case 'Oxane':
+      return { backgroundColor: theme.palette.custom.paleBlue };
     default:
       return { backgroundColor: theme.palette.background.default };
   }
