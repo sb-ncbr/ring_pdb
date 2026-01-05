@@ -44,7 +44,7 @@ def filter_by_conf(value: Dict[str, List[str] | bool], filtered_data):
 
 def is_favorable(ring, conf):
     return ((ring == "Cyclohexane" and conf == "Chair") or (ring == "Benzene" and conf == "Flat") or
-            (ring == "Cyclopentane" and conf in ["Envelope", "Half chair"]))
+            (ring == "Cyclopentane" and conf in ["Envelope", "Half chair"]) or (ring == "Oxane" and conf == "4C1"))
 
 
 def apply_filters(df, filters):

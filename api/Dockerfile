@@ -11,4 +11,4 @@ COPY api/data /data
 ENV FLASK_APP=/app/src/app.py
 ENV PYTHONUNBUFFERED=1
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["flask", "run", "--debug",  "--host=0.0.0.0", "--port=5000"]

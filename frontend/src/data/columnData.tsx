@@ -331,16 +331,16 @@ export const getColumns = (
       );
     },
   },
-  {
-    header: 'RMSD [Å]',
-    accessorKey: 'rmsd',
-    enableColumnFilter: false,
-    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
-      <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{formatNumber(cell.getValue<number>(), 3)}</Typography>
-      </Box>
-    ),
-  },
+  // {
+  //   header: 'RMSD [Å]',
+  //   accessorKey: 'rmsd',
+  //   enableColumnFilter: false,
+  //   Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
+  //     <Box sx={{ textAlign: 'right' }}>
+  //       <Typography variant="body2">{formatNumber(cell.getValue<number>(), 3)}</Typography>
+  //     </Box>
+  //   ),
+  // },
   {
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',
@@ -407,16 +407,16 @@ export const getColumns = (
       </Box>
     ),
   },
-  {
-    header: 'LIGAND COVERAGE [%]',
-    accessorKey: 'ligand_coverage',
-    filterVariant: 'text',
-    Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
-      <Box sx={{ textAlign: 'right' }}>
-        <Typography variant="body2">{cell.getValue<number>()}</Typography>
-      </Box>
-    ),
-  },
+  // {
+  //   header: 'LIGAND COVERAGE [%]',
+  //   accessorKey: 'ligand_coverage',
+  //   filterVariant: 'text',
+  //   Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
+  //     <Box sx={{ textAlign: 'right' }}>
+  //       <Typography variant="body2">{cell.getValue<number>()}</Typography>
+  //     </Box>
+  //   ),
+  // },
   {
     header: '2D STRUCTURE',
     accessorKey: 'img_url',

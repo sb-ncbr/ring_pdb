@@ -39,7 +39,7 @@ interface RingData {
   conformation: string;
   experimental_method: string;
   pdb_id: string;
-  residues: string;
+  residue_id: number;
   ring_id: string;
   ring_type: string;
   rmsd: number;
