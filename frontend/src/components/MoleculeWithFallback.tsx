@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RotatingMolecule } from "./RotatingMolecule";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-const GLTFLoader = (await import('three/examples/jsm/loaders/GLTFLoader')).GLTFLoader;
 
 function MoleculeWithFallback({
   modelPath,
@@ -23,7 +23,7 @@ useEffect(() => {
       console.log("GLB loaded successfully:", modelPath, gltf);
       setModelOk(true);
     },
-    undefined, // progress optional
+    undefined,
     (error: any) => {
       console.error("Failed to load GLB:", modelPath, error);
       setModelOk(false);
