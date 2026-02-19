@@ -173,9 +173,9 @@ export default function RingsStepper() {
                 sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  justifyContent: 'start',
+                  justifyContent: 'center',
                   margin: '16px 0',
-                  gap: '16px',
+                  gap: '24px',
                 }}
               >
                 {ringCards.rings[ringIndex].confs.map((conf, index) => (

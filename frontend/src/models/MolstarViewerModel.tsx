@@ -144,6 +144,7 @@ export default class MolstarViewerModel {
   }
 
   private async _load(pdbId: string, selection: RingSelection) {
+    pdbId = pdbId.toLowerCase()
     const expression = this._getExpression(selection);
     const ringSelectionQuery = StructureSelectionQuery('Ring', expression);
 

@@ -9,7 +9,7 @@ const Footer = () => {
         {/* Footer Text */}
         <Box sx={{ textAlign: 'right', color: 'gray' }}>
           <Typography variant="body2">
-            © 2025 RingWeb.{' '}
+            © 2026 RingWeb.{' '}
             <Link
               href="https://webchem.ncbr.muni.cz/Platform/Home/TermsOfUse"
               target="_blank"
