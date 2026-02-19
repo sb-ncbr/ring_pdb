@@ -28,6 +28,7 @@ interface CellRefs {
   };
   ligand?: StateObjectCell;
   ring?: StateObjectCell;
+  sacch?: StateObjectCell;
   volumeStreaming?: string;
 }
 
@@ -189,10 +190,17 @@ export default class MolstarViewerModel {
       'ring-selection',
     );
 
+    const sacch = await this._plugin.builders.structure.tryCreateComponentStatic(
+      structure,
+      'branched',
+      { label: 'Carbohydrate'}
+    );
+
     let polymerCartoonVisual = undefined;
     let polymerBasVisual = undefined;
     let ligandVisual = undefined;
     let ringVisual = undefined;
+    let sacchVisual = undefined;
 
     // create visual representations
     if (polymer) {
@@ -251,6 +259,22 @@ export default class MolstarViewerModel {
       });
     }
 
+    if (sacch) {
+      sacchVisual = await this._plugin.builders.structure.representation.addRepresentation(
+        sacch,
+        {
+          // type: 'carbohydrate',
+          type: 'ball-and-stick',
+          typeParams: {
+            alpha: 0.4,
+          },
+          // color: 'carbohydrate-symbol',
+          color: 'element-symbol',
+          colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
+        }
+      );
+    }
+
     // save node refs
     this._cellRefs = {
       assembly: structure.cell,
@@ -260,6 +284,7 @@ export default class MolstarViewerModel {
       },
       ligand: ligandVisual?.cell,
       ring: ringVisual?.cell,
+      sacch: sacchVisual?.cell
     };
   }
 
