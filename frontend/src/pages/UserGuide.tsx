@@ -76,9 +76,9 @@ export const UserGuide: React.FC = () => {
             <strong>Visualisation page</strong> of <strong>example rings</strong>.
           </Typography>
           <img
-            src="assets/images/ringweb_flow.svg"
-            alt="Flow of the RingWeb application"
-            style={{ width: '100%', marginTop: 16, borderRadius: 4 }}
+            src="assets/images/docs_scheme.svg"
+            alt="Diagram of the RingWeb application flow"
+            style={{ width: '50%', margin: 16, borderRadius: 4 }}
           />
         </AccordionDetails>
       </Accordion>
