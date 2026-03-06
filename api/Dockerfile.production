@@ -1,11 +1,16 @@
-FROM python:3.11-slim-bookworm
+FROM python:3.14-slim-bookworm
 
 WORKDIR /app
 
-COPY api/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+COPY api/pyproject.toml api/uv.lock ./
+RUN uv sync --frozen --no-dev
 
 COPY api/src /app/src
 COPY api/data /data
+
+ENV PYTHONUNBUFFERED=1
+ENV PATH='/app/.venv/bin:$PATH'
 
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "src.app:app"]
