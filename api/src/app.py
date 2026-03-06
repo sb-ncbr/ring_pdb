@@ -16,10 +16,10 @@ CORS(app)
 # Setup logging
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
-# Initialize the DataManager
+# Initialise the DataManager
 with app.app_context():
     data_manager = DataManager()
 
@@ -39,13 +39,13 @@ def detect_missing_values(df, field: str):
     error_info = None
 
     if missing_count > 0:
-        error_message = f"{missing_count} record(s) missing {field} value."
+        error_message = f'{missing_count} record(s) missing {field} value.'
         logging.error(error_message)
 
         error_info = {
-            "code": "MISSING_VALUE",
-            "field": field,
-            "message": error_message
+            'code': 'MISSING_VALUE',
+            'field': field,
+            'message': error_message
         }
 
     return valid_values, error_info
@@ -66,7 +66,7 @@ def get_filtered_field(field_name: str):
     Generic handler for routes that return a filtered field.
     """
     received_data = request.get_json()
-    other_filters = received_data.get("otherFilters", {})
+    other_filters = received_data.get('otherFilters', {})
 
     filtered_data = apply_filters(data_manager.data, other_filters)
 
@@ -115,7 +115,7 @@ def get_paginated_data():
 
     filters_value_range = {
         'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
-        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_float'] * 100, 'ring_coverage_float'),
+        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_percent'], 'ring_coverage_float'),
         'rsr': get_range_with_step(data_for_calc_ranges['rsr']),
         'rscc': get_range_with_step(data_for_calc_ranges['rscc']),
     }
@@ -134,13 +134,13 @@ def get_row_data():
     current_data = data_manager.data
 
     if not ring_id:
-        return jsonify({"error": "ringID parameter is required"}), 400
+        return jsonify({'error': 'ringID parameter is required'}), 400
 
     if ring_id not in current_data.index:
-        return jsonify({"error": "Ring ID not found"}), 404
+        return jsonify({'error': 'Ring ID not found'}), 404
 
     row_data = current_data.loc[ring_id].to_json()
-    return Response(status=200, mimetype="application/json", response=row_data)
+    return Response(status=200, mimetype='application/json', response=row_data)
 
 
 @app.route('/api/export-data', methods=['POST'])
@@ -153,7 +153,7 @@ def export_data():
 
     _, sorted_data = prepare_filtered_and_sorted_data(current_data, filters, sorting)
 
-    export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_counts'], axis=1).fillna('N/A')
+    export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_counts', 'is_favorable'], axis=1).fillna('N/A')
 
     csv_string = export_data.to_csv(index=False)
     csv_bytes = io.BytesIO(csv_string.encode('utf-8'))
@@ -167,5 +167,5 @@ def export_data():
     )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()

@@ -37,15 +37,6 @@ def get_range_with_step(data_series, column_name=None):
         return {'min': min_value, 'max': max_value, 'step': step}
 
 
-def get_favorability_mask(df: pd.DataFrame) -> pd.Series:
-    cyclohexane_mask = (df['ring_type'] == 'Cyclohexane') & (df['conformation'] == 'Chair')
-    benzene_mask = (df['ring_type'] == 'Benzene') & (df['conformation'] == 'Flat')
-    cyclopentane_mask = ((df['ring_type'] == 'Cyclopentane') & (df['conformation'].isin(['Envelope', 'Half chair'])))
-    oxane_mask = (df['ring_type'] == 'Oxane') & (df['conformation'] == '4C1')
-
-    return cyclohexane_mask | benzene_mask | cyclopentane_mask | oxane_mask
-
-
 def get_conformation_mask(df: pd.DataFrame, conf_filter: Dict[str, List[str] | bool]) -> pd.Series:
     selected_values = conf_filter.get('selectedValues', [])
     show_favorable = conf_filter.get('showFavorable', True)
@@ -60,7 +51,7 @@ def get_conformation_mask(df: pd.DataFrame, conf_filter: Dict[str, List[str] | b
         mask &= df['conformation'].isin(selected_values)
 
     if show_favorable != show_unfavorable:
-        favorability_mask = get_favorability_mask(df)
+        favorability_mask = df['is_favorable']
         mask &= favorability_mask if show_favorable else ~favorability_mask
 
     return mask
@@ -87,9 +78,9 @@ def prepare_filtered_and_sorted_data(current_data: pd.DataFrame,
                                      filters: list[dict[str, Any]],
                                      sorting: list[dict[str, Any]]
                                      ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    non_empty_filters = [filter_item for filter_item in filters if filter_item['value']]
-    in_filters = [filter_item for filter_item in non_empty_filters if filter_item['id'] in IN_FILTER_IDS]
-    range_filters = [filter_item for filter_item in non_empty_filters if filter_item['id'] in RANGE_FILTER_IDS]
+
+    in_filters = [f for f in filters if f['value'] and f['id'] in IN_FILTER_IDS]
+    range_filters = [f for f in filters if f['value'] and f['id'] in RANGE_FILTER_IDS]
 
     data_before_range_filters = filter_in(current_data, in_filters)
     filtered_data = filter_ranges(data_before_range_filters, range_filters)
@@ -127,7 +118,7 @@ def filter_ranges(filtered_data, range_filters: list[dict[str, Any]]) -> pd.Data
         if filter_id == 'resolution':
             mask &= filtered_data['resolution'].between(min_value, max_value)
         elif filter_id == 'ring_coverage':
-            mask &= (filtered_data['ring_coverage_float'] * 100).between(min_value, max_value)
+            mask &= (filtered_data['ring_coverage_percent']).between(min_value, max_value)
         elif filter_id == 'rsr':
             mask &= filtered_data['rsr'].between(min_value, max_value)
         elif filter_id == 'rscc':
