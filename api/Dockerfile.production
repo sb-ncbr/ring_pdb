@@ -8,7 +8,6 @@ COPY api/pyproject.toml api/uv.lock ./
 RUN uv sync --frozen --no-dev
 
 COPY api/src /app/src
-COPY api/src/templates /app/templates
 COPY api/data /data
 
 ENV PYTHONUNBUFFERED=1

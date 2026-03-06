@@ -75,11 +75,6 @@ def get_filtered_field(field_name: str):
     return build_response({'payload': field_data}, error_info)
 
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
 @app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
     return get_filtered_field('pdb_id')
