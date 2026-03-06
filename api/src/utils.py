@@ -1,5 +1,23 @@
 import numpy as np
-from typing import Dict, List
+from typing import Dict, List, Any
+import pandas as pd
+import logging
+
+IN_FILTER_IDS = {
+    'ring_type',
+    'conformation',
+    'experimental_method',
+    'pdb_id',
+    'ccd_id',
+}
+
+RANGE_FILTER_IDS = {
+    'resolution',
+    'ring_coverage',
+    'rsr',
+    'rscc',
+}
+
 
 def get_range_with_step(data_series, column_name=None):
     """Calculate min, max, and step while handling NaN values."""
@@ -19,44 +37,100 @@ def get_range_with_step(data_series, column_name=None):
         return {'min': min_value, 'max': max_value, 'step': step}
 
 
-def filter_by_conf(value: Dict[str, List[str] | bool], filtered_data):
-    selected_values = value.get('selectedValues', [])
-    show_favorable = value.get('showFavorable', True)
-    show_unfavorable = value.get('showUnfavorable', True)
+def get_favorability_mask(df: pd.DataFrame) -> pd.Series:
+    cyclohexane_mask = (df['ring_type'] == 'Cyclohexane') & (df['conformation'] == 'Chair')
+    benzene_mask = (df['ring_type'] == 'Benzene') & (df['conformation'] == 'Flat')
+    cyclopentane_mask = ((df['ring_type'] == 'Cyclopentane') & (df['conformation'].isin(['Envelope', 'Half chair'])))
+    oxane_mask = (df['ring_type'] == 'Oxane') & (df['conformation'] == '4C1')
 
-    if not (show_favorable or show_unfavorable):
-        return filtered_data.iloc[0:0]
+    return cyclohexane_mask | benzene_mask | cyclopentane_mask | oxane_mask
+
+
+def get_conformation_mask(df: pd.DataFrame, conf_filter: Dict[str, List[str] | bool]) -> pd.Series:
+    selected_values = conf_filter.get('selectedValues', [])
+    show_favorable = conf_filter.get('showFavorable', True)
+    show_unfavorable = conf_filter.get('showUnfavorable', True)
+
+    if not show_favorable and not show_unfavorable:
+        return pd.Series(False, index=df.index)
+
+    mask = pd.Series(True, index=df.index)
 
     if selected_values:
-        filtered_data = filtered_data[filtered_data['conformation'].isin(selected_values)]
+        mask &= df['conformation'].isin(selected_values)
 
-    if not (show_favorable and show_unfavorable):
-        favorability_mask = filtered_data.apply(
-            lambda row: is_favorable(row['ring_type'], row['conformation']), axis=1
-        )
-        if show_favorable:
-            filtered_data = filtered_data[favorability_mask]
-        elif show_unfavorable:
-            filtered_data = filtered_data[~favorability_mask]
+    if show_favorable != show_unfavorable:
+        favorability_mask = get_favorability_mask(df)
+        mask &= favorability_mask if show_favorable else ~favorability_mask
 
-    return filtered_data
+    return mask
 
 
-def is_favorable(ring, conf):
-    return ((ring == "Cyclohexane" and conf == "Chair") or (ring == "Benzene" and conf == "Flat") or
-            (ring == "Cyclopentane" and conf in ["Envelope", "Half chair"]) or (ring == "Oxane" and conf == "4C1"))
+def apply_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
+    mask = pd.Series(True, index=df.index)
 
-
-def apply_filters(df, filters):
     for key, value in filters.items():
         if not value:
             continue
-        if key == 'conformation':
-            filter_by_conf(value, df)
-        else:
-            if isinstance(value, (list, tuple, set)):
-                df = df[df[key].isin(value)]
-            else:
-                print(f"Warning: unexpected filter format for {key}, skipping.")
 
-    return df
+        if key == 'conformation':
+            mask &= get_conformation_mask(df, value)
+        elif key in df.columns and isinstance(value, (list, tuple, set)):
+            mask &= df[key].isin(value)
+        else:
+            logging.warning(f'Unexpected filter format or unknown filter key: {key}')
+
+    return df[mask]
+
+
+def prepare_filtered_and_sorted_data(current_data: pd.DataFrame,
+                                     filters: list[dict[str, Any]],
+                                     sorting: list[dict[str, Any]]
+                                     ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    non_empty_filters = [filter_item for filter_item in filters if filter_item['value']]
+    in_filters = [filter_item for filter_item in non_empty_filters if filter_item['id'] in IN_FILTER_IDS]
+    range_filters = [filter_item for filter_item in non_empty_filters if filter_item['id'] in RANGE_FILTER_IDS]
+
+    data_before_range_filters = filter_in(current_data, in_filters)
+    filtered_data = filter_ranges(data_before_range_filters, range_filters)
+    if sorting:
+        sort_column = sorting[0].get('id')
+        sort_order_desc = sorting[0].get('desc')
+        if sort_column == 'ring_coverage':
+            sort_column = 'ring_coverage_float'
+        filtered_data = filtered_data.sort_values(sort_column, ascending=(not sort_order_desc))
+
+    return data_before_range_filters, filtered_data
+
+
+def filter_in(filtered_data: pd.DataFrame, in_filters: list[dict[str, Any]]) -> pd.DataFrame:
+    mask = pd.Series(True, index=filtered_data.index)
+    for filter_item in in_filters:
+        filter_id = filter_item['id']
+        filter_value = filter_item['value']
+
+        if filter_id == 'conformation':
+            mask &= get_conformation_mask(filtered_data, filter_value)
+        else:
+            mask &= filtered_data[filter_id].isin(filter_value)
+
+    return filtered_data[mask]
+
+
+def filter_ranges(filtered_data, range_filters: list[dict[str, Any]]) -> pd.DataFrame:
+    mask = pd.Series(True, index=filtered_data.index)
+
+    for filter_item in range_filters:
+        filter_id = filter_item['id']
+        min_value, max_value = filter_item['value']
+
+        if filter_id == 'resolution':
+            mask &= filtered_data['resolution'].between(min_value, max_value)
+        elif filter_id == 'ring_coverage':
+            mask &= (filtered_data['ring_coverage_float'] * 100).between(min_value, max_value)
+        elif filter_id == 'rsr':
+            mask &= filtered_data['rsr'].between(min_value, max_value)
+        elif filter_id == 'rscc':
+            mask &= filtered_data['rscc'].between(min_value, max_value)
+
+    return filtered_data[mask]
