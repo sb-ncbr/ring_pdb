@@ -31,10 +31,10 @@ const Header: React.FC = () => {
         {/* Navigation Buttons */}
         <Box>
           <Button component={Link} to="/" color="inherit">
-            <Typography variant="subtitle2">Home</Typography>
+            <Typography variant="caption">Home</Typography>
           </Button>
           <Button component={Link} to="/user-guide" color="inherit">
-            <Typography variant="subtitle2">User guide</Typography>
+            <Typography variant="caption">User guide</Typography>
           </Button>
         </Box>
       </Toolbar>

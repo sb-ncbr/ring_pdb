@@ -53,20 +53,15 @@ const theme = createTheme({
       fontSize: '1rem',
     },
     body2: {
-      fontFamily: 'Lora, serif',
+      fontFamily: 'EireneSans, sans-serif',
       fontWeight: 400,
       fontSize: '0.875rem',
     },
     caption: {
       fontFamily: 'EireneSans, sans-serif',
-      fontWeight: 400,
-      fontSize: '0.875rem',
-    },
-    // outline: {
-    //   fontFamily: 'EireneSans, sans-serif',
-    //   fontWeight: 700,
-    //   fontSize: '1rem',
-    // },
+      fontWeight: 500,
+      fontSize: '1rem',
+    }
   },
   palette: {
     primary: {
