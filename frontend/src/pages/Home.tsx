@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Grid2, Link, Typography } from '@mui/material';
 import ActionCard from '../components/ActionCard';
 import ExampleCard from '../components/ExampleCard';
 import Divider from '@mui/material/Divider';
@@ -58,11 +58,13 @@ export const Home: React.FC = () => (
     </Section>
 
     <Section background="#ffffff" blur>
-      <Stack direction={{ xs: 'column', sm: 'row' }} gap="24px" justifyContent="center">
+      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3}} justifyContent="center" >
         {cards['example-cards'].map((card, index) => (
-          <ExampleCard key={index} {...card} />
+          <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }} sx={{ display: 'flex' }}>
+            <ExampleCard {...card} />
+          </Grid2>
         ))}
-      </Stack>
+        </Grid2>
     </Section>
     <Divider sx={{ mt: 6 }} />
     <Box

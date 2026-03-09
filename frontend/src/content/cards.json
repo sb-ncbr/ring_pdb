@@ -47,6 +47,12 @@
       "body": "We analysed the 5MTP structure, focusing on ligand 53K, which contains three benzene rings. In all chains, one specific benzene consistently adopts a chair-like conformation, which is unusual for planar aromatic systems. This pattern repeats across the entire structure, suggesting a possible refinement artifact or restraint issue.",
       "image": "assets/images/5MTP.png",
       "url": "/ring-details/5MTP_A_53K_302_C15-C17-C20-C19-C18-C16"
+    },
+    {
+      "header": "Flat cyclopentane in ligand 3KT of 4r91 entry",
+      "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that a number of rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
+      "image": "assets/images/4R91.png",
+      "url": "/ring-details/4R91_A_3KT_502_C16-C21-C22-C26-C27"
     }
   ]
 }

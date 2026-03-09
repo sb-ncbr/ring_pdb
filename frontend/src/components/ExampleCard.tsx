@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 interface ExampleCardProps {
   header: string;
@@ -18,27 +19,27 @@ const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image, url }) =
   return (
     <Card
       sx={{
-        width: 420,
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
+        maxWidth: 420,
+        maxHeight: 450
       }}
     >
-      <CardActionArea onClick={() => navigate(url)} sx={{ height: '560px' }}>
+      <CardActionArea onClick={() => navigate(url)} >
         <CardMedia
           component="img"
           src={image}
           alt={header}
           sx={{
-            height: '240px',
-            width: '100%',
+            height: 200
           }}
         />
-        <CardContent sx={{ height: '100%' }}>
-          <Typography gutterBottom variant="subtitle1" component="div">
+        <CardContent sx={{ height: '100%'}}>
+          <Typography gutterBottom variant="subtitle2" component="div">
             {header}
           </Typography>
-          <Typography variant="body1">{body}</Typography>
+          <Box component="div" sx={{ overflow: 'auto', maxHeight: 160, paddingRight: 2 }}>
+            <Typography variant="body2">{body}</Typography>
+          </Box>
+          
         </CardContent>
       </CardActionArea>
     </Card>
