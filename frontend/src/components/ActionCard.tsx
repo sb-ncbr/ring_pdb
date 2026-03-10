@@ -69,7 +69,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
     <Card
       onClick={handleCardClick}
       sx={(theme) => ({
-        width: 300,
+        maxWidth: 300,
         minHeight: 350,
         backgroundColor: color,
         transition: 'all 0.3s ease',
@@ -79,20 +79,23 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
       })}
     >
       <CardActionArea sx={{ height: '100%' }} onClick={url ? () => navigate(url) : undefined}>
-        <CardContent
-          sx={{
-            flex: '1 0 auto',
-            padding: '0 48px',
-          }}
-        >
-          <Typography variant="subtitle1" component="div" sx={{ marginBottom: '48px' }}>
+        <CardContent   sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          p: 6,
+          gap: 4
+  }}>
+          <Box sx={{ minHeight: 110 }}>
+          <Typography variant="subtitle1" component="div">
             {header}
           </Typography>
-          <Typography variant="body1" sx={{ mt: 1, marginBottom: '24px' }}>
+          </Box>
+          <Typography variant="body1">
             {body}
           </Typography>
           {action === 'input' ? (
-            <Box component="form" onSubmit={handleSubmit} sx={{ marginTop: '12px' }}>
+            <Box component="form" onSubmit={handleSubmit}>
               <TextField
                 inputRef={inputRef}
                 id={`search-by-${idType}`}
@@ -109,14 +112,16 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
                     flex: 1,
                   },
                 }}
-                InputProps={{
-                  endAdornment: (
+                slotProps={{
+                  input: {
+                    endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={handleSubmit}>
                         <SearchIcon />
                       </IconButton>
                     </InputAdornment>
-                  ),
+                  )
+                  }
                 }}
               />
             </Box>

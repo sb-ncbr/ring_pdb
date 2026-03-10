@@ -5,9 +5,8 @@ const Footer = () => {
   return (
     <>
       <Divider sx={{ mt: 6 }} />
-      <Box sx={{ backgroundColor: '#ffffff', color: 'white', py: 3, px: 3 }}>
-        {/* Footer Text */}
-        <Box sx={{ textAlign: 'right', color: 'gray' }}>
+      <Box sx={{ backgroundColor: (theme) => theme.palette.background.default, py: 3, px: 3 }}>
+        <Box sx={{ textAlign: 'right', color: (theme) => theme.palette.text.secondary }}>
           <Typography variant="body2">
             © 2026 RingWeb.{' '}
             <Link

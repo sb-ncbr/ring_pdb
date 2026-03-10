@@ -6,9 +6,9 @@ export default function ContactInfo() {
      <Button
       variant="contained"
       color="info"
-      startIcon={<EmailIcon sx={{ color: '#7C7C7C' }}/>}
+      startIcon={<EmailIcon />}
       href="mailto:doshchenko@muni.cz"
-      sx={{ color: '#7C7C7C' }}
+      sx={{ color: (theme) => theme.palette.text.secondary }}
     >
       Contact Us
     </Button>

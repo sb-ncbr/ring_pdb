@@ -4,22 +4,20 @@ import ActionCard from '../components/ActionCard';
 import ExampleCard from '../components/ExampleCard';
 import Divider from '@mui/material/Divider';
 import cards from '../content/cards.json';
-import Stack from '@mui/material/Stack';
 import { MainSection } from '../components/MainSection.tsx';
 import Heading from '../components/Heading.tsx';
 import ContactInfo from '../components/ContactInfo.tsx';
 
 interface SectionProps {
   children: React.ReactNode;
-  background?: string; // can be color or gradient
   blur?: boolean;
 }
 
-const Section: React.FC<SectionProps> = ({ children, background, blur }) => (
+const Section: React.FC<SectionProps> = ({ children, blur }) => (
   <Box
     sx={{
       width: '100%',
-      background,
+      backgroundColor: (theme) => theme.palette.background.default,
       backdropFilter: blur ? 'blur(10px)' : undefined,
       WebkitBackdropFilter: blur ? 'blur(10px)' : undefined,
       py: 3,
@@ -35,32 +33,47 @@ const isValidId = (id: unknown): id is 'pdb' | 'ccd' | undefined => {
 
 export const Home: React.FC = () => (
   <Box>
-    <Section background="#ffffff">
+    <Section>
       <MainSection />
     </Section>
 
-    <Section background="#ffffff" blur>
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        gap="24px"
-        justifyContent="center"
-        alignItems="stretch"
-      >
+    <Section blur>
+      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3 }} >
         {cards['action-cards'].map((card, index) => {
           const id = isValidId(card.idType) ? card.idType : undefined;
-          return <ActionCard key={index} {...card} idType={id} />;
+          return (
+            <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }}
+            sx={{
+              display: 'flex',
+              justifyContent: {
+              xs: 'center',
+              sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
+              lg: 'center'
+              }
+            }}>
+            <ActionCard {...card} idType={id} />
+          </Grid2>
+          )
         })}
-      </Stack>
+      </Grid2>
     </Section>
     <Divider sx={{ mt: 6 }} />
-    <Section background="#ffffff">
+    <Section>
       <Heading text="Examples" />
     </Section>
 
-    <Section background="#ffffff" blur>
-      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3}} justifyContent="center" >
+    <Section blur>
+      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3}}>
         {cards['example-cards'].map((card, index) => (
-          <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }} sx={{ display: 'flex' }}>
+          <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }}
+          sx={{
+              display: 'flex',
+              justifyContent: {
+              xs: 'center',
+              sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
+              lg: 'center'
+              }
+            }}>
             <ExampleCard {...card} />
           </Grid2>
         ))}
@@ -79,7 +92,7 @@ export const Home: React.FC = () => (
       }}
     >
       <img src='assets/images/elixirlogo.png' alt="Elixir Logo" />
-      <Typography variant="body2" align="center" sx={{ color: 'gray', mt: 2 }}>
+      <Typography variant="body2" align="center" sx={{ color: 'gray', mt: 2, px: 4  }}>
         RingWeb tool is a part of services provided by ELIXIR – European research infrastructure for
         biological information. For other services provided by ELIXIR's Czech Republic Node visit{' '}
         <Link
@@ -103,7 +116,7 @@ export const Home: React.FC = () => (
         justifyContent: 'center',
       }}
     >
-      <Typography variant="body2" align="center" sx={{ color: 'gray' }}>
+      <Typography variant="body2" align="center" sx={{ color: 'gray', px: 4 }}>
         Licence conditions in accordance with § 11 of Act No. 130/2002 Coll. The owner of the
         software is Masaryk University, a public university, ID: 00216224. Masaryk University allows
         other companies and individuals to use this software free of charge and without territorial

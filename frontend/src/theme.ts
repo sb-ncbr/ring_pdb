@@ -72,6 +72,7 @@ const theme = createTheme({
     },
     text: {
       primary: '#3A3A3A',
+      secondary: '#808080'
     },
     custom: {
       paleViolet: '#EBE4FF',

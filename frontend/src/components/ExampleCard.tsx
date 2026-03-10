@@ -18,12 +18,15 @@ const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image, url }) =
   const navigate = useNavigate();
   return (
     <Card
-      sx={{
+      sx={(theme) => ({
         maxWidth: 420,
-        maxHeight: 450
-      }}
+        maxHeight: 450,
+        '&:hover': {
+          boxShadow: theme.shadows[6],
+        },
+      })}
     >
-      <CardActionArea onClick={() => navigate(url)} >
+      <CardActionArea onClick={() => navigate(url)} sx={{ height: '100%' }}>
         <CardMedia
           component="img"
           src={image}
@@ -32,7 +35,7 @@ const ExampleCard: React.FC<ExampleCardProps> = ({ header, body, image, url }) =
             height: 200
           }}
         />
-        <CardContent sx={{ height: '100%'}}>
+        <CardContent sx={{ height: '100%' }}>
           <Typography gutterBottom variant="subtitle2" component="div">
             {header}
           </Typography>
