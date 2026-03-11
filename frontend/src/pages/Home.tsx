@@ -7,6 +7,7 @@ import cards from '../content/cards.json';
 import { MainSection } from '../components/MainSection.tsx';
 import Heading from '../components/Heading.tsx';
 import ContactInfo from '../components/ContactInfo.tsx';
+import DashboardStats from '../components/DashbardStats.tsx';
 
 interface SectionProps {
   children: React.ReactNode;
@@ -38,22 +39,25 @@ export const Home: React.FC = () => (
     </Section>
 
     <Section blur>
-      <Grid container spacing={{ xs: 3, sm: 2, xl: 3 }} >
+      <Grid container spacing={{ xs: 3, sm: 2, xl: 3 }}>
         {cards['action-cards'].map((card, index) => {
           const id = isValidId(card.idType) ? card.idType : undefined;
           return (
-            <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}
-            sx={{
-              display: 'flex',
-              justifyContent: {
-              xs: 'center',
-              sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
-              lg: 'center'
-              }
-            }}>
-            <ActionCard {...card} idType={id} />
-          </Grid>
-          )
+            <Grid
+              key={index}
+              size={{ xs: 12, sm: 6, lg: 3 }}
+              sx={{
+                display: 'flex',
+                justifyContent: {
+                  xs: 'center',
+                  sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
+                  lg: 'center',
+                },
+              }}
+            >
+              <ActionCard {...card} idType={id} />
+            </Grid>
+          );
         })}
       </Grid>
     </Section>
@@ -63,22 +67,28 @@ export const Home: React.FC = () => (
     </Section>
 
     <Section blur>
-      <Grid container spacing={{ xs: 3, sm: 2, xl: 3}}>
+      <Grid container spacing={{ xs: 3, sm: 2, xl: 3 }}>
         {cards['example-cards'].map((card, index) => (
-          <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}
-          sx={{
+          <Grid
+            key={index}
+            size={{ xs: 12, sm: 6, lg: 3 }}
+            sx={{
               display: 'flex',
               justifyContent: {
-              xs: 'center',
-              sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
-              lg: 'center'
-              }
-            }}>
+                xs: 'center',
+                sm: index % 2 === 0 ? 'flex-end' : 'flex-start',
+                lg: 'center',
+              },
+            }}
+          >
             <ExampleCard {...card} />
           </Grid>
         ))}
-        </Grid>
+      </Grid>
     </Section>
+    <Divider sx={{ mt: 6 }} />
+
+    <DashboardStats rings={453210} pdbEntries={76543} ligands={34567} />
     <Divider sx={{ mt: 6 }} />
     <Box
       sx={{
@@ -91,8 +101,8 @@ export const Home: React.FC = () => (
         py: 6,
       }}
     >
-      <img src='assets/images/elixirlogo.png' alt="Elixir Logo" />
-      <Typography variant="body2" align="center" sx={{ color: 'gray', mt: 2, px: 4  }}>
+      <img src="assets/images/elixirlogo.png" alt="Elixir Logo" />
+      <Typography variant="body2" align="center" sx={{ color: 'gray', mt: 2, px: 4 }}>
         RingWeb tool is a part of services provided by ELIXIR – European research infrastructure for
         biological information. For other services provided by ELIXIR's Czech Republic Node visit{' '}
         <Link
@@ -134,7 +144,7 @@ export const Home: React.FC = () => (
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        mt: 3
+        mt: 3,
       }}
     >
       <ContactInfo></ContactInfo>
