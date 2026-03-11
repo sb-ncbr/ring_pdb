@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid2, Link, Typography } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import ActionCard from '../components/ActionCard';
 import ExampleCard from '../components/ExampleCard';
 import Divider from '@mui/material/Divider';
@@ -38,11 +38,11 @@ export const Home: React.FC = () => (
     </Section>
 
     <Section blur>
-      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3 }} >
+      <Grid container spacing={{ xs: 3, sm: 2, xl: 3 }} >
         {cards['action-cards'].map((card, index) => {
           const id = isValidId(card.idType) ? card.idType : undefined;
           return (
-            <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }}
+            <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}
             sx={{
               display: 'flex',
               justifyContent: {
@@ -52,10 +52,10 @@ export const Home: React.FC = () => (
               }
             }}>
             <ActionCard {...card} idType={id} />
-          </Grid2>
+          </Grid>
           )
         })}
-      </Grid2>
+      </Grid>
     </Section>
     <Divider sx={{ mt: 6 }} />
     <Section>
@@ -63,9 +63,9 @@ export const Home: React.FC = () => (
     </Section>
 
     <Section blur>
-      <Grid2 container spacing={{ xs: 3, sm: 2, xl: 3}}>
+      <Grid container spacing={{ xs: 3, sm: 2, xl: 3}}>
         {cards['example-cards'].map((card, index) => (
-          <Grid2 key={index} size={{ xs: 12, sm: 6, lg: 3 }}
+          <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}
           sx={{
               display: 'flex',
               justifyContent: {
@@ -75,9 +75,9 @@ export const Home: React.FC = () => (
               }
             }}>
             <ExampleCard {...card} />
-          </Grid2>
+          </Grid>
         ))}
-        </Grid2>
+        </Grid>
     </Section>
     <Divider sx={{ mt: 6 }} />
     <Box
