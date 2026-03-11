@@ -95,47 +95,46 @@ export default function FilterAutocomplete({
   return (
     <Box
       sx={{
-        flexGrow: 1, // Allows the filter to grow and take available space
-        minWidth: '290px', // Ensure it has a minimum width
+        flexGrow: 1,
+        minWidth: '290px',
       }}
     >
       <Autocomplete
         multiple
-        // size="small"
-        // limitTags={10}
         filterSelectedOptions
         filterOptions={filterOptionsMUI}
         value={selectedValues}
         onChange={handleChange}
         options={allOptions}
-        // getOptionLabel={(option) => option}
         open={inputValue.length >= 2}
-        PaperComponent={(paperProps) => {
-          const { children, ...restPaperProps } = paperProps;
-          const visibleOptions = filterOptions(allOptions, inputValue);
+        slots={{
+          paper: (paperProps) => {
+            const { children, ...restPaperProps } = paperProps;
+            const visibleOptions = filterOptions(allOptions, inputValue);
 
-          return (
-            <Paper {...restPaperProps}>
-              <Box
-                onMouseDown={(e) => e.preventDefault()} // prevent blur
-                pl={1.5}
-                py={0.5}
-              >
-                {visibleOptions.length > 0 && ( // Only render if there are visible options
-                  <FormControlLabel
-                    onClick={(e) => {
-                      e.preventDefault(); // prevent blur
-                      handleToggleSelectAll(visibleOptions);
-                    }}
-                    label="Select all current matches"
-                    control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
-                  />
-                )}
-              </Box>
-              <Divider />
-              {children}
-            </Paper>
-          );
+            return (
+              <Paper {...restPaperProps}>
+                <Box
+                  onMouseDown={(e) => e.preventDefault()} // prevent blur
+                  pl={1.5}
+                  py={0.5}
+                >
+                  {visibleOptions.length > 0 && ( // Only render if there are visible options
+                    <FormControlLabel
+                      onClick={(e) => {
+                        e.preventDefault(); // prevent blur
+                        handleToggleSelectAll(visibleOptions);
+                      }}
+                      label="Select all current matches"
+                      control={<Checkbox id="select-all-checkbox" checked={selectAll} />}
+                    />
+                  )}
+                </Box>
+                <Divider />
+                {children}
+              </Paper>
+            );
+          },
         }}
         onInputChange={(_e, value) => {
           setInputValue(value);
@@ -167,18 +166,20 @@ export default function FilterAutocomplete({
                   transition: 'opacity 0s',
                 },
               }}
-              InputProps={{
-                ...restInputProps,
-                startAdornment: startAdornment ? (
-                  <div
-                    style={{
-                      maxHeight: '75px',
-                      overflowY: 'auto',
-                    }}
-                  >
-                    {startAdornment}
-                  </div>
-                ) : null,
+              slotProps={{
+                input: {
+                  ...restInputProps,
+                  startAdornment: startAdornment ? (
+                    <div
+                      style={{
+                        maxHeight: '75px',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      {startAdornment}
+                    </div>
+                  ) : null,
+                },
               }}
             />
           );

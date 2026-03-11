@@ -32,8 +32,6 @@ export const FilterAutocompleteSimple = ({
   const theme = useTheme();
   const { handleApiError } = useApiErrorHandler();
 
-
-
   useEffect(() => {
     if (filterByLabel === 'experimental method') {
       axios
@@ -44,7 +42,7 @@ export const FilterAutocompleteSimple = ({
           setAllOptions(response.data.payload);
         })
         .catch((error) => {
-          handleApiError(error)
+          handleApiError(error);
           console.log('Error fetching data:', error);
           return;
         });
@@ -55,7 +53,7 @@ export const FilterAutocompleteSimple = ({
     <Box
       sx={{
         flexGrow: 1,
-        minWidth: '290px',
+        minWidth: 290,
       }}
     >
       <Autocomplete<string, true, false, false>
@@ -81,18 +79,21 @@ export const FilterAutocompleteSimple = ({
                   fontSize: '14px',
                 },
               }}
-              InputProps={{
-                ...restInputProps,
-                startAdornment: startAdornment ? (
-                  <div
-                    style={{
-                      maxHeight: '75px',
-                      overflowY: 'auto',
-                    }}
-                  >
-                    {startAdornment}
-                  </div>
-                ) : null,
+              slotProps={{
+                input: {
+                  ...restInputProps,
+                  startAdornment: startAdornment ? (
+                    <div
+                      style={{
+                        maxHeight: '75px',
+                        overflowY: 'auto',
+                        marginRight: '25px',
+                      }}
+                    >
+                      {startAdornment}
+                    </div>
+                  ) : null,
+                },
               }}
             />
           );

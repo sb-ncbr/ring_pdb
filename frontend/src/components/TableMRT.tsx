@@ -38,7 +38,6 @@ import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
 // import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
 
-
 const TableMRT = () => {
   const location = useLocation();
   const [filterSliderRanges, setFilterSliderRanges] = useState({
@@ -290,7 +289,17 @@ const TableMRT = () => {
     renderTopToolbar: () => {
       function renderFilters(filterKeys: string[], index?: number) {
         return (
-          <Box key={index} sx={{ display: 'flex', gap: '16px', padding: '2px', flexWrap: 'wrap' }}>
+          <Box
+            key={index}
+            sx={{
+              display: 'flex',
+              gap: { xs: 2, lg: 3 },
+              flexDirection: { xs: 'column', md: 'row' },
+              flexWrap: 'wrap',
+              px: 1,
+              mt: 2,
+            }}
+          >
             {filterKeys.map((id) => {
               const header = table
                 .getHeaderGroups()
@@ -310,12 +319,11 @@ const TableMRT = () => {
           <Box
             sx={{
               display: 'flex',
-              padding: '16px 2px',
-              m: '2px 12px',
-              gap: '48px',
+              flexDirection: { xs: 'column', lg: 'row' }, // Stack on small screens
+              p: 1,
             }}
           >
-            {/* Right toolbar */}
+            {/* Left toolbar */}
             <Box>
               {/* Default Filters */}
               <Box>{renderFilters(defaultFilterKeys)}</Box>
@@ -333,16 +341,14 @@ const TableMRT = () => {
                       sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '16px',
-                        marginTop: '16px',
+                        gap: 1,
                       }}
                     >
                       <Box
                         sx={{
                           display: 'flex',
-                          flexDirection: 'row',
-                          gap: '16px',
-                          marginTop: '16px',
+                          flexDirection: { xs: 'column', md: 'row' },
+                          gap: 1,
                         }}
                       >
                         {/* First Row - First 3 filters */}
@@ -355,19 +361,33 @@ const TableMRT = () => {
                       <Box
                         sx={{
                           display: 'flex',
-                          flexDirection: 'row',
-                          gap: '16px',
+                          flexDirection: { xs: 'column', md: 'row' },
+                          gap: { xs: 3, md: 2 },
+                          px: 1,
+                          mb: 2,
                         }}
                       >
                         {advancedFilterKeys
                           .slice(3)
                           .filter((key) => visibleFilterKeys.includes(key))
                           .map((key, index) => (
-                            <Box key={key} sx={{ maxWidth: '130px' }}>
+                            <Box
+                              key={key}
+                              sx={{
+                                maxWidth: { xs: 350, md: 250, lg: 210 },
+                                flexGrow: 1,
+                              }}
+                            >
                               {renderFilters([key], index)}
                             </Box>
                           ))}
-                        <Box sx={{ marginTop: '24px' }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
                           <InfoTooltip onResetSlider={resetSliderFilters} />
                         </Box>
                       </Box>
@@ -377,13 +397,16 @@ const TableMRT = () => {
               </Grow>
             </Box>
 
-            {/* Left toolbar */}
+            {/* Right toolbar */}
             <Box
               sx={{
-                marginLeft: 'auto', // Align to the right
-                alignSelf: 'flex-end', // Align to the top
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: { xs: 'column', xl: 'row' },
+                gap: { xs: 0, md: 1 },
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                alignSelf: 'flex-end',
+                order: { xs: -1, lg: 0 }, // move on top for small screens
+                marginLeft: 'auto',
               }}
             >
               {/* Toggle Button for Advanced Filters */}
@@ -410,6 +433,7 @@ const TableMRT = () => {
                   '& .MuiTypography-root': {
                     whiteSpace: 'nowrap',
                   },
+                  order: { xs: -1, lg: 0 },
                 }}
               />
 
@@ -417,7 +441,13 @@ const TableMRT = () => {
                 disabled={table.getPrePaginationRowModel().rows.length === 0}
                 onClick={() => exportAllData(columnFilters, sorting)}
                 startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
-                sx={{ fontSize: '0.9rem', whiteSpace: 'nowrap', color: '#3A3A3A' }}
+                sx={{
+                  fontSize: '0.9rem',
+                  whiteSpace: 'nowrap',
+                  color: '#3A3A3A',
+                  justifyContent: 'start',
+                  order: { xs: -2, lg: 0 },
+                }}
               >
                 <Typography variant="caption">Download data</Typography>
               </Button>

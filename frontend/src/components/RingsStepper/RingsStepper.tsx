@@ -3,9 +3,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import { RingCard } from '../RingCard.tsx';
-
 import ringCards from '../../content/ringCards.json';
 import { ConformationCard } from '../ConformationCard.tsx';
 import { StepContent, Typography } from '@mui/material';
@@ -135,13 +133,13 @@ export default function RingsStepper() {
             <Typography variant="subtitle1">{steps[0]}</Typography>
           </StepLabel>
           <StepContent>
-            <Stack
-              direction="row"
-              gap="24px"
+            <Box
               sx={{
-                justifyContent: 'center',
-                alignItems: 'stretch',
-                margin: '16px 0',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'start',
+                my: 2,
+                gap: 3,
               }}
             >
               {ringCards.rings.map((ring: any, index: number) => (
@@ -158,7 +156,7 @@ export default function RingsStepper() {
                   disabled={isLoading}
                 />
               ))}
-            </Stack>
+            </Box>
           </StepContent>
         </Step>
 
@@ -173,9 +171,9 @@ export default function RingsStepper() {
                 sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  margin: '16px 0',
-                  gap: '24px',
+                  justifyContent: 'start',
+                  my: 2,
+                  gap: 3,
                 }}
               >
                 {ringCards.rings[ringIndex].confs.map((conf, index) => (

@@ -29,12 +29,18 @@ const Header: React.FC = () => {
         </Box>
 
         {/* Navigation Buttons */}
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: 'flex-end',
+          }}
+        >
           <Button component={Link} to="/" color="inherit">
-            <Typography variant="caption">Home</Typography>
+            <Typography variant="caption">HOME</Typography>
           </Button>
           <Button component={Link} to="/user-guide" color="inherit">
-            <Typography variant="caption">User guide</Typography>
+            <Typography variant="caption">USER GUIDE</Typography>
           </Button>
         </Box>
       </Toolbar>
