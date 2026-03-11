@@ -41,7 +41,7 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
             sx={{ borderColor: mainColor, color: mainColor }}
           />
         </Box>
-        <Box sx={{ height: 260 }}>
+        <Box sx={{ height: 220 }}>
           <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
         </Box>
         <CardContent>

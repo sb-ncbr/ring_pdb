@@ -31,16 +31,10 @@ export const SelectableCard: React.ComponentType<SelectableCardProps> = styled(
   boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
   border: selected ? `1px solid ${theme.palette.primary.main}` : '0',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  backgroundColor: '#fff',
-  '&.MuiPaper-root': {
-    backgroundColor: '#fff',
-  },
   '&:hover': {
     boxShadow: selected ? theme.shadows[24] : theme.shadows[6],
-    backgroundColor: '#fff',
   },
-  maxWidth: 345,
-  width: 345,
+  width: 280,
 }));
 
 export const RingCard: React.FC<RingCardProps> = ({
@@ -56,7 +50,7 @@ export const RingCard: React.FC<RingCardProps> = ({
     <SelectableCard selected={isSelected}>
       <CardActionArea onClick={handleCardSelect} disabled={disabled || isSelected}>
         <CardContent>
-          <Box sx={{ height: 300 }}>
+          <Box sx={{ height: 220 }}>
             <MoleculeWithFallback modelPath={`assets/geometry/${name}.glb`} />
           </Box>
           <Typography gutterBottom variant="subtitle1" component="div">

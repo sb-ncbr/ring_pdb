@@ -32,7 +32,7 @@ function MoleculeWithFallback({
   if (modelOk === null) return null;
 
   return (
-    <div style={{ width: '100%', height: 300, position: 'relative' }}>
+    <div style={{ width: '100%', height: 220, position: 'relative' }}>
       {modelOk ? (
         <RotatingMolecule modelPath={modelPath} />
       ) : (
