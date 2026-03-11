@@ -22,10 +22,7 @@ import ringCards from '../content/ringCards.json';
 import { TableCellProps } from '@mui/material';
 import { useSmartSwitch } from '../lib/hooks/use-smart-switch.ts';
 import { formatNumber } from '../lib/utils.ts';
-import {
-  getFavorabilityFlags,
-  getOptions,
-} from '../helperFunctions/ringUtils.ts';
+import { getFavorabilityFlags, getOptions } from '../helperFunctions/ringUtils.ts';
 
 export const commonHeadCellProps: TableCellProps = {
   align: 'center',
@@ -39,8 +36,7 @@ export const commonHeadCellProps: TableCellProps = {
 
 export const commonBodyCellProps = {
   sx: {
-    paddingLeft: '42px',
-    paddingRight: '42px',
+    px: 4,
   },
 };
 
@@ -69,7 +65,7 @@ export const getColumns = (
       );
     },
   },
-    {
+  {
     header: 'CHAIN ID',
     accessorKey: 'chain_id',
     enableColumnFilter: false,
@@ -104,6 +100,20 @@ export const getColumns = (
     header: 'RESIDUE ID',
     accessorKey: 'residue_id',
     enableColumnFilter: false,
+    muiTableHeadCellProps: {
+      ...commonHeadCellProps,
+      sx: {
+        ...commonHeadCellProps.sx,
+        width: '120px',
+      },
+    },
+    muiTableBodyCellProps: {
+      ...commonBodyCellProps,
+      sx: {
+        ...commonBodyCellProps.sx,
+        width: '120px',
+      },
+    },
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
         <Typography variant="body2">{cell.getValue<number>()}</Typography>
@@ -203,6 +213,20 @@ export const getColumns = (
   {
     header: 'RING COVERAGE [%]',
     accessorKey: 'ring_coverage',
+    muiTableHeadCellProps: {
+      ...commonHeadCellProps,
+      sx: {
+        ...commonHeadCellProps.sx,
+        width: '140px',
+      },
+    },
+    muiTableBodyCellProps: {
+      ...commonBodyCellProps,
+      sx: {
+        ...commonBodyCellProps.sx,
+        width: '140px',
+      },
+    },
     filterVariant: 'text',
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
       <Box sx={{ textAlign: 'right' }}>
@@ -229,8 +253,8 @@ export const getColumns = (
       const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
 
       // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
-      const options = getOptions(ringCards as RingCards, selectedRingTypes)
-      const [hasFav, hasUnfav] = getFavorabilityFlags(selectedValues, selectedRingTypes)
+      const options = getOptions(ringCards as RingCards, selectedRingTypes);
+      const [hasFav, hasUnfav] = getFavorabilityFlags(selectedValues, selectedRingTypes);
 
       const favorableSwitch = useSmartSwitch(hasFav);
       const unfavorableSwitch = useSmartSwitch(hasUnfav);
@@ -321,7 +345,7 @@ export const getColumns = (
 
           <Chip
             label={
-              <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>
+              <Typography variant="body2">{favorable ? 'favorable' : 'unfavorable'}</Typography>
             }
             size="small"
             variant="outlined"
@@ -470,7 +494,10 @@ export const getColumns = (
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h6">
+              <Typography variant="subtitle2" mt={2}>
+                Ligand {row.original.ccd_id}
+              </Typography>
+              <Typography variant="subtitle2">
                 Ring atoms: {row.original.ring_id.split('_')[4].replace('/-/g', ' ')}
               </Typography>
               <Box
@@ -484,9 +511,6 @@ export const getColumns = (
                   objectFit: 'contain',
                 }}
               />
-              {/*<Typography variant="h6" mt={2}>*/}
-              {/*  Ligand {row.original.ccd_id}*/}
-              {/*</Typography>*/}
             </DialogContent>
           </Dialog>
         </div>

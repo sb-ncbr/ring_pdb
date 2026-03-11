@@ -95,8 +95,7 @@ export default function FilterAutocomplete({
   return (
     <Box
       sx={{
-        flexGrow: 1,
-        minWidth: '290px',
+        minWidth: '190px',
       }}
     >
       <Autocomplete
@@ -148,7 +147,7 @@ export default function FilterAutocomplete({
             <TextField
               {...restParams}
               label={`Filter by ${filterByLabel}`}
-              placeholder={!selectedOptions.length ? 'Start typing for autocomplete...' : ''}
+              placeholder={!selectedOptions.length ? 'Start typing...' : ''}
               sx={{
                 '& .MuiOutlinedInput-input': {
                   fontFamily: 'Lora, sans-serif',
@@ -185,9 +184,7 @@ export default function FilterAutocomplete({
           );
         }}
         sx={{
-          flexGrow: 1,
-          minWidth: '290px',
-          maxWidth: '100%',
+          minWidth: '190px',
         }}
       />
     </Box>

@@ -5,10 +5,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 import { useTheme } from '@mui/material/styles';
 
-const Input = styled(MuiInput)`
-  font-size: 0.9rem;
-  //width: 42px;
-`;
+const Input = styled(MuiInput)({
+  fontSize: '0.9rem',
+});
 
 const CustomSlider = styled(Slider)(() => ({
   '& .MuiSlider-thumb': {
@@ -167,7 +166,6 @@ export default function RangeSlider({
       <Grid
         container
         columnSpacing={2}
-        rowSpacing={0}
         sx={{ alignItems: 'center', justifyContent: 'space-between' }}
       >
         <Grid size={6}>

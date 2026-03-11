@@ -26,7 +26,7 @@ export const InfoTooltip = ({ onResetSlider }: { onResetSlider: any }) => {
           <RestartAltIcon />
         </IconButton>
         <Typography
-          variant="caption"
+          variant="body1"
           sx={{
             whiteSpace: 'nowrap',
           }}

@@ -52,8 +52,7 @@ export const FilterAutocompleteSimple = ({
   return (
     <Box
       sx={{
-        flexGrow: 1,
-        minWidth: 290,
+        minWidth: filterByLabel === 'experimental method' ? 290 : 250,
       }}
     >
       <Autocomplete<string, true, false, false>
@@ -61,7 +60,6 @@ export const FilterAutocompleteSimple = ({
         disableCloseOnSelect
         options={filterByLabel === 'experimental method' ? allOptions : options}
         value={selectedValues}
-        // getOptionLabel={(option) => option as string}
         onChange={(_e, newValue) => {
           onChange(newValue);
         }}
@@ -87,7 +85,6 @@ export const FilterAutocompleteSimple = ({
                       style={{
                         maxHeight: '75px',
                         overflowY: 'auto',
-                        marginRight: '25px',
                       }}
                     >
                       {startAdornment}
@@ -102,20 +99,15 @@ export const FilterAutocompleteSimple = ({
           const { key, ...optionProps } = props;
           return (
             <li key={key} {...optionProps}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
+              <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
               {option}
             </li>
           );
         }}
-        renderTags={
+        renderValue={
           filterByLabel === 'ring type'
-            ? (tagValue, getTagProps) =>
-                tagValue.map((option, index) => {
+            ? (value, getTagProps) =>
+                value.map((option, index) => {
                   const { key, ...tagProps } = getTagProps({ index });
                   return (
                     <Chip

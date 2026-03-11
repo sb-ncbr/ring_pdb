@@ -36,7 +36,7 @@ import {
 import { exportAllData } from '../helperFunctions/helpers.ts';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
-// import { useApiErrorHandler } from '../hooks/useApiErrorHandler.ts';
+import { useApiErrorHandler } from '../lib/hooks/use-api-error-handler.ts';
 
 const TableMRT = () => {
   const location = useLocation();
@@ -133,7 +133,7 @@ const TableMRT = () => {
     });
   };
 
-  const tableContainerMaxWidth = isCompactView ? '1300px' : '1900px';
+  const tableContainerMaxWidth = isCompactView ? '1200px' : '1900px';
   const handleSortingChange = (newSorting: any) => {
     setSorting(newSorting);
   };
@@ -142,7 +142,7 @@ const TableMRT = () => {
     setShowAdvancedFilters((prev) => !prev);
   };
 
-  // const { handleApiError } = useApiErrorHandler();
+  const { handleApiError } = useApiErrorHandler();
 
   // clear the filter state on reload
   useEffect(() => {
@@ -153,7 +153,6 @@ const TableMRT = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    // console.log('Sending filters:', columnFilters);
     axios
       .post(`${import.meta.env.VITE_API_URL}/api/data`, {
         pageIndex: pagination.pageIndex + 1,
@@ -172,7 +171,7 @@ const TableMRT = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        // handleApiError(error)
+        handleApiError(error);
         console.error('Error fetching data:', error);
         return;
       });
@@ -287,16 +286,15 @@ const TableMRT = () => {
     renderEmptyRowsFallback: () => (isLoading ? <Spinner /> : null),
     // Ensure empty rows are rendered to maintain height
     renderTopToolbar: () => {
-      function renderFilters(filterKeys: string[], index?: number) {
+      function renderFilters(filterKeys: string[], advanced?: boolean, index?: number) {
         return (
           <Box
             key={index}
             sx={{
               display: 'flex',
-              gap: { xs: 2, lg: 3 },
+              gap: 1,
               flexDirection: { xs: 'column', md: 'row' },
-              flexWrap: 'wrap',
-              px: 1,
+              flexWrap: advanced ? 'wrap' : undefined,
               mt: 2,
             }}
           >
@@ -321,6 +319,8 @@ const TableMRT = () => {
               display: 'flex',
               flexDirection: { xs: 'column', lg: 'row' }, // Stack on small screens
               p: 1,
+              gap: { xs: 1, lg: 2 },
+              mx: { xs: 2, sm: 8, md: 0 },
             }}
           >
             {/* Left toolbar */}
@@ -354,7 +354,7 @@ const TableMRT = () => {
                         {/* First Row - First 3 filters */}
                         {advancedFilterKeys
                           .slice(0, 3)
-                          .map((key, index) => renderFilters([key], index))}
+                          .map((key, index) => renderFilters([key], true, index))}
                       </Box>
 
                       {/* Second Row - Remaining filters-sliders */}
@@ -362,9 +362,9 @@ const TableMRT = () => {
                         sx={{
                           display: 'flex',
                           flexDirection: { xs: 'column', md: 'row' },
-                          gap: { xs: 3, md: 2 },
+                          gap: 3,
                           px: 1,
-                          mb: 2,
+                          mb: 4,
                         }}
                       >
                         {advancedFilterKeys
@@ -378,7 +378,7 @@ const TableMRT = () => {
                                 flexGrow: 1,
                               }}
                             >
-                              {renderFilters([key], index)}
+                              {renderFilters([key], true, index)}
                             </Box>
                           ))}
                         <Box
@@ -401,8 +401,7 @@ const TableMRT = () => {
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: { xs: 'column', xl: 'row' },
-                gap: { xs: 0, md: 1 },
+                flexDirection: { xs: 'column', lg: 'row' },
                 justifyContent: { xs: 'flex-start', md: 'flex-end' },
                 alignSelf: 'flex-end',
                 order: { xs: -1, lg: 0 }, // move on top for small screens
@@ -413,7 +412,7 @@ const TableMRT = () => {
 
               <FormControlLabel
                 control={<Switch checked={showAdvancedFilters} onChange={toggleAdvancedFilter} />}
-                label={<Typography variant="caption">Show advanced filters</Typography>}
+                label={<Typography variant="body1">Show advanced filters</Typography>}
                 sx={{
                   '& .MuiTypography-root': {
                     whiteSpace: 'nowrap',
@@ -428,7 +427,7 @@ const TableMRT = () => {
                     onChange={() => setIsCompactView(!isCompactView)}
                   />
                 }
-                label={<Typography variant="caption">Show compact table</Typography>}
+                label={<Typography variant="body1">Show compact table</Typography>}
                 sx={{
                   '& .MuiTypography-root': {
                     whiteSpace: 'nowrap',
@@ -442,14 +441,13 @@ const TableMRT = () => {
                 onClick={() => exportAllData(columnFilters, sorting)}
                 startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
                 sx={{
-                  fontSize: '0.9rem',
                   whiteSpace: 'nowrap',
                   color: '#3A3A3A',
                   justifyContent: 'start',
                   order: { xs: -2, lg: 0 },
                 }}
               >
-                <Typography variant="caption">Download data</Typography>
+                <Typography variant="body1">Download data</Typography>
               </Button>
             </Box>
           </Box>
@@ -462,7 +460,6 @@ const TableMRT = () => {
   return (
     <Box
       sx={{
-        margin: '0 8px',
         '.MuiTableHead-root .MuiIconButton-root': {
           display: 'none',
         },
