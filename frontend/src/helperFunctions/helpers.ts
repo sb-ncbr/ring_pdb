@@ -1,10 +1,11 @@
-import ringCards from '../content/ringCards.json';
+import stats from '../content/stats.json';
 import { OtherSelectedFiltersType } from '../components/FilterAutocomplete.tsx';
 import { MRT_ColumnFiltersState, MRT_SortingState } from 'material-react-table';
 import axios from 'axios';
+import { RingType } from '../data/dataTypes.ts';
 
-export const isFavorable = (ringName: string, confName: string) => {
-  const ring = ringCards.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
+export const isFavorable = (ringName: RingType, confName: string) => {
+  const ring = stats.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
 
   if (!ring) return null;
   const conf = ring.confs.find((c) => {
@@ -13,19 +14,12 @@ export const isFavorable = (ringName: string, confName: string) => {
   return conf ? conf.favorable : null;
 };
 
-export const getChipStyles = (type: string, theme: any) => {
-  switch (type) {
-    case 'Cyclohexane':
-      return { backgroundColor: theme.palette.custom.paleGreen };
-    case 'Cyclopentane':
-      return { backgroundColor: theme.palette.custom.paleOrange };
-    case 'Benzene':
-      return { backgroundColor: theme.palette.custom.paleViolet };
-    case 'Oxane':
-      return { backgroundColor: theme.palette.custom.paleBlue };
-    default:
-      return { backgroundColor: theme.palette.background.default };
-  }
+export const getChipStyles = (type: RingType, theme: any) => {
+  return {
+    backgroundColor:
+      theme.palette.custom[type.toLowerCase()] ??
+      theme.palette.background.default,
+  };
 };
 
 export const getOtherSelectedFilters = (

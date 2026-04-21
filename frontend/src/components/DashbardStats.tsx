@@ -1,13 +1,14 @@
 import { Box, Typography, Stack } from '@mui/material';
+import stats from "../content/stats.json"
 
-interface StatsProps {
-  rings: number;
-  pdbEntries: number;
-  ligands: number;
-}
 
-export default function DashboardStats({ rings, pdbEntries, ligands }: StatsProps) {
-  const stats = [
+export default function DashboardStats() {
+
+  const rings = stats?.summary.rings;
+  const ligands = stats?.summary.ligands;
+  const pdbEntries = stats?.summary.pdbEntries;
+
+  const statsToDisplay = [
     { label: 'Rings analysed', value: rings },
     { label: 'PDB entries', value: pdbEntries },
     { label: 'Ligands', value: ligands },
@@ -38,7 +39,7 @@ export default function DashboardStats({ rings, pdbEntries, ligands }: StatsProp
         justifyContent="space-between"
         alignItems="center"
       >
-        {stats.map((stat) => (
+        {statsToDisplay.map((stat) => (
           <Box key={stat.label} sx={{ textAlign: 'center' }}>
             <Typography
               sx={{

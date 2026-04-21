@@ -18,7 +18,7 @@ import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple
 import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import ringCards from '../content/ringCards.json';
+import stats from '../content/stats.json';
 import { TableCellProps } from '@mui/material';
 import { useSmartSwitch } from '../lib/hooks/use-smart-switch.ts';
 import { formatNumber } from '../lib/utils.ts';
@@ -147,7 +147,7 @@ export const getColumns = (
 
       const ringsByConformation: Record<string, string[]> = {};
 
-      for (const ring of ringCards.rings) {
+      for (const ring of stats.rings) {
         for (const conf of ring.confs) {
           if (!ringsByConformation[conf.name]) {
             ringsByConformation[conf.name] = [];
@@ -159,7 +159,7 @@ export const getColumns = (
       const ringOptions: string[] =
         confTypeFilter && confTypeFilter.length > 0
           ? Array.from(new Set(confTypeFilter.flatMap((conf) => ringsByConformation[conf] || [])))
-          : ringCards.rings.map((ring) => ring.name);
+          : stats.rings.map((ring) => ring.name);
 
       return (
         <FilterAutocompleteSimple
@@ -177,7 +177,7 @@ export const getColumns = (
       );
     },
     Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => {
-      const ringType = cell.getValue<string>();
+      const ringType = cell.getValue<string>() as RingType;
       const theme = useTheme();
       return (
         <Chip
@@ -253,7 +253,7 @@ export const getColumns = (
       const selectedRingTypes: RingType[] = Array.isArray(ringTypeFilter) ? ringTypeFilter : [];
 
       // Collect applicable conformations from selected ring types. if nothing selected -> show all variants
-      const options = getOptions(ringCards as RingCards, selectedRingTypes);
+      const options = getOptions(stats as RingCards, selectedRingTypes);
       const [hasFav, hasUnfav] = getFavorabilityFlags(selectedValues, selectedRingTypes);
 
       const favorableSwitch = useSmartSwitch(hasFav);
@@ -328,7 +328,7 @@ export const getColumns = (
     },
     Cell: ({ row }: { row: MRT_Row<RowData> }) => {
       const conf = row.original.conformation;
-      const ring = row.original.ring_type;
+      const ring = row.original.ring_type as RingType;
       const favorable = isFavorable(ring, conf);
       const mainColor = favorable ? '#2587E2' : '#CD4139';
 
@@ -355,16 +355,6 @@ export const getColumns = (
       );
     },
   },
-  // {
-  //   header: 'RMSD [Å]',
-  //   accessorKey: 'rmsd',
-  //   enableColumnFilter: false,
-  //   Cell: ({ cell }: { cell: MRT_Cell<RowData> }) => (
-  //     <Box sx={{ textAlign: 'right' }}>
-  //       <Typography variant="body2">{formatNumber(cell.getValue<number>(), 3)}</Typography>
-  //     </Box>
-  //   ),
-  // },
   {
     header: 'EXPERIMENTAL METHOD',
     accessorKey: 'experimental_method',

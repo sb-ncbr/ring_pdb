@@ -35,12 +35,14 @@ export interface ColumnDataMRT {
 }
 
 export type APIData = Readonly<Omit<RowData, 'id'>>;
-export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane' | 'Oxane';
+export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane' | 'Oxane' | 'Oxolane';
 
 export interface RingConf {
   name: string;
   count: number;
   favorable: boolean;
+  type?: string;
+  label?: string;
 }
 
 export interface Ring {

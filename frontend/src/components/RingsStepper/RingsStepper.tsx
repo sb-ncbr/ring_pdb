@@ -4,12 +4,13 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import { RingCard } from '../RingCard.tsx';
-import ringCards from '../../content/ringCards.json';
+import stats from '../../content/stats.json';
 import { ConformationCard } from '../ConformationCard.tsx';
 import { StepContent, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { RingType } from '../../data/dataTypes.ts';
 
 const steps = ['Select a ring type', 'Select conformations'];
 
@@ -114,7 +115,7 @@ export default function RingsStepper() {
     });
   };
 
-  const ringName = selectedRing.name;
+  const ringName = selectedRing.name as RingType;
   const ringIndex = selectedRing.index;
 
   return (
@@ -142,7 +143,7 @@ export default function RingsStepper() {
                 gap: 3,
               }}
             >
-              {ringCards.rings.map((ring: any, index: number) => (
+              {stats.rings.map((ring: any, index: number) => (
                 <RingCard
                   key={index}
                   {...ring}
@@ -176,7 +177,7 @@ export default function RingsStepper() {
                   gap: 3,
                 }}
               >
-                {ringCards.rings[ringIndex].confs.map((conf, index) => (
+                {stats.rings[ringIndex].confs.map((conf, index) => (
                   <ConformationCard
                     key={index}
                     {...conf}

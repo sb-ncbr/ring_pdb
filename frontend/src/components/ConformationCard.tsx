@@ -7,6 +7,7 @@ import { SelectableCard } from './RingCard.tsx';
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
 import MoleculeWithFallback from './MoleculeWithFallback.tsx';
+import { RingType } from '../data/dataTypes.ts';
 
 interface ConfCardProps {
   name: string;
@@ -14,9 +15,18 @@ interface ConfCardProps {
   handleCardClick: () => void;
   isSelected: boolean;
   disabled: boolean;
-  ring: string;
+  ring: RingType;
   favorable: boolean;
 }
+
+//TODO: move to types later if needed
+const homocycles = ["Cyclohexane", "Benzene", "Cyclopentane"] as const;
+type Homocycle = typeof homocycles[number];
+
+function isHomoCycle(ring: RingType): ring is Homocycle {
+  return homocycles.includes(ring as Homocycle);
+}
+
 
 export const ConformationCard: React.FC<ConfCardProps> = ({
   name,
@@ -42,7 +52,8 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           />
         </Box>
         <Box sx={{ height: 220 }}>
-          <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
+          {isHomoCycle(ring) ? <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} /> : null}
+          
         </Box>
         <CardContent>
           <Typography gutterBottom variant="subtitle1" component="div">

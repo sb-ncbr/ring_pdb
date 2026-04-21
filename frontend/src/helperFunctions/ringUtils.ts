@@ -1,4 +1,4 @@
-import ringCards from '../content/ringCards.json';
+import stats from '../content/stats.json';
 import { Ring, RingCards, RingConf, RingType } from '../data/dataTypes.ts';
 
 export function getFavorabilityFlags(confs: string[], ringNames: string[]): [boolean, boolean] {
@@ -8,11 +8,11 @@ export function getFavorabilityFlags(confs: string[], ringNames: string[]): [boo
 
   const ringsToLoopThrough = ringNames.length
   ? ringNames
-  : ringCards.rings.map((r) => r.name);
+  : stats.rings.map((r) => r.name);
 
   let hasFav = false;
   let hasUnfav = false;
-  const ringMap = Object.fromEntries(ringCards.rings.map((r) => [r.name, r]));
+  const ringMap = Object.fromEntries(stats.rings.map((r) => [r.name, r]));
 
   ringsToLoopThrough.forEach((name: string) => {
     const ring = ringMap[name];

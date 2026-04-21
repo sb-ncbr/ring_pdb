@@ -17,6 +17,7 @@ import { useBehavior } from '../lib/hooks/use-behavior.ts';
 import MolstarViewer from '../components/molstar/MolstarViewer.tsx';
 import MolstarViewerModel from '../models/MolstarViewerModel.tsx';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { RingType } from '../data/dataTypes.ts';
 
 const getRingCoverageCounts = (rowValue: string | null) => {
   if (!rowValue) return;
@@ -42,7 +43,6 @@ interface RingData {
   residue_id: number;
   ring_id: string;
   ring_type: string;
-  rmsd: number;
   resolution: number | null;
   ring_coverage: string | null;
   ring_coverage_counts: string | null;
@@ -147,7 +147,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
 
   const linkColor = 'info.main';
   const conf = ringData.conformation;
-  const ring = ringData.ring_type;
+  const ring = ringData.ring_type as RingType;
   const favorable = isFavorable(ring, conf);
   const mainColor = favorable ? '#2587E2' : '#CD4139';
 
@@ -163,9 +163,9 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
       >
         Ring details
         <Chip
-          label={<Typography variant="body2">{ringData.ring_type}</Typography>}
+          label={<Typography variant="body2">{ring}</Typography>}
           sx={{
-            ...getChipStyles(ringData.ring_type, theme),
+            ...getChipStyles(ring, theme),
             color: '#000',
             width: 123,
             marginLeft: '24px',
@@ -260,12 +260,6 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
                   ')'
                 : 'N/A'}
             </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
-              RMSD with template:
-            </Typography>
-            <Typography variant="caption">{ringData.rmsd} Å</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>

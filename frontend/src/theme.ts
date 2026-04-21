@@ -3,19 +3,21 @@ import { createTheme } from '@mui/material/styles';
 declare module '@mui/material/styles' {
   interface Palette {
     custom: {
-      paleViolet: string;
-      paleOrange: string;
-      paleGreen: string;
-      paleBlue: string;  
+      cyclohexane: string,
+      cyclopentane:string,
+      benzene: string,
+      oxane: string,
+      oxolane: string,
     };
   }
 
   interface PaletteOptions {
     custom?: {
-      paleViolet?: string;
-      paleOrange?: string;
-      paleGreen?: string;
-      paleBlue?: string;  
+      cyclohexane?: string,
+      cyclopentane?: string,
+      benzene?: string,
+      oxane?: string,
+      oxolane?: string,
     };
   }
 }
@@ -75,10 +77,11 @@ const theme = createTheme({
       secondary: '#808080'
     },
     custom: {
-      paleViolet: '#EBE4FF',
-      paleOrange: '#F6E8D8',
-      paleGreen: '#E2EFEF',
-      paleBlue: '#D8EBFF',  
+      cyclohexane: '#D8EBFF',
+      cyclopentane: '#E2EFEF',
+      benzene: '#EBE4FF',
+      oxane: '#F6E8D8',
+      oxolane: '#F7DDE6',
     },
     background: {
       default: '#FFFFFF',

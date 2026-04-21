@@ -88,7 +88,7 @@ export const Home: React.FC = () => (
     </Section>
     <Divider sx={{ mt: 6 }} />
 
-    <DashboardStats rings={453210} pdbEntries={76543} ligands={34567} />
+    <DashboardStats />
     <Divider sx={{ mt: 6 }} />
     <Box
       sx={{

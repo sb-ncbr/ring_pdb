@@ -1,0 +1,585 @@
+{
+  "summary": {
+    "rings": 628083,
+    "ligands": 4536,
+    "pdbEntries": 94663
+  },
+  "experimentalMethods": [
+    {
+      "method": "X-ray diffraction",
+      "count": 384859
+    },
+    {
+      "method": "Electron microscopy",
+      "count": 239852
+    },
+    {
+      "method": "Solution NMR",
+      "count": 2795
+    },
+    {
+      "method": "X-ray diffraction, Neutron diffraction",
+      "count": 129
+    },
+    {
+      "method": "X-Ray solution scattering",
+      "count": 128
+    },
+    {
+      "method": "Electron crystallography",
+      "count": 118
+    },
+    {
+      "method": "Fiber diffraction",
+      "count": 73
+    },
+    {
+      "method": "Solid-state NMR",
+      "count": 54
+    },
+    {
+      "method": "Neutron diffraction",
+      "count": 27
+    },
+    {
+      "method": "X-Ray powder diffraction",
+      "count": 25
+    },
+    {
+      "method": "X-ray diffraction, X-Ray solution scattering",
+      "count": 8
+    },
+    {
+      "method": "Solution NMR, Theoretical model",
+      "count": 8
+    },
+    {
+      "method": "Solution NMR, Solid-state NMR",
+      "count": 6
+    },
+    {
+      "method": "Solution NMR, X-Ray solution scattering",
+      "count": 1
+    }
+  ],
+  "rings": [
+    {
+      "name": "Cyclohexane",
+      "ccd": 1772,
+      "pdb": 4180,
+      "total": 12461,
+      "confs": [
+        {
+          "name": "Chair",
+          "count": 8197,
+          "favorable": true
+        },
+        {
+          "name": "Half chair",
+          "count": 2196,
+          "favorable": false
+        },
+        {
+          "name": "Twist boat",
+          "count": 1041,
+          "favorable": false
+        },
+        {
+          "name": "Boat",
+          "count": 948,
+          "favorable": false
+        },
+        {
+          "name": "Flat",
+          "count": 79,
+          "favorable": false
+        }
+      ]
+    },
+    {
+      "name": "Cyclopentane",
+      "ccd": 924,
+      "pdb": 3522,
+      "total": 10799,
+      "confs": [
+        {
+          "name": "Half chair",
+          "count": 6791,
+          "favorable": true
+        },
+        {
+          "name": "Envelope",
+          "count": 3729,
+          "favorable": true
+        },
+        {
+          "name": "Flat",
+          "count": 279,
+          "favorable": false
+        }
+      ]
+    },
+    {
+      "name": "Benzene",
+      "ccd": 23606,
+      "pdb": 42973,
+      "total": 125380,
+      "confs": [
+        {
+          "name": "Flat",
+          "count": 125317,
+          "favorable": true
+        },
+        {
+          "name": "Half chair",
+          "count": 35,
+          "favorable": false
+        },
+        {
+          "name": "Chair",
+          "count": 23,
+          "favorable": false
+        },
+        {
+          "name": "Boat",
+          "count": 4,
+          "favorable": false
+        },
+        {
+          "name": "Twist boat",
+          "count": 1,
+          "favorable": false
+        }
+      ]
+    },
+    {
+      "name": "Oxane",
+      "ccd": 2169,
+      "pdb": 24722,
+      "total": 301838,
+      "confs": [
+        {
+          "name": "1C4",
+          "count": 250707,
+          "favorable": true,
+          "type": "C",
+          "label": "Chair"
+        },
+        {
+          "name": "4C1",
+          "count": 19215,
+          "favorable": true,
+          "type": "C",
+          "label": "Chair"
+        },
+        {
+          "name": "1S3",
+          "count": 3709,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "3,6B",
+          "count": 2974,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "B3,6",
+          "count": 2328,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "3S1",
+          "count": 2041,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "2S6",
+          "count": 2024,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "6S2",
+          "count": 1991,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "1S5",
+          "count": 1416,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "3H2",
+          "count": 1355,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "3H4",
+          "count": 1176,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "5H4",
+          "count": 1142,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "1H2",
+          "count": 1036,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "1,4B",
+          "count": 985,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "5S1",
+          "count": 897,
+          "favorable": false,
+          "type": "S",
+          "label": "Skew"
+        },
+        {
+          "name": "1H6",
+          "count": 813,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "3E",
+          "count": 810,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "5H6",
+          "count": 794,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "E4",
+          "count": 768,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "E2",
+          "count": 736,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "1E",
+          "count": 703,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "B2,5",
+          "count": 554,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "5E",
+          "count": 528,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "B1,4",
+          "count": 487,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "E6",
+          "count": 436,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "2,5B",
+          "count": 241,
+          "favorable": false,
+          "type": "B",
+          "label": "Boat"
+        },
+        {
+          "name": "2H3",
+          "count": 235,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "4H5",
+          "count": 194,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "6H1",
+          "count": 178,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "6H5",
+          "count": 175,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "2H1",
+          "count": 173,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "E5",
+          "count": 166,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "4H3",
+          "count": 163,
+          "favorable": false,
+          "type": "H",
+          "label": "Half chair"
+        },
+        {
+          "name": "E1",
+          "count": 158,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "2E",
+          "count": 150,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "E3",
+          "count": 147,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "4E",
+          "count": 144,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "6E",
+          "count": 89,
+          "favorable": false,
+          "type": "E",
+          "label": "Envelope"
+        }
+      ]
+    },
+    {
+      "name": "Oxolane",
+      "ccd": 3000,
+      "pdb": 38442,
+      "total": 177605,
+      "confs": [
+        {
+          "name": "E3",
+          "count": 25334,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "E2",
+          "count": 23887,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "3E",
+          "count": 20250,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "4T3",
+          "count": 15970,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "Flat",
+          "count": 13097,
+          "favorable": false,
+          "type": "F",
+          "label": "Flat"
+        },
+        {
+          "name": "3T2",
+          "count": 12661,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "4E",
+          "count": 10114,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "2T3",
+          "count": 9544,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "2E",
+          "count": 8114,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "1T2",
+          "count": 6721,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "2T1",
+          "count": 4940,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "1T0",
+          "count": 4712,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "E0",
+          "count": 4633,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "4T0",
+          "count": 4449,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "1E",
+          "count": 3749,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "3T4",
+          "count": 3540,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "E1",
+          "count": 2084,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "E4",
+          "count": 1459,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "0T1",
+          "count": 948,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        },
+        {
+          "name": "0E",
+          "count": 779,
+          "favorable": true,
+          "type": "E",
+          "label": "Envelope"
+        },
+        {
+          "name": "0T4",
+          "count": 620,
+          "favorable": true,
+          "type": "T",
+          "label": "Twist"
+        }
+      ]
+    }
+  ]
+}
