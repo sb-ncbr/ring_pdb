@@ -88,3 +88,26 @@ export const exportAllData = async (filters: MRT_ColumnFiltersState, sorting: MR
     console.error('Error exporting data:', error);
   }
 };
+
+
+export function formatConformation(conf: string) {
+  if (!conf || !/[A-Za-z]/.test(conf)) {
+    return conf;
+  }
+
+  const match = conf.match(/^([0-9,]*)([A-Za-z]+)([0-9,]*)$/);
+
+  if (!match) {
+    return conf;
+  }
+
+  const [, before, letter, after] = match;
+
+  return (
+    <>
+      {before && <sup>{before}</sup>}
+      {letter}
+      {after && <sub>{after}</sub>}
+    </>
+  );
+}

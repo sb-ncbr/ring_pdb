@@ -9,6 +9,7 @@ export interface RowData {
   resolution: number;
   ring_coverage: number;
   conformation: string;
+  conf_main_type: string;
   rmsd: number;
   experimental_method: string;
   rsr: number;

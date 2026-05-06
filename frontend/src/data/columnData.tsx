@@ -15,7 +15,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.ts';
+import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.tsx';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import stats from '../content/stats.json';
@@ -341,7 +341,7 @@ export const getColumns = (
             gap: '16px',
           }}
         >
-          <Typography variant="body2">{row.original.conformation}</Typography>
+          <Typography variant="body2">{row.original.conf_main_type}</Typography>
 
           <Chip
             label={

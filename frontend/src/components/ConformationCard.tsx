@@ -2,7 +2,7 @@ import * as React from 'react';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import { formatNumber } from '../helperFunctions/helpers.ts';
+import { formatNumber } from '../helperFunctions/helpers.tsx';
 import { SelectableCard } from './RingCard.tsx';
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
@@ -17,6 +17,10 @@ interface ConfCardProps {
   disabled: boolean;
   ring: RingType;
   favorable: boolean;
+  // subtypes: { 
+  //   name: string;
+  //   count: number;
+  // }[] | []
 }
 
 //TODO: move to types later if needed
@@ -52,7 +56,19 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           />
         </Box>
         <Box sx={{ height: 220 }}>
-          {isHomoCycle(ring) ? <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} /> : null}
+          {isHomoCycle(ring) ? <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} /> : null
+        //   <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" sx={{mx: 2}}>
+        //     {Array.from(subtypes).map((conf, i) => (
+        //       <Typography key={i} component="span" sx={{ 
+        //         display: "inline-flex",
+        //         justifyItems: "center",
+        //         alignItems: "center",
+        //         lineHeight: 1}}>
+        //         {formatConformation(conf.name)}
+        //       </Typography>
+        //     ))}
+        // </Box>
+}
           
         </Box>
         <CardContent>

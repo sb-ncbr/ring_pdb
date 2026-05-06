@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Chip, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Loader from '../components/Spinner.tsx';
-import { getChipStyles, isFavorable } from '../helperFunctions/helpers.ts';
+import { formatConformation, getChipStyles, isFavorable } from '../helperFunctions/helpers.tsx';
 import { useTheme } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -38,6 +38,7 @@ export const getAtoms = (ringId: string) => {
 interface RingData {
   ccd_id: string;
   conformation: string;
+  conf_main_type: string;
   experimental_method: string;
   pdb_id: string;
   residue_id: number;
@@ -299,7 +300,8 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Assigned conformation:
             </Typography>
-            <Typography variant="caption">{ringData.conformation}</Typography>
+            <Typography variant="caption">{ringData.conf_main_type}</Typography>
+            {['Oxane', 'Oxolane'].includes(ringData.ring_type) && ringData.conformation !== 'Flat' ? <Typography variant="caption">&nbsp;({formatConformation(ringData.conformation)})</Typography> : null}
             <Chip
               label={
                 <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>

@@ -3,7 +3,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import { formatNumber } from '../helperFunctions/helpers.ts';
+import { formatNumber } from '../helperFunctions/helpers.tsx';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { RingType } from '../data/dataTypes.ts';

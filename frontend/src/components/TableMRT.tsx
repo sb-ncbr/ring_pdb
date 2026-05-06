@@ -33,7 +33,7 @@ import {
   level3Filters,
   sliderFilterKeys,
 } from '../helperFunctions/filters.tsx';
-import { exportAllData } from '../helperFunctions/helpers.ts';
+import { exportAllData } from '../helperFunctions/helpers.tsx';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
 import { useApiErrorHandler } from '../lib/hooks/use-api-error-handler.ts';
