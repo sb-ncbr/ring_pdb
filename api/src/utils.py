@@ -18,73 +18,6 @@ RANGE_FILTER_IDS = {
     'rscc',
 }
 
-CONF_MAP = {
-    # Chair
-    "1C4": "Chair",
-    "4C1": "Chair",
-
-    # Boat
-    "3,6B": "Boat",
-    "B3,6": "Boat",
-    "1,4B": "Boat",
-    "B1,4": "Boat",
-    "B2,5": "Boat",
-    "2,5B": "Boat",
-
-    # Envelope
-    "E4": "Envelope",
-    "3E": "Envelope",
-    "1E": "Envelope",
-    "E2": "Envelope",
-    "5E": "Envelope",
-    "E6": "Envelope",
-    "E5": "Envelope",
-    "E1": "Envelope",
-    "E3": "Envelope",
-    "2E": "Envelope",
-    "4E": "Envelope",
-    "6E": "Envelope",
-    "0E": "Envelope",
-    "E0": "Envelope",
-
-    # Half-chair
-    "3H2": "Half chair",
-    "5H4": "Half chair",
-    "3H4": "Half chair",
-    "1H2": "Half chair",
-    "1H6": "Half chair",
-    "5H6": "Half chair",
-    "4H5": "Half chair",
-    "2H3": "Half chair",
-    "6H5": "Half chair",
-    "2H1": "Half chair",
-    "6H1": "Half chair",
-    "4H3": "Half chair",
-
-    # Skew
-    "1S3": "Skew",
-    "3S1": "Skew",
-    "6S2": "Skew",
-    "2S6": "Skew",
-    "5S1": "Skew",
-    "1S5": "Skew",
-
-    # Twist
-    "4T3": "Twist",
-    "3T2": "Twist",
-    "2T3": "Twist",
-    "1T2": "Twist",
-    "1T0": "Twist",
-    "2T1": "Twist",
-    "4T0": "Twist",
-    "3T4": "Twist",
-    "0T1": "Twist",
-    "0T4": "Twist",
-
-    # Flat
-    "Flat": "Flat",
-}
-
 
 def get_range_with_step(data_series, column_name=None):
     """Calculate min, max, and step while handling NaN values."""
@@ -115,8 +48,7 @@ def get_conformation_mask(df: pd.DataFrame, conf_filter: Dict[str, List[str] | b
     mask = pd.Series(True, index=df.index)
 
     if selected_values:
-        mapped_conf = df['conformation'].map(CONF_MAP).fillna(df['conformation'])
-        mask &= mapped_conf.isin(selected_values)
+        mask &= df['conf_main_type'].isin(selected_values)
 
     if show_favorable != show_unfavorable:
         favorability_mask = df['is_favorable']
