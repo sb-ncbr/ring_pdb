@@ -11,12 +11,12 @@ export default function ContactInfo() {
 
       <Stack spacing={2} alignItems="start">
         <Link
-          href="mailto:doshchenko@muni.cz"
+          href="mailto:doshchenko@mail.muni.cz"
           underline="none"
           sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
         >
           <EmailIcon fontSize="small" />
-          doshchenko@muni.cz
+          doshchenko@mail.muni.cz
         </Link>
 
         <Link

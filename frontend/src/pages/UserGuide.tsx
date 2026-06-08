@@ -77,7 +77,7 @@ export const UserGuide: React.FC = () => {
           </Typography>
           <img
             src="assets/images/docs_scheme.svg"
-            alt="Diagram of the RingWeb application flow"
+            alt="Diagram of the RingPDB application flow"
             style={{ width: '50%', margin: 16, borderRadius: 4 }}
           />
         </AccordionDetails>

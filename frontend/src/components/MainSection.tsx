@@ -16,7 +16,7 @@ export const MainSection = () => {
         }}
       >
         Discover, analyze, and explore molecular ring structures like never
-        before. RingWeb is a powerful web-based platform designed to help
+        before. RingPDB is a powerful web-based platform designed to help
         researchers efficiently navigate the vast dataset of ligand rings in the{" "}
         <Link
           href="https://www.ebi.ac.uk/pdbe/"
@@ -41,7 +41,7 @@ export const MainSection = () => {
       >
         Whether you’re investigating structural irregularities, validating
         ring conformations, or gaining insights into molecular interactions,
-        RingWeb provides the tools you need:
+        RingPDB provides the tools you need:
       </Typography>
 
       <List sx={{ listStyleType: "disc", pl: 4 }}>

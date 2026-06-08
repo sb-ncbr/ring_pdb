@@ -2,7 +2,7 @@
   <br>
   <br>
   <a href="https://github.com/sb-ncbr/ring_web">
-    <img src="frontend/assets/Logo.svg" alt="RingWeb" width="220">
+    <img src="frontend/assets/Logo.svg" alt="RingPDB" width="220">
   </a>
   <br>
   <br>

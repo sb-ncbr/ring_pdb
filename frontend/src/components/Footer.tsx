@@ -13,7 +13,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="body2">
-            © 2026 RingWeb.{' '}
+            © 2026 RingPDB.{' '}
             <Link
               href="https://webchem.ncbr.muni.cz/Platform/Home/TermsOfUse"
               target="_blank"

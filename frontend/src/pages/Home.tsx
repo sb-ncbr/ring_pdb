@@ -103,7 +103,7 @@ export const Home: React.FC = () => (
     >
       <img src="assets/images/elixirlogo.png" alt="Elixir Logo" />
       <Typography variant="body2" align="center" sx={{ color: 'gray', mt: 2, px: 4 }}>
-        RingWeb tool is a part of services provided by ELIXIR – European research infrastructure for
+        RingPDB tool is a part of services provided by ELIXIR – European research infrastructure for
         biological information. For other services provided by ELIXIR's Czech Republic Node visit{' '}
         <Link
           href="https://www.elixir-czech.cz/services"

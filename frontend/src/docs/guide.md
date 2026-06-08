@@ -1,6 +1,6 @@
-# RingWeb Application User Guide
+# RingPDB Application User Guide
 
-Welcome to the user guide for **RingWeb**, a web-based platform for exploring ring conformations in biomolecular structures.
+Welcome to the user guide for **RingPDB**, a web-based platform for exploring ring conformations in biomolecular structures.
 This guide will walk you through the main features of the application and help you get started efficiently.
 
 ---
