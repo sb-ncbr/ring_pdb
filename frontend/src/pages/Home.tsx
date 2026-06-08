@@ -71,7 +71,7 @@ export const Home: React.FC = () => (
         {cards['example-cards'].map((card, index) => (
           <Grid
             key={index}
-            size={{ xs: 12, sm: 6, lg: 3 }}
+            size={{ xs: 12, sm: 6, lg: 4 }}
             sx={{
               display: 'flex',
               justifyContent: {

@@ -55,7 +55,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
           filters:
             idType == 'pdb'
               ? {
-                  pdb_id: validatedIds.map((id) => id.toUpperCase()),
+                  pdb_id: validatedIds.map((id) => id.toLowerCase()),
                 }
               : {
                   ccd_id: validatedIds.map((id) => id.toUpperCase()),

@@ -31,28 +31,34 @@
   ],
   "example-cards": [
     {
-      "header": "Flat cyclopentane in ligand 3KT of 4r91 entry",
+      "header": "Flat Cyclopentane in HD2 Ligand (PDB ID: 4BB5)",
+      "body": "The HD2 inhibitor candidate contains a cyclopentane ring observed in an energetically unfavorable flat conformation in all four ligand copies. Electron density support is inconsistent across monomers, and the ring lacks interactions that would stabilize this geometry, suggesting a potential modeling artifact.",
+      "image": "assets/images/4CFB.png",
+      "url": "/ring-details/4bb5_D_HD2_1292_C8-C9-C10-C11-C12"
+    },
+    {
+      "header": "Planar Cyclohexane in NHE Ligand (PDB ID: 1ZHH)",
+      "body": "The NHE ligand was modeled with a flat cyclohexane ring despite high-resolution data (1.94 Å). Electron density analysis revealed local fitting issues, and the corresponding PDB-REDO model adopts the expected chair conformation, suggesting the planar geometry is a refinement artifact.",
+      "image": "assets/images/4CFB.png",
+      "url": "/ring-details/1zhh_B_NHE_3256_C3'-C2'-C1'-C6'-C5'-C4'"
+    },
+    {
+      "header": "Distorted Benzene Ring in SFD Ligand (PDB ID: 2VFV)",
+      "body": "The SFD cofactor was modeled with a benzene ring in an unusual half-chair conformation. Although the ligand is largely supported by electron density, surrounding difference density features and comparison with the PDB-REDO model suggest that the ring geometry may require refinement.",
+      "image": "assets/images/4CFB.png",
+      "url": "/ring-details/2vfv_A_SFD_1418_C6F-C9F-C1F-C8F-C7F-CBF"
+    },
+    {
+      "header": "OXANE",
       "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that a number of rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
-      "image": "assets/images/4R91.png",
+      "image": "assets/images/4CFB.png",
       "url": "/ring-details/4r91_A_3KT_502_C16-C21-C22-C26-C27"
     },
     {
-      "header": "Flat cyclohexane in ligand OM3 of 4cfb entry",
+      "header": "OXOLANE",
       "body": "Upon analysing cases of cyclohexane rings occurring in the flat conformation in detail, we discovered that most of these rings should be present in one of the more energetically stable conformations. An example of such a potential conformation issue is a ligand with CCD ID OM3 in PDB entry 4cfb.",
       "image": "assets/images/4CFB.png",
       "url": "/ring-details/4cfb_A_OM3_1217_C15-C16-C17-C18-C19-C21"
-    },
-    {
-      "header": "Chair-like benzene in ligand 53K of 5mtp entry",
-      "body": "We analysed the 5MTP structure, focusing on ligand 53K, which contains three benzene rings. In all chains, one specific benzene consistently adopts a chair-like conformation, which is unusual for planar aromatic systems. This pattern repeats across the entire structure, suggesting a possible refinement artifact or restraint issue.",
-      "image": "assets/images/5MTP.png",
-      "url": "/ring-details/5mtp_A_53K_302_C15-C17-C20-C19-C18-C16"
-    },
-    {
-      "header": "Flat cyclopentane in ligand 3KT of 4r91 entry",
-      "body": "Upon thorough analysis of the cyclopentane dataset, we have discovered that a number of rings seem to have been assigned the flat conformation without adequate proof of the existence of such conformation. An example of a cyclopentane in the flat conformation, which should have a more energetically favourable conformation instead, is the ring in ligand with CCD ID 3KT in PDB entry 4r91.",
-      "image": "assets/images/4R91.png",
-      "url": "/ring-details/4r91_A_3KT_502_C16-C21-C22-C26-C27"
     }
   ]
 }
