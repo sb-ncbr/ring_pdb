@@ -56,7 +56,7 @@ export const ConformationCard: React.FC<ConfCardProps> = ({
           />
         </Box>
         <Box sx={{ height: 220 }}>
-          {isHomoCycle(ring) ? <MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} /> : null
+          {<MoleculeWithFallback modelPath={`assets/geometry/${ring}/${ring}-${name}.glb`} />
         //   <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" sx={{mx: 2}}>
         //     {Array.from(subtypes).map((conf, i) => (
         //       <Typography key={i} component="span" sx={{ 
