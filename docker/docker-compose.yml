@@ -1,4 +1,4 @@
-name: ringweb
+name: ringpdb
 
 services:
   api:
@@ -12,7 +12,7 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - ringweb-network
+      - ringpdb-network
 
   web:
     container_name: web
@@ -29,8 +29,8 @@ services:
         - action: rebuild
           path: ../frontend/package.json
     networks:
-      - ringweb-network
+      - ringpdb-network
 
 networks:
-  ringweb-network:
+  ringpdb-network:
     driver: bridge
