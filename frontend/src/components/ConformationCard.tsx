@@ -24,12 +24,15 @@ interface ConfCardProps {
 }
 
 //TODO: move to types later if needed
+/*
 const homocycles = ["Cyclohexane", "Benzene", "Cyclopentane"] as const;
 type Homocycle = typeof homocycles[number];
 
 function isHomoCycle(ring: RingType): ring is Homocycle {
   return homocycles.includes(ring as Homocycle);
 }
+
+*/
 
 
 export const ConformationCard: React.FC<ConfCardProps> = ({
