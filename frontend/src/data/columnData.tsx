@@ -15,7 +15,11 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
-import { getChipStyles, getOtherSelectedFilters, isFavorable } from '../helperFunctions/helpers.tsx';
+import {
+  getChipStyles,
+  getOtherSelectedFilters,
+  isFavorable,
+} from '../helperFunctions/helpers.tsx';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import stats from '../content/stats.json';
@@ -327,9 +331,14 @@ export const getColumns = (
       );
     },
     Cell: ({ row }: { row: MRT_Row<RowData> }) => {
-      const conf = row.original.conformation;
+      const conf = row.original.conf_main_type;
       const ring = row.original.ring_type as RingType;
+
       const favorable = isFavorable(ring, conf);
+
+      console.log(conf);
+      console.log(favorable);
+
       const mainColor = favorable ? '#2587E2' : '#CD4139';
 
       return (
