@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
-import CardActionArea from '@mui/material/CardActionArea';
 import { useRef, useState } from 'react';
 import { IconButton, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
