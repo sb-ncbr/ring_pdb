@@ -301,7 +301,12 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
               Assigned conformation:
             </Typography>
             <Typography variant="caption">{ringData.conf_main_type}</Typography>
-            {['Oxane', 'Oxolane'].includes(ringData.ring_type) && ringData.conformation !== 'Flat' ? <Typography variant="caption">&nbsp;({formatConformation(ringData.conformation)})</Typography> : null}
+            {['Oxane', 'Oxolane'].includes(ringData.ring_type) &&
+            ringData.conformation !== 'Flat' ? (
+              <Typography variant="caption">
+                &nbsp;({formatConformation(ringData.conformation)})
+              </Typography>
+            ) : null}
             <Chip
               label={
                 <Typography variant="caption">{favorable ? 'favorable' : 'unfavorable'}</Typography>
@@ -430,35 +435,41 @@ function ToggleElectronDensityButton({ viewer }: { viewer: MolstarViewerModel })
 }
 
 function DownloadStructureButton({ pdbId }: { pdbId: string }) {
+  const [isDownloading, setIsDownloading] = useState(false);
   async function handleDownload() {
+    if (isDownloading) return;
+
+    setIsDownloading(true);
+
     try {
       const response = await fetch(`https://www.ebi.ac.uk/pdbe/entry-files/download/${pdbId}.cif`);
+
+      if (!response.ok) {
+        throw new Error('Failed to download file');
+      }
+
       const data = await response.text();
 
-      // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([data]));
-
-      // Create a temporary link element
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${pdbId.toLowerCase()}.cif`);
-
-      // Append link to body, click it, and remove it
+      link.download = `${pdbId.toLowerCase()}.cif`;
       document.body.appendChild(link);
       link.click();
-      link.parentNode?.removeChild(link);
+      link.remove();
 
-      // Clean up the URL
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error downloading file:', error);
-      // You might want to add error handling UI here
+    } finally {
+      setIsDownloading(false);
     }
   }
 
   return (
     <Button
       onClick={handleDownload}
+      disabled={isDownloading}
       startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
       sx={{ whiteSpace: 'nowrap', color: '#3A3A3A' }}
     >

@@ -335,10 +335,6 @@ export const getColumns = (
       const ring = row.original.ring_type as RingType;
 
       const favorable = isFavorable(ring, conf);
-
-      console.log(conf);
-      console.log(favorable);
-
       const mainColor = favorable ? '#2587E2' : '#CD4139';
 
       return (

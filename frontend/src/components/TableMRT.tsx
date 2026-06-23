@@ -33,7 +33,7 @@ import {
   level3Filters,
   sliderFilterKeys,
 } from '../helperFunctions/filters.tsx';
-import { exportAllData } from '../helperFunctions/helpers.tsx';
+import { DownloadCSVButton } from './DownloadCSVButton.tsx';
 import Spinner from './Spinner.tsx';
 import { ColumnFilter } from '@tanstack/react-table';
 import { useApiErrorHandler } from '../lib/hooks/use-api-error-handler.ts';
@@ -435,20 +435,7 @@ const TableMRT = () => {
                   order: { xs: -1, lg: 0 },
                 }}
               />
-
-              <Button
-                disabled={table.getPrePaginationRowModel().rows.length === 0}
-                onClick={() => exportAllData(columnFilters, sorting)}
-                startIcon={<FileDownloadIcon sx={{ color: '#7C7C7C' }} />}
-                sx={{
-                  whiteSpace: 'nowrap',
-                  color: '#3A3A3A',
-                  justifyContent: 'start',
-                  order: { xs: -2, lg: 0 },
-                }}
-              >
-                <Typography variant="body1">Download data</Typography>
-              </Button>
+              <DownloadCSVButton filters={columnFilters} sorting={sorting} />
             </Box>
           </Box>
           <Divider sx={{ marginBottom: '5px' }} />
