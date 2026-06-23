@@ -1,7 +1,5 @@
 import stats from '../content/stats.json';
 import { OtherSelectedFiltersType } from '../components/FilterAutocomplete.tsx';
-import { MRT_ColumnFiltersState, MRT_SortingState } from 'material-react-table';
-import axios from 'axios';
 import { RingType } from '../data/dataTypes.ts';
 
 export const isFavorable = (ringName: RingType, confName: string) => {

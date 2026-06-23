@@ -7,12 +7,10 @@ import {
   MRT_ColumnFiltersState,
   MRT_TableHeadCellFilterContainer,
 } from 'material-react-table';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { RowData, APIData } from '../data/dataTypes';
 import axios from 'axios';
 import { commonBodyCellProps, commonHeadCellProps, getColumns } from '../data/columnData.tsx';
 import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Grow from '@mui/material/Grow';
 import FormControlLabel from '@mui/material/FormControlLabel';

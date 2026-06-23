@@ -78,22 +78,25 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
         },
       })}
     >
-      <CardActionArea sx={{ height: '100%' }} onClick={url ? () => navigate(url) : undefined}>
-        <CardContent   sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          p: 6,
-          gap: 4
-  }}>
+      <Box
+        sx={{ height: '100%', cursor: url ? 'pointer' : 'default' }}
+        onClick={url ? () => navigate(url) : undefined}
+      >
+        <CardContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            p: 6,
+            gap: 4,
+          }}
+        >
           <Box sx={{ minHeight: 110 }}>
-          <Typography variant="subtitle1" component="div">
-            {header}
-          </Typography>
+            <Typography variant="subtitle1" component="div">
+              {header}
+            </Typography>
           </Box>
-          <Typography variant="body1">
-            {body}
-          </Typography>
+          <Typography variant="body1">{body}</Typography>
           {action === 'input' ? (
             <Box component="form" onSubmit={handleSubmit}>
               <TextField
@@ -115,19 +118,19 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
                 slotProps={{
                   input: {
                     endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleSubmit}>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                  }
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleSubmit}>
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
             </Box>
           ) : null}
         </CardContent>
-      </CardActionArea>
+      </Box>
     </Card>
   );
 };
