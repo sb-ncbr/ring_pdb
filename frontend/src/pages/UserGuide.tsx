@@ -198,8 +198,8 @@ export const UserGuide: React.FC = () => {
                 <strong>minimum and maximum</strong> values for numerical fields using sliders.
               </li>
               <Callout type="reset">
-                Use the <strong>reset button</strong> below the sliders to clear{' '}
-                <strong>all</strong> numerical filter settings at once.
+                Use the <strong>reset button</strong> next to sliders to clear <strong>all</strong>{' '}
+                numerical filter settings at once.
               </Callout>
               <li>
                 <strong>Click on a table row</strong> to navigate to the{' '}
