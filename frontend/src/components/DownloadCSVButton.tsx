@@ -20,7 +20,7 @@ export function DownloadCSVButton(payload: DownloadPayload) {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/export-data`,
-        { ...payload.filters, ...payload.sorting },
+        payload,
         { responseType: 'blob' },
       );
 
