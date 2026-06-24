@@ -38,6 +38,8 @@ export interface ColumnDataMRT {
 export type APIData = Readonly<Omit<RowData, 'id'>>;
 export type RingType = 'Cyclohexane' | 'Benzene' | 'Cyclopentane' | 'Oxane' | 'Oxolane';
 
+export type HomocycleType = Extract<RingType, 'Benzene' | 'Cyclohexane' | 'Cyclopentane'>;
+
 export interface RingConf {
   name: string;
   count: number;

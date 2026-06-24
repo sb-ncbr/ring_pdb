@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Card, { CardProps } from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
-import { formatNumber } from '../helperFunctions/helpers.tsx';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+
+import { formatNumber } from '../helperFunctions/helpers.tsx';
+import { SelectableCard } from '../helperFunctions/stylers.ts';
 import { RingType } from '../data/dataTypes.ts';
 import MoleculeWithFallback from './MoleculeWithFallback.tsx';
+import { CardActionArea } from '@mui/material';
 
 interface RingCardProps {
   name: RingType;
@@ -19,23 +19,6 @@ interface RingCardProps {
   isSelected: boolean;
   disabled: boolean;
 }
-
-interface SelectableCardProps extends CardProps {
-  selected?: boolean;
-}
-
-export const SelectableCard: React.ComponentType<SelectableCardProps> = styled(
-  Card,
-)<SelectableCardProps>(({ theme, selected }) => ({
-  transform: selected ? 'translateY(-10px)' : 'none',
-  boxShadow: selected ? theme.shadows[24] : theme.shadows[1],
-  border: selected ? `1px solid ${theme.palette.primary.main}` : '0',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  '&:hover': {
-    boxShadow: selected ? theme.shadows[24] : theme.shadows[6],
-  },
-  width: 280,
-}));
 
 export const RingCard: React.FC<RingCardProps> = ({
   name,
