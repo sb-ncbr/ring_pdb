@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 function MoleculeWithFallback({
   modelPath,
-  imageFallback = '/assets/images/image_no_available.jpg',
+  imageFallback = '/assets/images/no_image_available.png',
 }: {
   modelPath: string;
   imageFallback?: string;
@@ -12,8 +12,6 @@ function MoleculeWithFallback({
   const [modelOk, setModelOk] = useState<boolean | null>(null);
 
   useEffect(() => {
-    console.log('Starting to load GLB:', modelPath);
-
     const loader = new GLTFLoader();
 
     loader.load(

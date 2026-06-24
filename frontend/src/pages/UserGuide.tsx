@@ -69,7 +69,7 @@ export const UserGuide: React.FC = () => {
                 visualisations.
               </li>
             </ul>
-          </Typography> 
+          </Typography>
 
           <Typography variant="body1" sx={{ mt: 3 }}>
             From the <strong>Main page</strong> you can also directly access the{' '}
@@ -89,7 +89,7 @@ export const UserGuide: React.FC = () => {
           <Typography variant="subtitle2">Browse Rings and Conformations Page</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="body1" sx={{ mb: 3 }}>
+          <Typography component="div" variant="body1" sx={{ mb: 3 }}>
             Using this two-step interface you can browse available rings and their conformations.
             The selectable cards provide some basic counts for rings/conformations.
             <ol style={{ paddingLeft: '1.2em', marginTop: 0, marginBottom: 0 }}>

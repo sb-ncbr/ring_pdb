@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { RingType } from '../../data/dataTypes.ts';
 
-const steps = ['Select a ring type', 'Select conformations'];
+const steps = ['Select a ring type (single choice)', 'Select conformations (multiple choice)'];
 
 const StickyButton = styled(Button)(({ theme }) => ({
   zIndex: 1,

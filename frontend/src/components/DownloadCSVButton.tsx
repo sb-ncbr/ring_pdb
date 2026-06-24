@@ -52,7 +52,7 @@ export function DownloadCSVButton(payload: DownloadPayload) {
         order: { xs: -2, lg: 0 },
       }}
     >
-      <Typography variant="body1">Download CSV</Typography>
+      <Typography variant="body1">Download data</Typography>
     </Button>
   );
 }
