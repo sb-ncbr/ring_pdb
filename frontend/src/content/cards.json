@@ -53,6 +53,12 @@
       "body": "The detergent molecule BOG contains an oxane ring that adopts a near-planar geometry rather than the expected chair conformation. Electron density supports only part of the ring, and comparison with the corresponding PDB-REDO model shows no flat conformation, suggesting that the observed geometry likely results from refinement artifacts.",
       "image": "assets/images/example-oxane-8YFY.png",
       "url": "/ring-details/8yfy_A_BOG_401_C1-C2-C3-C4-C5-O5"
+    },
+    {
+      "header": "Flat Oxolane Ring in 6C9 Ligand (PDB ID: 5IP6)",
+      "body": "The EthR inhibitor 6C9 contains an oxolane ring modeled in an energetically unfavorable flat conformation. Although the ligand is fully supported by electron density, residual features in the electron density map near the ring and the absence of this conformation in the corresponding PDB-REDO model suggest that the geometry likely results from refinement artifacts.",
+      "image": "assets/images/example-oxolane-5IP6.png",
+      "url": "/ring-details/5ip6_A_6C9_301_C1-C2-O-C3-C"
     }
   ]
 }
