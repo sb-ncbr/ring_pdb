@@ -2,6 +2,7 @@ import { MRT_Cell, MRT_Row } from 'material-react-table';
 
 export interface RowData {
   ring_id: string;
+  extended_PDB_ID: string;
   pdb_id: string;
   ccd_id: string;
   residue_id: number;
@@ -10,11 +11,7 @@ export interface RowData {
   ring_coverage: number;
   conformation: string;
   conf_main_type: string;
-  rmsd: number;
   experimental_method: string;
-  rsr: number;
-  rscc: number;
-  ligand_coverage: string;
   img_url: string;
 }
 

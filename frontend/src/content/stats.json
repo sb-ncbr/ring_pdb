@@ -1,21 +1,21 @@
 {
   "summary": {
-    "rings": 789409,
-    "ligands": 37341,
-    "pdbEntries": 111154
+    "rings": 819943,
+    "ligands": 38054,
+    "pdbEntries": 113659
   },
   "experimentalMethods": [
     {
       "method": "X-ray diffraction",
-      "count": 450519
+      "count": 457248
     },
     {
       "method": "Electron microscopy",
-      "count": 334577
+      "count": 358367
     },
     {
       "method": "Solution NMR",
-      "count": 3558
+      "count": 3572
     },
     {
       "method": "Solution scattering",
@@ -38,12 +38,12 @@
       "count": 85
     },
     {
-      "method": "Powder diffraction",
+      "method": "Neutron diffraction",
       "count": 28
     },
     {
-      "method": "Neutron diffraction",
-      "count": 27
+      "method": "Powder diffraction",
+      "count": 28
     },
     {
       "method": "Neutron diffraction, X-ray diffraction",
@@ -54,11 +54,11 @@
       "count": 12
     },
     {
-      "method": "Solution NMR, Theoretical model",
+      "method": "Solution NMR, Solid-state NMR",
       "count": 8
     },
     {
-      "method": "Solution NMR, Solid-state NMR",
+      "method": "Solution NMR, Theoretical model",
       "count": 8
     },
     {
@@ -73,37 +73,37 @@
   "rings": [
     {
       "name": "Cyclohexane",
-      "ccd": 2913,
-      "pdb": 8761,
-      "total": 47066,
+      "ccd": 2980,
+      "pdb": 9182,
+      "total": 49254,
       "confs": [
         {
           "name": "Chair",
-          "count": 35870,
+          "count": 37760,
           "favorable": true,
           "subtypes": []
         },
         {
           "name": "Half chair",
-          "count": 6405,
+          "count": 6568,
           "favorable": false,
           "subtypes": []
         },
         {
           "name": "Boat",
-          "count": 2370,
+          "count": 2446,
           "favorable": false,
           "subtypes": []
         },
         {
           "name": "Twist boat",
-          "count": 2184,
+          "count": 2241,
           "favorable": false,
           "subtypes": []
         },
         {
           "name": "Flat",
-          "count": 237,
+          "count": 239,
           "favorable": false,
           "subtypes": []
         }
@@ -111,25 +111,25 @@
     },
     {
       "name": "Cyclopentane",
-      "ccd": 1463,
-      "pdb": 4936,
-      "total": 16242,
+      "ccd": 1487,
+      "pdb": 5212,
+      "total": 17211,
       "confs": [
         {
           "name": "Half chair",
-          "count": 10199,
+          "count": 10947,
           "favorable": true,
           "subtypes": []
         },
         {
           "name": "Envelope",
-          "count": 5408,
+          "count": 5618,
           "favorable": true,
           "subtypes": []
         },
         {
           "name": "Flat",
-          "count": 635,
+          "count": 646,
           "favorable": false,
           "subtypes": []
         }
@@ -137,13 +137,13 @@
     },
     {
       "name": "Benzene",
-      "ccd": 31794,
-      "pdb": 56426,
-      "total": 169322,
+      "ccd": 32441,
+      "pdb": 57611,
+      "total": 173242,
       "confs": [
         {
           "name": "Flat",
-          "count": 169221,
+          "count": 173143,
           "favorable": true,
           "subtypes": []
         },
@@ -155,7 +155,7 @@
         },
         {
           "name": "Chair",
-          "count": 29,
+          "count": 27,
           "favorable": false,
           "subtypes": []
         },
@@ -175,194 +175,194 @@
     },
     {
       "name": "Oxane",
-      "ccd": 2508,
-      "pdb": 27337,
-      "total": 346335,
+      "ccd": 2542,
+      "pdb": 27906,
+      "total": 358799,
       "confs": [
         {
           "name": "Chair",
-          "count": 309653,
+          "count": 321200,
           "favorable": true,
           "subtypes": [
             {
               "name": "1C4",
-              "count": 288276
+              "count": 298923
             },
             {
               "name": "4C1",
-              "count": 21377
+              "count": 22277
             }
           ]
         },
         {
           "name": "Skew",
-          "count": 14469,
+          "count": 14790,
           "favorable": false,
           "subtypes": [
             {
               "name": "1S3",
-              "count": 4312
+              "count": 4389
             },
             {
               "name": "3S1",
-              "count": 2323
+              "count": 2394
             },
             {
               "name": "6S2",
-              "count": 2317
+              "count": 2348
             },
             {
               "name": "2S6",
-              "count": 2205
+              "count": 2226
             },
             {
               "name": "5S1",
-              "count": 1716
+              "count": 1809
             },
             {
               "name": "1S5",
-              "count": 1596
+              "count": 1624
             }
           ]
         },
         {
           "name": "Boat",
-          "count": 8779,
+          "count": 9000,
           "favorable": false,
           "subtypes": [
             {
               "name": "3,6B",
-              "count": 3480
+              "count": 3566
             },
             {
               "name": "B3,6",
-              "count": 2716
+              "count": 2788
             },
             {
               "name": "1,4B",
-              "count": 1086
+              "count": 1117
             },
             {
               "name": "B1,4",
-              "count": 623
+              "count": 641
             },
             {
               "name": "B2,5",
-              "count": 615
+              "count": 621
             },
             {
               "name": "2,5B",
-              "count": 259
+              "count": 267
             }
           ]
         },
         {
           "name": "Half chair",
-          "count": 7969,
+          "count": 8176,
           "favorable": false,
           "subtypes": [
             {
               "name": "3H2",
-              "count": 1522
+              "count": 1530
             },
             {
               "name": "5H4",
-              "count": 1395
+              "count": 1483
             },
             {
               "name": "3H4",
-              "count": 1218
+              "count": 1223
             },
             {
               "name": "1H2",
-              "count": 1055
+              "count": 1076
             },
             {
               "name": "1H6",
-              "count": 826
+              "count": 842
             },
             {
               "name": "5H6",
-              "count": 803
+              "count": 808
             },
             {
               "name": "2H3",
-              "count": 220
-            },
-            {
-              "name": "6H5",
-              "count": 208
+              "count": 224
             },
             {
               "name": "4H5",
-              "count": 207
-            },
-            {
-              "name": "6H1",
-              "count": 183
+              "count": 212
             },
             {
               "name": "2H1",
-              "count": 169
+              "count": 209
+            },
+            {
+              "name": "6H5",
+              "count": 209
+            },
+            {
+              "name": "6H1",
+              "count": 185
             },
             {
               "name": "4H3",
-              "count": 163
+              "count": 175
             }
           ]
         },
         {
           "name": "Envelope",
-          "count": 5264,
+          "count": 5432,
           "favorable": false,
           "subtypes": [
             {
               "name": "E4",
-              "count": 961
+              "count": 1021
             },
             {
               "name": "3E",
-              "count": 872
+              "count": 881
             },
             {
               "name": "1E",
-              "count": 765
+              "count": 774
             },
             {
               "name": "E2",
-              "count": 734
+              "count": 742
             },
             {
               "name": "5E",
-              "count": 568
+              "count": 578
             },
             {
               "name": "E6",
-              "count": 443
+              "count": 444
             },
             {
               "name": "E1",
-              "count": 179
+              "count": 225
             },
             {
               "name": "E5",
-              "count": 179
+              "count": 180
             },
             {
               "name": "E3",
-              "count": 169
+              "count": 176
             },
             {
               "name": "2E",
-              "count": 148
+              "count": 151
             },
             {
               "name": "4E",
-              "count": 147
+              "count": 148
             },
             {
               "name": "6E",
-              "count": 99
+              "count": 112
             }
           ]
         },
@@ -376,107 +376,107 @@
     },
     {
       "name": "Oxolane",
-      "ccd": 3635,
-      "pdb": 42837,
-      "total": 210444,
+      "ccd": 3696,
+      "pdb": 43819,
+      "total": 221437,
       "confs": [
         {
           "name": "Envelope",
-          "count": 120597,
-          "favorable": true,
+          "count": 127530,
+          "favorable": false,
           "subtypes": [
             {
               "name": "3E",
-              "count": 28094
+              "count": 30434
             },
             {
               "name": "E2",
-              "count": 28085
+              "count": 30234
             },
             {
               "name": "E3",
-              "count": 27950
+              "count": 29041
             },
             {
               "name": "4E",
-              "count": 11100
+              "count": 11383
             },
             {
               "name": "2E",
-              "count": 9299
+              "count": 9798
             },
             {
               "name": "E0",
-              "count": 5844
+              "count": 6027
             },
             {
               "name": "1E",
-              "count": 4677
+              "count": 4873
             },
             {
               "name": "E1",
-              "count": 2445
+              "count": 2501
             },
             {
               "name": "E4",
-              "count": 1880
+              "count": 1994
             },
             {
               "name": "0E",
-              "count": 1223
+              "count": 1245
             }
           ]
         },
         {
           "name": "Twist",
-          "count": 74726,
+          "count": 78236,
           "favorable": true,
           "subtypes": [
             {
               "name": "4T3",
-              "count": 17514
+              "count": 17963
             },
             {
               "name": "3T2",
-              "count": 15114
+              "count": 16010
             },
             {
               "name": "2T3",
-              "count": 10613
+              "count": 10918
             },
             {
               "name": "1T2",
-              "count": 8468
-            },
-            {
-              "name": "1T0",
-              "count": 5639
+              "count": 8962
             },
             {
               "name": "2T1",
-              "count": 5538
+              "count": 6081
+            },
+            {
+              "name": "1T0",
+              "count": 5895
             },
             {
               "name": "4T0",
-              "count": 5152
+              "count": 5337
             },
             {
               "name": "3T4",
-              "count": 4523
+              "count": 4862
             },
             {
               "name": "0T1",
-              "count": 1197
+              "count": 1217
             },
             {
               "name": "0T4",
-              "count": 968
+              "count": 991
             }
           ]
         },
         {
           "name": "Flat",
-          "count": 15121,
+          "count": 15671,
           "favorable": false,
           "subtypes": []
         }

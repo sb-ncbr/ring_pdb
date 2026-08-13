@@ -15,32 +15,16 @@ export interface GetUpdatedFiltersResult {
   resetLevel: string | null;
 }
 
-export type FilterKey = 'resolution' | 'ring_coverage' | 'ligand_coverage' | 'rsr' | 'rscc';
-export const columnDefaultState = {
-  experimental_method: true,
-  rsr: true,
-  rscc: true,
-  ligand_coverage: false,
-};
-export const defaultFilterKeys = ['ring_type', 'conformation'];
-export const advancedFilterKeys = [
-  'pdb_id',
-  'ccd_id',
-  'experimental_method',
-  'resolution',
-  'ring_coverage',
-  'ligand_coverage',
-  'rsr',
-  'rscc',
-];
-export const sliderFilterKeys = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
-export const combinedFilters = new Map(
-  [...defaultFilterKeys, ...advancedFilterKeys].map((id) => [id, { id, value: [] }]),
-);
+export type FilterKey = 'resolution' | 'ring_coverage';
 
 export const level1Filters = ['ring_type', 'conformation'];
-export const level2Filters = ['pdb_id', 'ccd_id', 'experimental_method'];
-export const level3Filters = ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'];
+export const level2Filters = ['extended_PDB_ID', 'ccd_id', 'experimental_method'];
+export const level3Filters = ['resolution', 'ring_coverage'];
+
+export const sliderFilterKeys = ['resolution', 'ring_coverage'];
+export const combinedFilters = new Map(
+  [...level1Filters, ...level2Filters, ...level3Filters].map((id) => [id, { id, value: [] }]),
+);
 
 export interface ConformationValue {
   selectedValues: string[];

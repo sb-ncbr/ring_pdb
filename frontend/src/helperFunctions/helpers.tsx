@@ -2,6 +2,12 @@ import stats from '../content/stats.json';
 import { OtherSelectedFiltersType } from '../components/FilterAutocomplete.tsx';
 import { RingType } from '../data/dataTypes.ts';
 
+
+export const convertLegacyPdbIdToExtended = (id: string): string => {
+  return `pdb_${id.toLowerCase().padStart(8, '0')}`;
+};
+
+
 export const isFavorable = (ringName: RingType, confName: string) => {
   const ring = stats.rings.find((r) => r.name.toLowerCase() === ringName.toLowerCase());
 
@@ -26,7 +32,7 @@ export const getOtherSelectedFilters = (
     'ring_type',
     'conformation',
     'ccd_id',
-    'pdb_id',
+    'extended_PDB_ID',
     'experimental_method',
   ];
 

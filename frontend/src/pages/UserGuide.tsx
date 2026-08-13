@@ -153,7 +153,7 @@ export const UserGuide: React.FC = () => {
                   </li>
                   <li>
                     Switch to <strong>Compact View</strong> to hide columns like Experimental
-                    Method, RSR, and RSCC.
+                    Method.
                   </li>
                   <li>
                     Download the currently selected data in <strong>CSV</strong> format.

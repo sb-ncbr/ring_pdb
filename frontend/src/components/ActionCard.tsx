@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { IconButton, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { convertLegacyPdbIdToExtended } from '../helperFunctions/helpers';
 
 interface ActionCardProps {
   header: string;
@@ -35,17 +36,43 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
     setInputValue(value);
 
     const ids = value.split(/[\s,;]+/).filter((id: string) => id);
-    const regex = idType == 'pdb' ? /^[1-9][a-zA-Z0-9]{3}$/ : /^[a-zA-Z0-9]{1,5}$/;
 
-    const invalidIds = ids.filter((id: string) => !regex.test(id));
+    const isValidPdbId = (id: string): boolean => {
+      return (
+        /^[1-9][a-zA-Z0-9]{3}$/.test(id) ||
+        /^pdb_[a-zA-Z0-9]{8}$/i.test(id)
+      );
+    };
+
+    const normalizePdbId = (id: string): string => {
+      if (/^pdb_/i.test(id)) {
+        return id.toLowerCase();
+      }
+
+      return convertLegacyPdbIdToExtended(id);
+    };
+
+    const invalidIds = ids.filter((id) => {
+      if (idType === 'pdb') {
+        return !isValidPdbId(id);
+      }
+
+      return !/^(?:[a-zA-Z0-9]{1,3}|[a-zA-Z0-9]{5})$/.test(id);
+    });
 
     if (value.trim() === '' || invalidIds.length === 0) {
       setError(null);
-      setValidatedIds(ids);
+
+      setValidatedIds(
+        ids.map((id) =>
+          idType === 'pdb' ? normalizePdbId(id) : id.toUpperCase()
+        )
+      );
     } else {
       setError(`Invalid IDs: ${invalidIds.join(', ')}`);
     }
   };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (inputValue.length != 0 && !error) {
@@ -54,7 +81,7 @@ const ActionCard: React.FC<ActionCardProps> = ({ header, body, action, color, ur
           filters:
             idType == 'pdb'
               ? {
-                  pdb_id: validatedIds.map((id) => id.toLowerCase()),
+                  extended_PDB_ID: validatedIds.map((id) => id.toLowerCase()),
                 }
               : {
                   ccd_id: validatedIds.map((id) => id.toUpperCase()),

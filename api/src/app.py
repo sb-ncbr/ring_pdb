@@ -77,7 +77,7 @@ def get_filtered_field(field_name: str):
 
 @app.route('/api/get_pdb_ids', methods=['POST'])
 def get_pdb_ids():
-    return get_filtered_field('pdb_id')
+    return get_filtered_field('extended_PDB_ID')
 
 
 @app.route('/api/get_ccd_ids', methods=['POST'])
@@ -110,9 +110,7 @@ def get_paginated_data():
 
     filters_value_range = {
         'resolution': get_range_with_step(data_for_calc_ranges['resolution']),
-        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_percent'], 'ring_coverage_float'),
-        'rsr': get_range_with_step(data_for_calc_ranges['rsr']),
-        'rscc': get_range_with_step(data_for_calc_ranges['rscc']),
+        'ring_coverage': get_range_with_step(data_for_calc_ranges['ring_coverage_percent'], 'ring_coverage_float')
     }
 
     response = {

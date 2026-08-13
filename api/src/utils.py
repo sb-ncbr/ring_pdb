@@ -8,14 +8,13 @@ IN_FILTER_IDS = {
     'conformation',
     'experimental_method',
     'pdb_id',
+    'extended_PDB_ID',
     'ccd_id',
 }
 
 RANGE_FILTER_IDS = {
     'resolution',
-    'ring_coverage',
-    'rsr',
-    'rscc',
+    'ring_coverage'
 }
 
 
@@ -119,9 +118,5 @@ def filter_ranges(filtered_data, range_filters: list[dict[str, Any]]) -> pd.Data
             mask &= filtered_data['resolution'].between(min_value, max_value)
         elif filter_id == 'ring_coverage':
             mask &= (filtered_data['ring_coverage_percent']).between(min_value, max_value)
-        elif filter_id == 'rsr':
-            mask &= filtered_data['rsr'].between(min_value, max_value)
-        elif filter_id == 'rscc':
-            mask &= filtered_data['rscc'].between(min_value, max_value)
 
     return filtered_data[mask]

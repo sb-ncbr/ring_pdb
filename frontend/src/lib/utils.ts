@@ -1,5 +1,6 @@
 interface StructureComponents {
   pdbId: string;
+  extendedPdbId: string;
   chainId: string;
   compId: string;
   residueId: number;
@@ -24,11 +25,16 @@ export function parseStructureString(input: string): StructureComponents {
   const parts = input.split('_');
 
   // Validate we have the correct number of components
-  if (parts.length !== 5) {
-    throw new Error('Invalid structure string format. Expected 5 underscore-separated components');
+  if (parts.length !== 6) {
+    throw new Error('Invalid structure string format. Expected 6 underscore-separated components');
   }
 
-  const [pdbId, chainId, compId, residueId, atomString] = parts;
+  const [pdbPrefix, pdbId, chainId, compId, residueId, atomString] = parts;
+  const shortPdbId = pdbId.replace(/^0+/, '');
+
+  if (shortPdbId.length !== 4) {
+    throw new Error('Not possible to convert to short pdb id.');
+  }
 
   // Split the atoms string by hyphen
   const atomIds = atomString.split('-').filter((atom) => atom.length > 0);
@@ -39,7 +45,8 @@ export function parseStructureString(input: string): StructureComponents {
   }
 
   return {
-    pdbId,
+    pdbId: shortPdbId,
+    extendedPdbId: pdbPrefix + '_' + pdbId,
     chainId,
     compId,
     residueId: +residueId,

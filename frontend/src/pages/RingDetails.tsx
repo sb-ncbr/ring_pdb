@@ -41,6 +41,7 @@ interface RingData {
   conf_main_type: string;
   experimental_method: string;
   pdb_id: string;
+  extended_PDB_ID: string;
   residue_id: number;
   ring_id: string;
   ring_type: string;
@@ -48,8 +49,6 @@ interface RingData {
   ring_coverage: string | null;
   ring_coverage_counts: string | null;
   ring_coverage_float: number | null;
-  rscc: number | null;
-  rsr: number | null;
 }
 
 const RingDetailsWrapper: React.FC = () => {
@@ -215,6 +214,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
                 {ringData.pdb_id}{' '}
               </Link>
             </Typography>
+            <Typography sx={{ marginLeft: 1 }}>| {ringData.extended_PDB_ID}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
@@ -276,20 +276,6 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
               <Typography variant="caption">{ringData.resolution} Å</Typography>
             </Box>
           )}
-
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
-              RSR:
-            </Typography>
-            <Typography variant="caption">{ringData.rsr ?? 'N/A'}</Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
-              RSCC:
-            </Typography>
-            <Typography variant="caption">{ringData.rscc ?? 'N/A'}</Typography>
-          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ marginRight: '8px' }}>
               Atoms:

@@ -20,10 +20,7 @@ import RangeSlider from './RangeSlider.tsx';
 import Typography from '@mui/material/Typography';
 import { InfoTooltip } from './InfoTooltip.tsx';
 import {
-  advancedFilterKeys,
-  columnDefaultState,
   combinedFilters,
-  defaultFilterKeys,
   FilterKey,
   getUpdatedFilters,
   level1Filters,
@@ -40,30 +37,25 @@ const TableMRT = () => {
   const location = useLocation();
   const [filterSliderRanges, setFilterSliderRanges] = useState({
     resolution: { min: 1, max: 100, step: 1 },
-    ring_coverage: { min: 0, max: 50, step: 0.5 },
-    rsr: { min: 0.1, max: 10, step: 0.1 },
-    rscc: { min: 0, max: 5, step: 0.2 },
-    ligand_coverage: { min: 0, max: 100, step: 5 },
+    ring_coverage: { min: 0, max: 50, step: 0.5 }
   });
   const [sliderResetCounter, setSliderResetCounter] = useState(0);
   const initialFilters: { id: string; value: any }[] = location.state?.filters
     ? Object.entries(location.state.filters).map(([id, value]) => ({
-        id,
-        value,
-      }))
+      id,
+      value,
+    }))
     : Array.from(combinedFilters.values());
 
   const [data, setData] = useState<APIData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [isCompactView, setIsCompactView] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(initialFilters);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [columnVisibility, setColumnVisibility] = useState(columnDefaultState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(!!location.state?.filters);
 
   const handleColumnFiltersChange = (newFilters: ColumnFilter[]) => {
@@ -83,34 +75,34 @@ const TableMRT = () => {
   const memoizedColumns = useMemo<MRT_ColumnDef<RowData>[]>(() => {
     const createFilter =
       (key: FilterKey) =>
-      ({ column }: { column: any }) => (
-        <RangeSlider
-          filterBy={column.columnDef.header}
-          minVal={filterSliderRanges[key]?.min}
-          maxVal={filterSliderRanges[key]?.max}
-          step={filterSliderRanges[key]?.step}
-          disabled={filterSliderRanges[key]?.min === undefined}
-          value={
-            (columnFilters.find((f: any) => f.id === key)?.value as [number, number]) ?? [
-              filterSliderRanges[key]?.min ?? 0,
-              filterSliderRanges[key]?.max ?? 0,
-            ]
-          }
-          onChange={(newSelectedValues) => {
-            const newFilters = columnFilters.filter((f) => f.id !== key);
-            if (newSelectedValues && newSelectedValues.length) {
-              newFilters.push({ id: key, value: newSelectedValues });
+        ({ column }: { column: any }) => (
+          <RangeSlider
+            filterBy={column.columnDef.header}
+            minVal={filterSliderRanges[key]?.min}
+            maxVal={filterSliderRanges[key]?.max}
+            step={filterSliderRanges[key]?.step}
+            disabled={filterSliderRanges[key]?.min === undefined}
+            value={
+              (columnFilters.find((f: any) => f.id === key)?.value as [number, number]) ?? [
+                filterSliderRanges[key]?.min ?? 0,
+                filterSliderRanges[key]?.max ?? 0,
+              ]
             }
-            handleColumnFiltersChange(newFilters);
-          }}
-          sliderResetCounter={sliderResetCounter}
-        />
-      );
+            onChange={(newSelectedValues) => {
+              const newFilters = columnFilters.filter((f) => f.id !== key);
+              if (newSelectedValues && newSelectedValues.length) {
+                newFilters.push({ id: key, value: newSelectedValues });
+              }
+              handleColumnFiltersChange(newFilters);
+            }}
+            sliderResetCounter={sliderResetCounter}
+          />
+        );
 
     return getColumns(columnFilters, handleColumnFiltersChange).map((column) => {
       if (
         column.accessorKey &&
-        ['resolution', 'ring_coverage', 'ligand_coverage', 'rsr', 'rscc'].includes(
+        ['resolution', 'ring_coverage'].includes(
           column.accessorKey,
         )
       ) {
@@ -131,7 +123,7 @@ const TableMRT = () => {
     });
   };
 
-  const tableContainerMaxWidth = isCompactView ? '1200px' : '1900px';
+  const tableContainerMaxWidth = '1900px';
   const handleSortingChange = (newSorting: any) => {
     setSorting(newSorting);
   };
@@ -174,19 +166,6 @@ const TableMRT = () => {
         return;
       });
   }, [pagination.pageIndex, pagination.pageSize, columnFilters, sorting]);
-
-  useEffect(() => {
-    if (isCompactView) {
-      setColumnVisibility({
-        experimental_method: false,
-        rsr: false,
-        rscc: false,
-        ligand_coverage: false,
-      });
-    } else {
-      setColumnVisibility(columnDefaultState);
-    }
-  }, [isCompactView]);
 
   const table = useMaterialReactTable({
     columns: memoizedColumns,
@@ -259,8 +238,7 @@ const TableMRT = () => {
     },
     onSortingChange: handleSortingChange,
     isMultiSortEvent: () => false,
-    state: { isLoading, sorting, columnVisibility, pagination, columnFilters },
-
+    state: { isLoading, sorting, pagination, columnFilters },
     muiTableBodyProps: {
       sx: {
         ...(isLoading && {
@@ -324,7 +302,7 @@ const TableMRT = () => {
             {/* Left toolbar */}
             <Box>
               {/* Default Filters */}
-              <Box>{renderFilters(defaultFilterKeys)}</Box>
+              <Box>{renderFilters(level1Filters)}</Box>
 
               {/* Advanced Filters with Grow Transition */}
               <Grow
@@ -350,8 +328,7 @@ const TableMRT = () => {
                         }}
                       >
                         {/* First Row - First 3 filters */}
-                        {advancedFilterKeys
-                          .slice(0, 3)
+                        {level2Filters
                           .map((key, index) => renderFilters([key], true, index))}
                       </Box>
 
@@ -365,8 +342,7 @@ const TableMRT = () => {
                           mb: 4,
                         }}
                       >
-                        {advancedFilterKeys
-                          .slice(3)
+                        {level3Filters
                           .filter((key) => visibleFilterKeys.includes(key))
                           .map((key, index) => (
                             <Box
@@ -415,22 +391,6 @@ const TableMRT = () => {
                   '& .MuiTypography-root': {
                     whiteSpace: 'nowrap',
                   },
-                }}
-              />
-
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isCompactView}
-                    onChange={() => setIsCompactView(!isCompactView)}
-                  />
-                }
-                label={<Typography variant="body1">Show compact table</Typography>}
-                sx={{
-                  '& .MuiTypography-root': {
-                    whiteSpace: 'nowrap',
-                  },
-                  order: { xs: -1, lg: 0 },
                 }}
               />
               <DownloadCSVButton filters={columnFilters} sorting={sorting} />

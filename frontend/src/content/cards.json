@@ -2,7 +2,7 @@
   "action-cards": [
     {
       "header": "Search for rings in the PDB entries by PDB ID(s)",
-      "body": "Here you can enter PDB IDs separated by comma, semicolon, or space",
+      "body": "Here you can enter PDB IDs (or extended PDB codes) separated by comma, semicolon, or space",
       "action": "input",
       "color": "#f3eed9",
       "idType": "pdb"
@@ -23,7 +23,7 @@
     },
     {
       "header": "Browse the whole dataset",
-      "body": "Here you can browse the whole dataset collected on 27.04.2026",
+      "body": "Here you can browse the whole dataset collected on 08.08.2026",
       "action": "button",
       "color": "#F1F1F1",
       "url": "/data"
@@ -34,31 +34,31 @@
       "header": "Flat Cyclopentane in HD2 Ligand (PDB ID: 4BB5)",
       "body": "The 4BB5 assembles into a tetramer, where each monomer binds one HD2 ligand. This inhibitor contains a cyclopentane ring observed in an energetically unfavorable flat conformation in all four ligand copies. The ring lacks interactions that would stabilize this geometry, suggesting a potential modeling artifact. Electron density is inconsistent across these copies, and this example shows the ring with only two atoms covered by density.",
       "image": "assets/images/example-cyclopentane-4BB5.png",
-      "url": "/ring-details/4bb5_D_HD2_1292_C8-C9-C10-C11-C12"
+      "url": "/ring-details/pdb_00004bb5_D_HD2_1292_C10-C11-C12-C8-C9"
     },
     {
       "header": "Flat Cyclohexane in NHE Ligand (PDB ID: 1ZHH)",
       "body": "The NHE ligand was modeled with a flat cyclohexane ring despite high-resolution data (1.94 Å). Electron density analysis revealed local fitting issues, and the corresponding PDB-REDO model adopts the expected chair conformation, suggesting the planar geometry is a refinement artifact.",
       "image": "assets/images/example-cyclohexane-1ZHH.png",
-      "url": "/ring-details/1zhh_B_NHE_3256_C3'-C2'-C1'-C6'-C5'-C4'"
+      "url": "/ring-details/pdb_00001zhh_B_NHE_3256_C1'-C2'-C3'-C4'-C5'-C6'"
     },
     {
       "header": "Distorted Benzene in SFD Ligand (PDB ID: 2VFV)",
       "body": "The SFD cofactor was modeled with a benzene ring in an unusual half-chair conformation. Although the ligand is largely supported by electron density, surrounding difference density features and comparison with the PDB-REDO model suggest that the ring geometry may require refinement.",
       "image": "assets/images/example-benzene-2VFV.png",
-      "url": "/ring-details/2vfv_A_SFD_1418_C6F-C9F-C1F-C8F-C7F-CBF"
+      "url": "/ring-details/pdb_00002vfv_A_SFD_1418_C1F-C6F-C7F-C8F-C9F-CBF"
     },
     {
       "header": "Flat Oxane in BOG Ligand (PDB ID: 8YFY)",
       "body": "The detergent molecule BOG contains an oxane ring that adopts a near-planar geometry rather than the expected chair conformation. Electron density supports only part of the ring, and comparison with the corresponding PDB-REDO model shows no flat conformation, suggesting that the observed geometry likely results from refinement artifacts.",
       "image": "assets/images/example-oxane-8YFY.png",
-      "url": "/ring-details/8yfy_A_BOG_401_C1-C2-C3-C4-C5-O5"
+      "url": "/ring-details/pdb_00008yfy_A_BOG_401_C1-C2-C3-C4-C5-O5"
     },
     {
       "header": "Flat Oxolane Ring in 6C9 Ligand (PDB ID: 5IP6)",
       "body": "The EthR inhibitor 6C9 contains an oxolane ring modeled in an energetically unfavorable flat conformation. Although the ligand is fully supported by electron density, residual features in the electron density map near the ring and the absence of this conformation in the corresponding PDB-REDO model suggest that the geometry likely results from refinement artifacts.",
       "image": "assets/images/example-oxolane-5IP6.png",
-      "url": "/ring-details/5ip6_A_6C9_301_C1-C2-O-C3-C"
+      "url": "/ring-details/pdb_00005ip6_A_6C9_301_C-C1-C2-C3-O"
     }
   ]
 }
