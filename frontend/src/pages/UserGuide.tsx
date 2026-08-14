@@ -52,9 +52,9 @@ export const UserGuide: React.FC = () => {
                 Both lowercase and uppercase formats are accepted.
               </li>
               <li>
-                <strong>Search by Ligand ID (CCD ID)</strong>:<br />
+                <strong>Search by CCD ID</strong>:<br />
                 Enter one or more Chemical Component Dictionary (CCD) IDs to find rings in specific
-                ligands. Use the same format and separators as for PDB IDs.
+                ligands and non-standard residues. Use the same format and separators as for PDB IDs.
               </li>
               <li>
                 <strong>Browse Rings and Conformations</strong>:<br />
@@ -152,10 +152,6 @@ export const UserGuide: React.FC = () => {
                     levels.
                   </li>
                   <li>
-                    Switch to <strong>Compact View</strong> to hide columns like Experimental
-                    Method.
-                  </li>
-                  <li>
                     Download the currently selected data in <strong>CSV</strong> format.
                   </li>
                 </ul>
@@ -221,8 +217,8 @@ export const UserGuide: React.FC = () => {
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body1" sx={{ mb: 3 }}>
-            On the left side of the page you can find even more information about the current ring,
-            including its coverage, atom names, chain ID, and residue ID.
+            On the left side of the page you can find information about the current ring,
+            including atom names.
           </Typography>
           <img
             src="assets/images/ring_details_screenshot.png"

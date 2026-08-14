@@ -4,7 +4,7 @@ import Heading from './Heading.tsx';
 export const MainSection = () => {
   return (
     <>
-      <Heading text="Welcome"/>
+      <Heading text="Welcome" />
 
       <Typography
         variant="body1"
@@ -15,9 +15,9 @@ export const MainSection = () => {
           textAlign: "left",
         }}
       >
-        Discover, analyze, and explore molecular ring structures like never
+        Discover, analyse, and explore molecular ring structures like never
         before. RingPDB is a powerful web-based platform designed to help
-        researchers efficiently navigate the vast dataset of ligand rings in the{" "}
+        researchers efficiently navigate the vast dataset of rings in ligands and non-standard residues in the{" "}
         <Link
           href="https://www.ebi.ac.uk/pdbe/"
           target="_blank"
@@ -26,7 +26,7 @@ export const MainSection = () => {
         >
           Protein Data Bank (PDB)
         </Link>
-        . Start your journey today and uncover new perspectives in ligand
+        . Start your journey today and uncover new perspectives in rings conformation
         research with ease and precision!
       </Typography>
 
