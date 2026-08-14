@@ -13,9 +13,9 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import FilterAutocomplete from '../components/FilterAutocomplete.tsx';
 import { FilterAutocompleteSimple } from '../components/FilterAutocompleteSimple.tsx';
 import {
+  formatConformation,
   getChipStyles,
   getOtherSelectedFilters,
   isFavorable,
@@ -27,6 +27,8 @@ import { TableCellProps } from '@mui/material';
 import { useSmartSwitch } from '../lib/hooks/use-smart-switch.ts';
 import { formatNumber, parseStructureString } from '../lib/utils.ts';
 import { getFavorabilityFlags, getOptions } from '../helperFunctions/ringUtils.ts';
+import FilterPDBAutocomplete from '../components/FilterPDBAutocomplete.tsx';
+import FilterCCDAutocomplete from '../components/FilterCCDAutocomplete.tsx';
 
 export const commonHeadCellProps: TableCellProps = {
   align: 'center',
@@ -59,8 +61,7 @@ export const getColumns = (
       Filter: ({ column }: { column: MRT_Column<RowData> }) => {
         const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'extended_PDB_ID');
         return (
-          <FilterAutocomplete
-            filterByLabel="PDB ID"
+          <FilterPDBAutocomplete
             selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
             onChange={(newSelectedValues) => {
               const newFilters = [
@@ -90,8 +91,7 @@ export const getColumns = (
       Filter: ({ column }: { column: MRT_Column<RowData> }) => {
         const otherSelectedFilters = getOtherSelectedFilters(columnFilters, 'ccd_id');
         return (
-          <FilterAutocomplete
-            filterByLabel="CCD ID"
+          <FilterCCDAutocomplete
             selectedValues={columnFilters.find((f: any) => f.id === column.id)?.value || []}
             onChange={(newSelectedValues) => {
               const newFilters = [
@@ -351,7 +351,7 @@ export const getColumns = (
               gap: '16px',
             }}
           >
-            <Typography variant="body2">{row.original.conf_main_type}</Typography>
+            <Typography variant="body2">{row.original.conf_main_type} {['Oxane', 'Oxolane'].includes(ring) && conf !== "Flat" && formatConformation(row.original.conformation)}</Typography>
 
             <Chip
               label={

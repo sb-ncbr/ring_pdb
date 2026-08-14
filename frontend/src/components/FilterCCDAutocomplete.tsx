@@ -1,64 +1,19 @@
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
-import { Checkbox, Chip, Paper, Typography } from '@mui/material';
+import { Checkbox, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
-import { RingType } from '../data/dataTypes.ts';
-import { ConformationValue } from '../helperFunctions/filters.tsx';
+import { OtherSelectedFiltersType } from '../data/dataTypes';
 
-const getPdbSearchPrefix = (value: string): string | null => {
-  let input = value.trim().toLowerCase();
 
-  if (/^pdb?_?$/.test(input)) {
-    return null;
-  }
-
-  if (input.startsWith('pdb_')) {
-    input = input.slice(4);
-  }
-
-  input = input.replace(/^0+/, '');
-
-  // start showing options only after second char
-  if (input.length < 2) {
-    return null;
-  }
-
-  return input;
-};
-
-const toExtendedPdbPrefix = (value: string): string => {
-  return `pdb_${value.padStart(8, '0')}`;
-};
-
-const toLegacyPdbId = (id: string): string => {
-  const normalized = id.trim().toLowerCase();
-
-  if (!normalized.startsWith('pdb_')) {
-    return normalized;
-  }
-
-  return normalized.slice(-4);
-};
-
-export type OtherSelectedFiltersType = {
-  ring_type: RingType[];
-  conformation: ConformationValue;
-  extended_PDB_ID: string[];
-  ccd_id: string[];
-  experimental_method: string[];
-};
-
-export default function FilterAutocomplete({
-  filterByLabel,
+export default function FilterCCDAutocomplete({
   onChange,
   selectedValues,
   otherSelectedFilters,
 }: {
-  filterByLabel: string;
   onChange: (newValue: any) => void;
   selectedValues: string[];
   otherSelectedFilters: OtherSelectedFiltersType;
@@ -66,35 +21,20 @@ export default function FilterAutocomplete({
   const [allOptions, setAllOptions] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []); // check this later, selectedOption now not used in values!!!
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues || []);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
-  const filterPdbOptions = (options: string[], input: string) => {
-    const query = input.trim().toLowerCase();
-
+  const filterOptions = (options: string[], input: string) => {
     return options.filter((option) => {
-      const extendedId = option.toLowerCase();
-      const legacyId = toLegacyPdbId(option).toLowerCase();
-
-      return (
-        extendedId.startsWith(query) ||
-        legacyId.startsWith(query)
-      );
+      return input.toLowerCase().trim() === option.slice(0, input.length).toLowerCase().trim();
     });
   };
 
+  const filterOptionsMUI = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => String(option),
+  });
 
-
-  const filterOptionsMUI = (options: string[], { inputValue }: { inputValue: string }) => {
-    const query = inputValue.trim().toLowerCase();
-
-    return options.filter((option) => {
-      const extendedId = option.toLowerCase();
-      const legacyId = toLegacyPdbId(option);
-
-      return extendedId.startsWith(query) || legacyId.startsWith(query);
-    });
-  };
 
   const handleToggleSelectAll = (visibleOptions: string[]) => {
     setSelectedOptions((prevSelectedOptions) => {
@@ -114,7 +54,7 @@ export default function FilterAutocomplete({
       setSelectAll(false);
     }
 
-    const filteredOptions = filterPdbOptions(allOptions, inputValue);
+    const filteredOptions = filterOptions(allOptions, inputValue);
     if (reason === 'selectOption') {
       setSelectAll(stringValue.length === filteredOptions.length);
     }
@@ -122,39 +62,26 @@ export default function FilterAutocomplete({
     onChange(stringValue);
   };
 
-  const endpointMap = {
-    'PDB ID': 'get_pdb_ids',
-    'CCD ID': 'get_ccd_ids',
-  };
-  const url = `${import.meta.env.VITE_API_URL}/api/${endpointMap[filterByLabel as keyof typeof endpointMap]}`;
+  const url = `${import.meta.env.VITE_API_URL}/api/get_ccd_ids`;
 
   useEffect(() => {
-    const searchPrefix = getPdbSearchPrefix(inputValue);
-
-    if (!searchPrefix) {
-      setAllOptions([]);
-      return;
-    }
-
-    const extendedPrefix = toExtendedPdbPrefix(searchPrefix);
     setAllOptions([]);
     setLoading(true);
 
     axios
       .post(url, {
-        otherFilters: otherSelectedFilters,
-        pdbIdPrefix: extendedPrefix,
+        otherFilters: otherSelectedFilters
       })
       .then((response) => {
         setAllOptions(response.data.payload);
       })
       .catch((error) => {
-        console.error('Error fetching PDB IDs:', error);
+        console.error('Error fetching CCD IDs:', error);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [inputValue, otherSelectedFilters, url]);
+  }, [inputValue, otherSelectedFilters]);
 
   return (
     <Box
@@ -164,8 +91,6 @@ export default function FilterAutocomplete({
     >
       <Autocomplete
         multiple
-        // disableCloseOnSelect
-        // filterSelectedOptions={false}
         filterOptions={filterOptionsMUI}
         value={selectedValues}
         onChange={handleChange}
@@ -173,38 +98,10 @@ export default function FilterAutocomplete({
         loading={loading}
         loadingText="Loading..."
         open={inputValue.length >= 2}
-        renderOption={(props, option) => {
-          const { key, ...optionProps } = props;
-          return (
-            <li key={key} {...optionProps}>
-              {toLegacyPdbId(option)}
-              <Typography
-                component="span"
-                sx={{
-                  ml: 1,
-                  fontSize: '0.75rem',
-                  opacity: 0.6,
-                }}
-              >
-                ({option})
-              </Typography>
-            </li>
-          );
-        }}
-        renderValue={(value, getItemProps) =>
-          value.map((option, index) => (
-            <Chip
-              {...getItemProps({ index })}
-              key={option}
-              label={toLegacyPdbId(option)}
-              size="small"
-            />
-          ))
-        }
         slots={{
           paper: (paperProps) => {
             const { children, ...restPaperProps } = paperProps;
-            const visibleOptions = filterPdbOptions(allOptions, inputValue);
+            const visibleOptions = filterOptions(allOptions, inputValue);
 
             return (
               <Paper {...restPaperProps}>
@@ -241,7 +138,7 @@ export default function FilterAutocomplete({
           return (
             <TextField
               {...restParams}
-              label={`Filter by ${filterByLabel}`}
+              label={`Filter by CCD ID`}
               placeholder={!selectedOptions.length ? 'Start typing...' : ''}
               sx={{
                 '& .MuiOutlinedInput-input': {

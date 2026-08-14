@@ -36,7 +36,7 @@ class DataManager:
             ((df['ring_type'] == 'Benzene') & (df['conformation'] == 'Flat')) |
             ((df['ring_type'] == 'Cyclopentane') & (df['conformation'].isin(['Envelope', 'Half chair']))) |
             ((df['ring_type'] == 'Oxane') & (df['conformation'].isin(['1C4', '4C1']))) |
-            ((df['ring_type'] == 'Oxolane') & (~df['conformation'].isin(['Flat'])))
+            ((df['ring_type'] == 'Oxolane') & (df['conf_main_type'].isin(['Twist'])))
         )
         return df
 

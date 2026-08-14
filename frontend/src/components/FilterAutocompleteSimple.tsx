@@ -8,9 +8,8 @@ import { useTheme } from '@mui/material/styles';
 import { getChipStyles } from '../helperFunctions/helpers.tsx';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { OtherSelectedFiltersType } from './FilterAutocomplete.tsx';
 import { useApiErrorHandler } from '../lib/hooks/use-api-error-handler.ts';
-import { RingType } from '../data/dataTypes.ts';
+import { OtherSelectedFiltersType, RingType } from '../data/dataTypes.ts';
 
 export const FilterAutocompleteSimple = ({
   options,
@@ -108,17 +107,17 @@ export const FilterAutocompleteSimple = ({
         renderValue={
           filterByLabel === 'ring type'
             ? (value, getTagProps) =>
-                value.map((option, index) => {
-                  const { key, ...tagProps } = getTagProps({ index });
-                  return (
-                    <Chip
-                      key={`${option}-${selectedValues.length}`}
-                      label={option}
-                      {...tagProps}
-                      sx={{ ...getChipStyles(option as RingType, theme) }}
-                    />
-                  );
-                })
+              value.map((option, index) => {
+                const { key, ...tagProps } = getTagProps({ index });
+                return (
+                  <Chip
+                    key={`${option}-${selectedValues.length}`}
+                    label={option}
+                    {...tagProps}
+                    sx={{ ...getChipStyles(option as RingType, theme) }}
+                  />
+                );
+              })
             : undefined
         }
       />

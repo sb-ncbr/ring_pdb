@@ -56,3 +56,17 @@ export interface Ring {
 export interface RingCards {
   rings: Ring[];
 }
+
+export interface ConformationValue {
+  selectedValues: string[];
+  showFavorable: boolean;
+  showUnfavorable: boolean;
+}
+
+export type OtherSelectedFiltersType = {
+  ring_type: RingType[];
+  conformation: ConformationValue;
+  extended_PDB_ID: string[];
+  ccd_id: string[];
+  experimental_method: string[];
+};

@@ -26,11 +26,7 @@ export const combinedFilters = new Map(
   [...level1Filters, ...level2Filters, ...level3Filters].map((id) => [id, { id, value: [] }]),
 );
 
-export interface ConformationValue {
-  selectedValues: string[];
-  showFavorable: boolean;
-  showUnfavorable: boolean;
-}
+
 
 export const getUpdatedFilters = ({
   newFilters,

@@ -1,6 +1,5 @@
 import stats from '../content/stats.json';
-import { OtherSelectedFiltersType } from '../components/FilterAutocomplete.tsx';
-import { RingType } from '../data/dataTypes.ts';
+import { OtherSelectedFiltersType, RingType } from '../data/dataTypes.ts';
 
 
 export const convertLegacyPdbIdToExtended = (id: string): string => {
@@ -56,10 +55,10 @@ export const getOtherSelectedFilters = (
         value ??
         (key === 'conformation'
           ? {
-              selectedValues: [],
-              showFavorable: true,
-              showUnfavorable: true,
-            }
+            selectedValues: [],
+            showFavorable: true,
+            showUnfavorable: true,
+          }
           : []);
     }
   });
