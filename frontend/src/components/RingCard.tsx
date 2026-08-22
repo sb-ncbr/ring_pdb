@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import { formatNumber } from '../helperFunctions/helpers.tsx';
 import { SelectableCard } from '../helperFunctions/stylers.ts';
 import { RingType } from '../data/dataTypes.ts';
-import MoleculeWithFallback from './MoleculeWithFallback.tsx';
 import { CardActionArea } from '@mui/material';
+import { MoleculeWithFallback } from './MoleculeWithFallback.tsx';
 
 interface RingCardProps {
   name: RingType;

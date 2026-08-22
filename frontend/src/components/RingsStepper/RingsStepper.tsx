@@ -145,7 +145,7 @@ export default function RingsStepper() {
             >
               {stats.rings.map((ring: any, index: number) => (
                 <RingCard
-                  key={index}
+                  key={ring.name}
                   {...ring}
                   handleCardSelect={() =>
                     handleRingSelect({
@@ -177,9 +177,9 @@ export default function RingsStepper() {
                   gap: 3,
                 }}
               >
-                {stats.rings[ringIndex].confs.map((conf, index) => (
+                {stats.rings[ringIndex].confs.map((conf, _) => (
                   <ConformationCard
-                    key={index}
+                    key={`${ringName}-${conf.name}`}
                     {...conf}
                     handleCardClick={() => handleConfCardClick(conf)}
                     isSelected={selectedConfs.has(conf)}

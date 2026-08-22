@@ -8,10 +8,10 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 
 import { formatNumber } from '../helperFunctions/helpers.tsx';
 import { SelectableCard } from '../helperFunctions/stylers.ts';
-import MoleculeWithFallback from './MoleculeWithFallback.tsx';
 import { RingType, HomocycleType } from '../data/dataTypes.ts';
 import { DetailedConfsDialog } from './RingsStepper/DetailedConfsDialog.tsx';
 import { cardTooltipSx } from '../helperFunctions/stylers.ts';
+import { MoleculeWithFallback } from './MoleculeWithFallback.tsx';
 
 interface ConfCardProps {
   name: string;
