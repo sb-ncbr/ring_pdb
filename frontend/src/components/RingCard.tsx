@@ -39,9 +39,9 @@ export const RingCard: React.FC<RingCardProps> = ({
           <Typography gutterBottom variant="subtitle1" component="div">
             {name}
           </Typography>
-          <Typography variant="body1">{formatNumber(ccd)} ligands in the CCD</Typography>
-          <Typography variant="body1">{formatNumber(pdb)} ligand instances in the PDB</Typography>
-          <Typography variant="body1">{formatNumber(total)} analyzed rings</Typography>
+          <Typography variant="body1">{formatNumber(ccd)} residues in the CCD</Typography>
+          <Typography variant="body1">{formatNumber(pdb)} residue instances in the PDB</Typography>
+          <Typography variant="body1">{formatNumber(total)} analysed rings</Typography>
         </CardContent>
       </CardActionArea>
     </SelectableCard>

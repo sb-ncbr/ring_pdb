@@ -1,7 +1,7 @@
 {
   "summary": {
     "rings": 819943,
-    "ligands": 38054,
+    "nonStandardResidues": 38054,
     "pdbEntries": 113659
   },
   "experimentalMethods": [

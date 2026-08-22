@@ -1,17 +1,15 @@
 import { Box, Typography, Stack } from '@mui/material';
-import stats from "../content/stats.json"
-
+import stats from '../content/stats.json';
 
 export default function DashboardStats() {
-
   const rings = stats?.summary.rings;
-  const ligands = stats?.summary.ligands;
+  const nonstd = stats?.summary.nonStandardResidues;
   const pdbEntries = stats?.summary.pdbEntries;
 
   const statsToDisplay = [
     { label: 'Rings analysed', value: rings },
     { label: 'PDB entries', value: pdbEntries },
-    { label: 'Ligands', value: ligands },
+    { label: 'Non-standard residues', value: nonstd },
   ];
 
   return (

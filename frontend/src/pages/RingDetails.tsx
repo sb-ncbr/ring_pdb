@@ -146,7 +146,7 @@ const RingDetails: React.FC<RingDetailsProps> = ({ ringData }) => {
   const { viewer } = useMolstar();
 
   const linkColor = 'info.main';
-  const conf = ringData.conformation;
+  const conf = ringData.conf_main_type;
   const ring = ringData.ring_type as RingType;
   const favorable = isFavorable(ring, conf);
   const mainColor = favorable ? '#2587E2' : '#CD4139';
