@@ -181,194 +181,194 @@
       "confs": [
         {
           "name": "Chair",
-          "count": 321200,
+          "count": 321291,
           "favorable": true,
           "subtypes": [
             {
-              "name": "1C4",
-              "count": 298923
+              "name": "4C1",
+              "count": 298921
             },
             {
-              "name": "4C1",
-              "count": 22277
+              "name": "1C4",
+              "count": 22370
             }
           ]
         },
         {
           "name": "Skew",
-          "count": 14790,
+          "count": 14307,
           "favorable": false,
           "subtypes": [
             {
               "name": "1S3",
-              "count": 4389
+              "count": 4312
             },
             {
               "name": "3S1",
-              "count": 2394
+              "count": 2295
             },
             {
               "name": "6S2",
-              "count": 2348
+              "count": 2221
             },
             {
               "name": "2S6",
-              "count": 2226
+              "count": 2136
             },
             {
               "name": "5S1",
-              "count": 1809
+              "count": 1747
             },
             {
               "name": "1S5",
-              "count": 1624
+              "count": 1596
             }
           ]
         },
         {
           "name": "Boat",
-          "count": 9000,
+          "count": 9610,
           "favorable": false,
           "subtypes": [
             {
               "name": "3,6B",
-              "count": 3566
+              "count": 3902
             },
             {
               "name": "B3,6",
-              "count": 2788
+              "count": 3100
             },
             {
               "name": "1,4B",
-              "count": 1117
+              "count": 1086
             },
             {
               "name": "B1,4",
-              "count": 641
+              "count": 633
             },
             {
               "name": "B2,5",
-              "count": 621
+              "count": 604
             },
             {
               "name": "2,5B",
-              "count": 267
+              "count": 285
             }
           ]
         },
         {
           "name": "Half chair",
-          "count": 8176,
+          "count": 7833,
           "favorable": false,
           "subtypes": [
             {
-              "name": "3H2",
-              "count": 1530
-            },
-            {
-              "name": "5H4",
-              "count": 1483
-            },
-            {
-              "name": "3H4",
-              "count": 1223
-            },
-            {
-              "name": "1H2",
-              "count": 1076
-            },
-            {
-              "name": "1H6",
-              "count": 842
-            },
-            {
-              "name": "5H6",
-              "count": 808
-            },
-            {
-              "name": "2H3",
-              "count": 224
-            },
-            {
-              "name": "4H5",
-              "count": 212
-            },
-            {
-              "name": "2H1",
-              "count": 209
-            },
-            {
               "name": "6H5",
-              "count": 209
+              "count": 1799
             },
             {
               "name": "6H1",
-              "count": 185
+              "count": 1471
+            },
+            {
+              "name": "2H1",
+              "count": 1212
+            },
+            {
+              "name": "4H5",
+              "count": 895
             },
             {
               "name": "4H3",
-              "count": 175
+              "count": 693
+            },
+            {
+              "name": "2H3",
+              "count": 652
+            },
+            {
+              "name": "5H6",
+              "count": 251
+            },
+            {
+              "name": "1H2",
+              "count": 188
+            },
+            {
+              "name": "1H6",
+              "count": 187
+            },
+            {
+              "name": "5H4",
+              "count": 187
+            },
+            {
+              "name": "3H2",
+              "count": 156
+            },
+            {
+              "name": "3H4",
+              "count": 142
             }
           ]
         },
         {
           "name": "Envelope",
-          "count": 5432,
+          "count": 5564,
           "favorable": false,
           "subtypes": [
             {
-              "name": "E4",
-              "count": 1021
-            },
-            {
-              "name": "3E",
-              "count": 881
-            },
-            {
-              "name": "1E",
-              "count": 774
-            },
-            {
-              "name": "E2",
-              "count": 742
-            },
-            {
-              "name": "5E",
-              "count": 578
-            },
-            {
-              "name": "E6",
-              "count": 444
-            },
-            {
               "name": "E1",
-              "count": 225
-            },
-            {
-              "name": "E5",
-              "count": 180
-            },
-            {
-              "name": "E3",
-              "count": 176
-            },
-            {
-              "name": "2E",
-              "count": 151
-            },
-            {
-              "name": "4E",
-              "count": 148
+              "count": 1286
             },
             {
               "name": "6E",
-              "count": 112
+              "count": 980
+            },
+            {
+              "name": "E5",
+              "count": 838
+            },
+            {
+              "name": "4E",
+              "count": 690
+            },
+            {
+              "name": "2E",
+              "count": 482
+            },
+            {
+              "name": "E3",
+              "count": 348
+            },
+            {
+              "name": "E4",
+              "count": 203
+            },
+            {
+              "name": "1E",
+              "count": 169
+            },
+            {
+              "name": "E2",
+              "count": 164
+            },
+            {
+              "name": "5E",
+              "count": 157
+            },
+            {
+              "name": "E6",
+              "count": 151
+            },
+            {
+              "name": "3E",
+              "count": 96
             }
           ]
         },
         {
           "name": "Flat",
-          "count": 201,
+          "count": 194,
           "favorable": false,
           "subtypes": []
         }
