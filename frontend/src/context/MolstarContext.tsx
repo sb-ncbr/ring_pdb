@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import MolstarViewerModel from '../models/MolstarViewerModel';
 
 interface MolstarContextType {
@@ -12,10 +12,18 @@ interface MolstarProviderProps {
 }
 
 export const MolstarProvider: React.FC<MolstarProviderProps> = ({ children }) => {
-  const viewer = useRef<MolstarViewerModel>(new MolstarViewerModel());
+  const [viewer, setViewer] = useState<MolstarViewerModel | null>(null);
+
+  useEffect(() => {
+    const model = new MolstarViewerModel();
+    setViewer(model);
+    return () => { void model.dispose(); };
+  }, []);
+
+  if (!viewer) return null;
 
   const value = {
-    viewer: viewer.current,
+    viewer,
   };
 
   return <MolstarContext.Provider value={value}>{children}</MolstarContext.Provider>;

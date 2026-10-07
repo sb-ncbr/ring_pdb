@@ -5,6 +5,7 @@ import {
   PluginContextContainer,
 } from 'molstar/lib/commonjs/mol-plugin-ui/plugin';
 import { SequenceView } from 'molstar/lib/commonjs/mol-plugin-ui/sequence';
+import { OverlayTaskProgress } from 'molstar/lib/commonjs/mol-plugin-ui/task';
 import { useBehavior } from '../../lib/hooks/use-behavior';
 import MolstarViewerModel from '../../models/MolstarViewerModel';
 
@@ -85,6 +86,7 @@ export function MolstarViewport({ viewer }: { viewer: MolstarViewerModel }) {
   return (
     <PluginContextContainer plugin={viewer.plugin}>
       <ViewportViewer />
+      <OverlayTaskProgress />
     </PluginContextContainer>
   );
 }

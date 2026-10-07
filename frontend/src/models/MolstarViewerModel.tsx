@@ -38,6 +38,9 @@ export default class MolstarViewerModel {
   private readonly _volumeServer = 'https://www.ebi.ac.uk/pdbe/volume-server';
   private _cellRefs: CellRefs = {};
   private _subscriptions: Subscription[] = [];
+  private readonly _initialization: Promise<void>;
+  private _pendingLoad: Promise<void> = Promise.resolve();
+  private _disposal?: Promise<void>;
 
   public state = {
     showControls: new BehaviorSubject<boolean>(false),
@@ -64,7 +67,8 @@ export default class MolstarViewerModel {
     };
     this._plugin = new PluginUIContext(spec);
 
-    this._init();
+    this._initialization = this._init();
+    void this._initialization.catch((error) => console.error(error));
   }
 
   get plugin() {
@@ -72,6 +76,19 @@ export default class MolstarViewerModel {
   }
 
   sub() {
+    const imageTasks = new Set<number>();
+    this._subscribe(this._plugin.events.task.progress, ({ id, progress }) => {
+      if (['Download Image', 'Copy Image', 'Generate Image'].includes(progress.root.progress.taskName)) {
+        imageTasks.add(id);
+      }
+    });
+    this._subscribe(this._plugin.events.task.finished, ({ id }) => {
+      if (!imageTasks.delete(id) || imageTasks.size > 0) return;
+      if (this._plugin.canvas3d?.webgl.gl.isContextLost()) return;
+      // Encoding/readback is complete; do not retain 8K GPU buffers between exports.
+      this._plugin.helpers.viewportScreenshot?.imagePass.setSize(128, 128);
+    });
+
     this._subscribe(this.state.showBallAndStick, (showBallAndStick) => {
       this._handleVisualsToggle(showBallAndStick);
     });
@@ -89,15 +106,35 @@ export default class MolstarViewerModel {
   }
 
   unsub() {
-    this._plugin.unmount();
     for (const sub of this._subscriptions) sub.unsubscribe();
     this._subscriptions = [];
   }
 
-  async load(pdbId: string, selection: RingSelection) {
+  dispose(): Promise<void> {
+    if (this._disposal) return this._disposal;
+    this.unsub();
+    // Keep the plugin alive until initialization and any active load finish.
+    this._disposal = Promise.allSettled([this._initialization, this._pendingLoad]).then(() => {
+      this._plugin.dispose();
+      this._cellRefs = {};
+      for (const subject of Object.values(this.state)) subject.complete();
+    });
+    return this._disposal;
+  }
+
+  load(pdbId: string, selection: RingSelection): Promise<void> {
+    if (this._disposal) return this._disposal;
+    this._pendingLoad = this._pendingLoad.then(() => {
+      if (!this._disposal) return this._loadEntry(pdbId, selection);
+    });
+    return this._pendingLoad;
+  }
+
+  private async _loadEntry(pdbId: string, selection: RingSelection) {
     this.state.isLoading.next(true);
 
     try {
+      await this._initialization;
       await this._plugin.clear();
       await this._load(pdbId, selection);
       this.focusRing(selection);
