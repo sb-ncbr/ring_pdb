@@ -146,7 +146,9 @@ def export_data():
 
     _, sorted_data = prepare_filtered_and_sorted_data(current_data, filters, sorting)
 
-    export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_counts', 'is_favorable'], axis=1).fillna('N/A')
+    export_data = sorted_data.drop(['ring_coverage_float', 'ring_coverage_percent', 'ring_coverage_counts', 'is_favorable'], axis=1).fillna('N/A')
+    ring_id = export_data.pop("ring_id")
+    export_data.insert(0, "ring_id", ring_id)
 
     csv_string = export_data.to_csv(index=False)
     csv_bytes = io.BytesIO(csv_string.encode('utf-8'))
