@@ -23,6 +23,10 @@ DOI: [10.1186/s13321-026-01154-0](https://doi.org/10.1186/s13321-026-01154-0)
 
 ## How to run
 
+### Dataset management with [Git LFS](https://git-lfs.com/)
+
+Large dataset files are managed using Git Large File Storage (Git LFS). Make sure Git LFS is installed and initialized before cloning or updating the repository.
+
 ### Development
 
 ```bash
