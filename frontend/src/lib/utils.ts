@@ -25,8 +25,9 @@ export function parseStructureString(input: string): StructureComponents {
   const parts = input.split('_');
 
   // Validate we have the correct number of components
-  if (parts.length !== 6) {
-    throw new Error('Invalid structure string format. Expected 6 underscore-separated components');
+  const validLengths = [6, 7]; // 7 is for structures with pdb_ins code
+  if (!validLengths.includes(parts.length)) {
+    throw new Error('Invalid structure string format. Expected 6 or 7 underscore-separated components');
   }
 
   const [pdbPrefix, pdbId, chainId, compId, residueId, atomString] = parts;
