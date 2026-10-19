@@ -7,8 +7,10 @@ services:
   web:
     volumes:
       - ./nginx.production.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt/live/ringpdb.biodata.ceitec.cz/fullchain.pem:/etc/fullchain.pem:ro
-      - /etc/letsencrypt/live/ringpdb.biodata.ceitec.cz/privkey.pem:/etc/privkey.pem:ro
+      # Mount directories, not single files, so renewed certs are picked up on reload
+      - /etc/letsencrypt/live:/etc/letsencrypt/live:ro
+      - /etc/letsencrypt/archive:/etc/letsencrypt/archive:ro
+      - /var/www/certbot:/var/www/certbot:ro
     ports:
       - "80:80"
       - "443:443"
